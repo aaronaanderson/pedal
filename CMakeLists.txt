@@ -9,12 +9,12 @@ set_target_properties(pedal PROPERTIES
   CXX_STANDARD_REQUIRED ON
 )
 
-target_compile_options(pedal PRIVATE "")
+# target_compile_options(pedal PRIVATE "")
 
-target_compile_definitions(pedal PUBLIC "")
+# target_compile_definitions(pedal PUBLIC "")
 
 target_include_directories(pedal PUBLIC include)
 
-target_link_libraries(pedal PUBLIC "")
+# target_link_libraries(pedal PUBLIC "")
 
 add_subdirectory(examples)
