@@ -18,3 +18,4 @@ target_include_directories(pedal PUBLIC include)
 # target_link_libraries(pedal PUBLIC "")
 
 add_subdirectory(examples)
+add_subdirectory(tests)
