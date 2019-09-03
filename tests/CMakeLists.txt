@@ -8,4 +8,3 @@ set_target_properties(pedal_test PROPERTIES
 
 target_include_directories(pedal_test PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 target_link_libraries(pedal_test pedal)
-

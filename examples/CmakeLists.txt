@@ -1,10 +1,29 @@
-add_executable(hello_pedal hello_pedal/main.cpp)
+# glfw for window creation
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "Build the GLFW documentation" FORCE)
+set(GLFW_INSTALL OFF CACHE BOOL "Generate installation target" FORCE)
+add_subdirectory(glfw)
 
-set_target_properties(hello_pedal PROPERTIES
+add_library(example_app example_app.cpp)
+set_target_properties(example_app PROPERTIES
     DEBUG_POSTFIX d
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )
 
-target_include_directories(hello_pedal PRIVATE ${CMAKE_CURRENT_LIST_DIR})
-target_link_libraries(hello_pedal pedal)
+target_include_directories(example_app PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+target_link_libraries(example_app PUBLIC glfw)
+
+set(example_list hello_pedal)
+
+foreach(example ${example_list})
+    add_executable(${example} "${example}.cpp")
+
+    set_target_properties(${example} PROPERTIES
+        DEBUG_POSTFIX d
+        CXX_STANDARD 14
+        CXX_STANDARD_REQUIRED ON
+    )
+
+    target_include_directories(${example} PRIVATE ${CMAKE_CURRENT_LIST_DIR})
+    target_link_libraries(${example} PRIVATE pedal example_app)
+endforeach()
