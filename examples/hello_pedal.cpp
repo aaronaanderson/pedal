@@ -4,5 +4,7 @@
 int main() {
     pdlHello();
     pdlExampleApp* app = pdlInitExampleApp();
+    while (pdlRunExampleApp(app)) {
+    }
     pdlDeleteExampleApp(app);
 }

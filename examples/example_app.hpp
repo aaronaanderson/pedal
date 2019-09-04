@@ -4,6 +4,7 @@
 struct pdlExampleApp;
 
 pdlExampleApp* pdlInitExampleApp();
+bool pdlRunExampleApp(pdlExampleApp* app);
 void pdlDeleteExampleApp(pdlExampleApp* app);
 
 #endif
