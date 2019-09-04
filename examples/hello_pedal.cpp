@@ -4,7 +4,11 @@
 int main() {
     pdlHello();
     pdlExampleApp* app = pdlInitExampleApp();
+    if (!app) {
+        return 1;
+    }
     while (pdlRunExampleApp(app)) {
+        //
     }
     pdlDeleteExampleApp(app);
 }
