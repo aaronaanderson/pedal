@@ -1,12 +1,16 @@
+find_package(OpenGL REQUIRED)
+
+# Build all dependencies as static libraries
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared libraries" FORCE)
 if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 
-#rtaudio for audio IO
+# Rtaudio for audio IO
 set(RTAUDIO_BUILD_STATIC_LIBS ON CACHE BOOL "Rtaudio Shared Lib" FORCE)
 set(RTAUDIO_BUILD_TESTING OFF CACHE BOOL "Rtaudio Testing" FORCE)
-set(RTAUDIO_TARGETNAME_UNINSTALL RTAUDIO_UNINSTALL CACHE STRING "Rtaudio Uninstall Target" FORCE)
+set(RTAUDIO_TARGETNAME_UNINSTALL
+    RTAUDIO_UNINSTALL CACHE STRING "Rtaudio Uninstall Target" FORCE)
 add_subdirectory(rtaudio)
 
 # glfw for window creation
@@ -32,15 +36,17 @@ set_target_properties(gl3w PROPERTIES
     CXX_STANDARD_REQUIRED ON
 )
 target_include_directories(gl3w PUBLIC imgui/examples/libs/gl3w)
+target_link_libraries(gl3w PUBLIC ${OPENGL_gl_LIBRARY})
 
 # common example app functionality
-add_library(example_app STATIC example_app.cpp)
+add_library(example_app STATIC example_app.cpp
+    imgui/examples/imgui_impl_glfw.cpp imgui/examples/imgui_impl_opengl3.cpp)
 set_target_properties(example_app PROPERTIES
     DEBUG_POSTFIX d
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )
-target_include_directories(example_app PUBLIC . rtaudio)
+target_include_directories(example_app PUBLIC . rtaudio imgui/examples)
 target_link_libraries(example_app PUBLIC glfw gl3w imgui rtaudio)
 
 # list of examples, give `examplename` if example file is `examplename.cpp`

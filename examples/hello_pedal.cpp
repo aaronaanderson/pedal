@@ -8,7 +8,7 @@ int main() {
         return 1;
     }
     while (pdlRunExampleApp(app)) {
-        //
+        pdlUpdateExampleApp(app);
     }
     pdlDeleteExampleApp(app);
 }
