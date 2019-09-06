@@ -118,22 +118,44 @@ bool pdlRunExampleApp(pdlExampleApp* app) {
 }
 
 void pdlUpdateExampleApp(pdlExampleApp* app) {
+    int display_w, display_h;
+    glfwGetFramebufferSize(app->window, &display_w, &display_h);
+
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    ImGui::Begin("Pedal");
+    ImGuiWindowFlags flags = 0;
+    flags |= ImGuiWindowFlags_NoTitleBar;
+    flags |= ImGuiWindowFlags_NoResize;
+    flags |= ImGuiWindowFlags_NoMove;
+    flags |= ImGuiWindowFlags_NoCollapse;
+    flags |= ImGuiWindowFlags_AlwaysAutoResize;
+    flags |= ImGuiWindowFlags_NoBackground;
+    flags |= ImGuiWindowFlags_NoSavedSettings;
+
+    ImGui::SetNextWindowPos(ImVec2{0.0f,0.0f});
+    ImGui::SetNextWindowSize(ImVec2{display_w/2.0f, float(display_h)});
+    ImGui::Begin("Left Window", nullptr, flags);
     ImGui::TextUnformatted(app->device_name.c_str());
     ImGui::Value("channels", app->output_channels);
     ImGui::Value("sampling rate", app->sampling_rate);
     ImGui::Value("buffer size", app->buffer_size);
     ImGui::End();
+
+    ImGui::SetNextWindowPos(ImVec2{display_w/2.0f,0.0f});
+    ImGui::SetNextWindowSize(ImVec2{display_w/2.0f, float(display_h)});
+    ImGui::Begin("Right Window", nullptr, flags);
+    ImGui::TextUnformatted(app->device_name.c_str());
+    ImGui::Value("channels", app->output_channels);
+    ImGui::Value("sampling rate", app->sampling_rate);
+    ImGui::Value("buffer size", app->buffer_size);
+    ImGui::End();
+
     ImGui::Render();
 
-    int display_w, display_h;
-    glfwGetFramebufferSize(app->window, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
-    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
