@@ -12,6 +12,16 @@
 
 #include <iostream>
 #include <string>
+#include <atomic>
+
+#define NUM_SLIDERS_MAX 16
+
+struct slider {
+    std::string name;
+    float low, high;
+    float val;
+    std::atomic<float> atomic_val;
+};
 
 struct pdlExampleApp {
     GLFWwindow* window;
@@ -22,6 +32,7 @@ struct pdlExampleApp {
     unsigned sampling_rate;
     unsigned buffer_size;
     pdlExampleCallback callback;
+    slider sliders[NUM_SLIDERS_MAX];
 };
 
 static int audioCallback(void *outputBuffer, void *inputBuffer,
@@ -32,8 +43,9 @@ static int audioCallback(void *outputBuffer, void *inputBuffer,
 
     }
     auto* app = (pdlExampleApp*)userData;
-    if (app->callback) {
-        app->callback(out, nFrames, app->sampling_rate, app->output_channels, streamTime);
+    if (app && app->callback) {
+        app->callback(out, nFrames, app->sampling_rate, app->output_channels,
+                      streamTime, app);
     }
     return 0;
 }
@@ -104,7 +116,25 @@ pdlExampleApp* pdlInitExampleApp(pdlExampleCallback callback) {
         return nullptr;
     }
 
+    for (int i = 0; i < NUM_SLIDERS_MAX; i += 1) {
+        slider* s = app->sliders + i;
+        s->name = "";
+        s->low = 0.0f;
+        s->high = 1.0f;
+        s->val = 0.0f;
+        s->atomic_val.store(0.0f);
+    }
     return app;
+}
+
+void pdlAddSlider(pdlExampleApp* app, int sliderIndex, const char* name,
+                  float low, float high, float initialValue) {
+    slider* s = app->sliders + sliderIndex;
+    s->name = name;
+    s->low = low;
+    s->high = high;
+    s->val = initialValue;
+    s->atomic_val.store(initialValue);
 }
 
 void pdlStartExampleApp(pdlExampleApp* app) {
@@ -120,6 +150,8 @@ bool pdlRunExampleApp(pdlExampleApp* app) {
 void pdlUpdateExampleApp(pdlExampleApp* app) {
     int display_w, display_h;
     glfwGetFramebufferSize(app->window, &display_w, &display_h);
+    int window_w, window_h;
+    glfwGetWindowSize(app->window, &window_w, &window_h);
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
@@ -135,7 +167,7 @@ void pdlUpdateExampleApp(pdlExampleApp* app) {
     flags |= ImGuiWindowFlags_NoSavedSettings;
 
     ImGui::SetNextWindowPos(ImVec2{0.0f,0.0f});
-    ImGui::SetNextWindowSize(ImVec2{display_w/2.0f, float(display_h)});
+    ImGui::SetNextWindowSize(ImVec2{window_w/2.0f, float(window_h)});
     ImGui::Begin("Left Window", nullptr, flags);
     ImGui::TextUnformatted(app->device_name.c_str());
     ImGui::Value("channels", app->output_channels);
@@ -143,13 +175,14 @@ void pdlUpdateExampleApp(pdlExampleApp* app) {
     ImGui::Value("buffer size", app->buffer_size);
     ImGui::End();
 
-    ImGui::SetNextWindowPos(ImVec2{display_w/2.0f,0.0f});
-    ImGui::SetNextWindowSize(ImVec2{display_w/2.0f, float(display_h)});
+    ImGui::SetNextWindowPos(ImVec2{window_w/2.0f,0.0f});
+    ImGui::SetNextWindowSize(ImVec2{window_w/2.0f, float(window_h)});
     ImGui::Begin("Right Window", nullptr, flags);
-    ImGui::TextUnformatted(app->device_name.c_str());
-    ImGui::Value("channels", app->output_channels);
-    ImGui::Value("sampling rate", app->sampling_rate);
-    ImGui::Value("buffer size", app->buffer_size);
+    for (int i = 0; i < NUM_SLIDERS_MAX; i += 1) {
+        slider* s = app->sliders + i;
+        if (s->name.empty()) continue;
+        ImGui::SliderFloat(s->name.c_str(), &s->val, s->low, s->high);
+    }
     ImGui::End();
 
     ImGui::Render();
@@ -158,6 +191,11 @@ void pdlUpdateExampleApp(pdlExampleApp* app) {
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+    for (int i = 0; i < NUM_SLIDERS_MAX; i += 1) {
+        slider* s = app->sliders + i;
+        s->atomic_val.store(s->val);
+    }
 }
 
 void pdlDeleteExampleApp(pdlExampleApp* app) {
@@ -176,4 +214,8 @@ void pdlDeleteExampleApp(pdlExampleApp* app) {
     glfwDestroyWindow(app->window);
     glfwTerminate();
     delete app;
+}
+
+float pdlGetSlider(pdlExampleApp* app, int idx) {
+    return app->sliders[idx].atomic_val.load();
 }
