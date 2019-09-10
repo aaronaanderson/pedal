@@ -15,12 +15,19 @@
 #include <atomic>
 
 #define NUM_SLIDERS_MAX 16
+#define NUM_TOGGLES_MAX 16
 
 struct slider {
     std::string name;
+    std::atomic<float> atomic_val;
     float low, high;
     float val;
-    std::atomic<float> atomic_val;
+};
+
+struct toggle {
+    std::string name;
+    std::atomic<bool> atomic_val;
+    bool val;
 };
 
 struct pdlExampleApp {
@@ -33,6 +40,7 @@ struct pdlExampleApp {
     unsigned buffer_size;
     pdlExampleCallback callback;
     slider sliders[NUM_SLIDERS_MAX];
+    toggle toggles[NUM_TOGGLES_MAX];
 };
 
 static int audioCallback(void *outputBuffer, void *inputBuffer,
@@ -124,17 +132,15 @@ pdlExampleApp* pdlInitExampleApp(pdlExampleCallback callback) {
         s->val = 0.0f;
         s->atomic_val.store(0.0f);
     }
-    return app;
-}
 
-void pdlAddSlider(pdlExampleApp* app, int sliderIndex, const char* name,
-                  float low, float high, float initialValue) {
-    slider* s = app->sliders + sliderIndex;
-    s->name = name;
-    s->low = low;
-    s->high = high;
-    s->val = initialValue;
-    s->atomic_val.store(initialValue);
+    for (int i = 0; i < NUM_TOGGLES_MAX; i += 1) {
+        toggle* t = app->toggles + i;
+        t->name = "";
+        t->val = false;
+        t->atomic_val.store(false);
+    }
+
+    return app;
 }
 
 void pdlStartExampleApp(pdlExampleApp* app) {
@@ -173,6 +179,11 @@ void pdlUpdateExampleApp(pdlExampleApp* app) {
     ImGui::Value("channels", app->output_channels);
     ImGui::Value("sampling rate", app->sampling_rate);
     ImGui::Value("buffer size", app->buffer_size);
+    for (int i = 0; i < NUM_SLIDERS_MAX; i += 1) {
+        toggle* t = app->toggles + i;
+        if (t->name.empty()) continue;
+        ImGui::Checkbox(t->name.c_str(), &t->val);
+    }
     ImGui::End();
 
     ImGui::SetNextWindowPos(ImVec2{window_w/2.0f,0.0f});
@@ -196,6 +207,11 @@ void pdlUpdateExampleApp(pdlExampleApp* app) {
         slider* s = app->sliders + i;
         s->atomic_val.store(s->val);
     }
+
+    for (int i = 0; i < NUM_TOGGLES_MAX; i += 1) {
+        toggle* t = app->toggles + i;
+        t->atomic_val.store(t->val);
+    }
 }
 
 void pdlDeleteExampleApp(pdlExampleApp* app) {
@@ -216,6 +232,28 @@ void pdlDeleteExampleApp(pdlExampleApp* app) {
     delete app;
 }
 
+void pdlAddSlider(pdlExampleApp* app, int sliderIndex, const char* name,
+                  float low, float high, float initialValue) {
+    slider* s = app->sliders + sliderIndex;
+    s->name = name;
+    s->low = low;
+    s->high = high;
+    s->val = initialValue;
+    s->atomic_val.store(initialValue);
+}
+
 float pdlGetSlider(pdlExampleApp* app, int idx) {
     return app->sliders[idx].atomic_val.load();
+}
+
+void pdlAddToggle(pdlExampleApp* app, int toggleIndex, const char* name,
+                  bool initialValue) {
+    toggle* t = app->toggles + toggleIndex;
+    t->name = name;
+    t->val = initialValue;
+    t->atomic_val.store(initialValue);
+}
+
+float pdlGetToggle(pdlExampleApp* app, int idx) {
+    return app->toggles[idx].atomic_val.load();
 }
