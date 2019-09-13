@@ -16,6 +16,7 @@
 
 #define NUM_SLIDERS_MAX 16
 #define NUM_TOGGLES_MAX 16
+#define NUM_TRIGGERS_MAX 16
 
 struct slider {
     std::string name;
@@ -25,6 +26,12 @@ struct slider {
 };
 
 struct toggle {
+    std::string name;
+    std::atomic<bool> atomic_val;
+    bool val;
+};
+
+struct trigger {
     std::string name;
     std::atomic<bool> atomic_val;
     bool val;
@@ -41,6 +48,7 @@ struct pdlExampleApp {
     pdlExampleCallback callback;
     slider sliders[NUM_SLIDERS_MAX];
     toggle toggles[NUM_TOGGLES_MAX];
+    trigger triggers[NUM_TRIGGERS_MAX];
 };
 
 static int audioCallback(void *outputBuffer, void *inputBuffer,
@@ -81,11 +89,16 @@ pdlExampleApp* pdlInitExampleApp(pdlExampleCallback callback) {
     glfwWindowHint(GLFW_AUTO_ICONIFY, false);  // so fullcreen does not iconify
     app->window = glfwCreateWindow(640, 480, "Pedal", nullptr, nullptr);
     if (!app->window) {
+        std::cerr << "Fail: glfwCreateWindow\n";
+        glfwTerminate();
+        delete app;
+        return nullptr;
     }
     glfwMakeContextCurrent(app->window);
     glfwSwapInterval(1);
 
     if (gl3wInit() != 0) {
+        std::cerr << "Fail: gl3wInit\n";
         glfwDestroyWindow(app->window);
         glfwTerminate();
         delete app;
@@ -140,6 +153,13 @@ pdlExampleApp* pdlInitExampleApp(pdlExampleCallback callback) {
         t->atomic_val.store(false);
     }
 
+    for (int i = 0; i < NUM_TRIGGERS_MAX; i += 1) {
+        trigger* t = app->triggers + i;
+        t->name = "";
+        t->val = false;
+        t->atomic_val.store(false);
+    }
+
     return app;
 }
 
@@ -179,10 +199,15 @@ void pdlUpdateExampleApp(pdlExampleApp* app) {
     ImGui::Value("channels", app->output_channels);
     ImGui::Value("sampling rate", app->sampling_rate);
     ImGui::Value("buffer size", app->buffer_size);
-    for (int i = 0; i < NUM_SLIDERS_MAX; i += 1) {
+    for (int i = 0; i < NUM_TOGGLES_MAX; i += 1) {
         toggle* t = app->toggles + i;
         if (t->name.empty()) continue;
         ImGui::Checkbox(t->name.c_str(), &t->val);
+    }
+    for (int i = 0; i < NUM_TRIGGERS_MAX; i += 1) {
+        trigger* t = app->triggers + i;
+        if (t->name.empty()) continue;
+        t->val = ImGui::Button(t->name.c_str());
     }
     ImGui::End();
 
@@ -210,6 +235,11 @@ void pdlUpdateExampleApp(pdlExampleApp* app) {
 
     for (int i = 0; i < NUM_TOGGLES_MAX; i += 1) {
         toggle* t = app->toggles + i;
+        t->atomic_val.store(t->val);
+    }
+
+    for (int i = 0; i < NUM_TRIGGERS_MAX; i += 1) {
+        trigger* t = app->triggers + i;
         t->atomic_val.store(t->val);
     }
 }
@@ -254,6 +284,17 @@ void pdlAddToggle(pdlExampleApp* app, int toggleIndex, const char* name,
     t->atomic_val.store(initialValue);
 }
 
-float pdlGetToggle(pdlExampleApp* app, int idx) {
+bool pdlGetToggle(pdlExampleApp* app, int idx) {
     return app->toggles[idx].atomic_val.load();
+}
+
+void pdlAddTrigger(pdlExampleApp* app, int triggerIndex, const char* name) {
+    trigger* t = app->triggers + triggerIndex;
+    t->name = name;
+    t->val = false;
+    t->atomic_val.store(false);
+}
+
+bool pdlGetTrigger(pdlExampleApp* app, int idx) {
+    return app->triggers[idx].atomic_val.exchange(false);
 }

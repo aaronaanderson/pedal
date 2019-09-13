@@ -3,6 +3,7 @@ find_package(OpenGL REQUIRED)
 # Build all dependencies as static libraries
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared libraries" FORCE)
 if(MSVC)
+    # suppress general warning on C functions such as strcpy, etc.
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 
@@ -25,6 +26,9 @@ set_target_properties(imgui PROPERTIES
     DEBUG_POSTFIX d
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
+    ARCHIVE_OUTPUT_DIRECTORY lib
+    ARCHIVE_OUTPUT_DIRECTORY_DEBUG lib
+    ARCHIVE_OUTPUT_DIRECTORY_RELEASE lib
 )
 target_include_directories(imgui PUBLIC imgui)
 
@@ -34,6 +38,9 @@ set_target_properties(gl3w PROPERTIES
     DEBUG_POSTFIX d
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
+    ARCHIVE_OUTPUT_DIRECTORY lib
+    ARCHIVE_OUTPUT_DIRECTORY_DEBUG lib
+    ARCHIVE_OUTPUT_DIRECTORY_RELEASE lib
 )
 target_include_directories(gl3w PUBLIC imgui/examples/libs/gl3w)
 target_link_libraries(gl3w PUBLIC ${OPENGL_gl_LIBRARY})
@@ -45,23 +52,28 @@ set_target_properties(example_app PROPERTIES
     DEBUG_POSTFIX d
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
+    ARCHIVE_OUTPUT_DIRECTORY lib
+    ARCHIVE_OUTPUT_DIRECTORY_DEBUG lib
+    ARCHIVE_OUTPUT_DIRECTORY_RELEASE lib
 )
-target_include_directories(example_app PUBLIC . rtaudio imgui/examples)
+target_include_directories(example_app PUBLIC rtaudio imgui/examples)
 target_link_libraries(example_app PUBLIC glfw gl3w imgui rtaudio)
 
 # list of examples, give `examplename` if example file is `examplename.cpp`
-set(example_list hello_pedal)
+set(example_list
+    hello_pedal
+)
 
 # go through example targets
 foreach(example ${example_list})
     add_executable(${example} "${example}.cpp")
-
     set_target_properties(${example} PROPERTIES
         DEBUG_POSTFIX d
         CXX_STANDARD 14
         CXX_STANDARD_REQUIRED ON
+        RUNTIME_OUTPUT_DIRECTORY bin
+        RUNTIME_OUTPUT_DIRECTORY_DEBUG bin
+        RUNTIME_OUTPUT_DIRECTORY_RELEASE bin
     )
-
-    target_include_directories(${example} PRIVATE .)
     target_link_libraries(${example} PRIVATE pedal example_app)
 endforeach()

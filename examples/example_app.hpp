@@ -18,6 +18,8 @@ float pdlGetSlider(pdlExampleApp* app, int idx);
 
 void pdlAddToggle(pdlExampleApp* app, int toggleIndex, const char* name,
                   bool initialValue);
-float pdlGetToggle(pdlExampleApp* app, int idx);
+bool pdlGetToggle(pdlExampleApp* app, int idx);
 
+void pdlAddTrigger(pdlExampleApp* app, int triggerIndex, const char* name);
+bool pdlGetTrigger(pdlExampleApp* app, int idx);
 #endif
