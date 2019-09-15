@@ -66,6 +66,12 @@ static int audioCallback(void *outputBuffer, void *inputBuffer,
     return 0;
 }
 
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if ((action == GLFW_PRESS) && (mods & GLFW_MOD_CONTROL) && (key == GLFW_KEY_Q)) {
+        glfwSetWindowShouldClose(window, 1);
+    }
+}
+
 pdlExampleApp* pdlInitExampleApp(pdlExampleCallback callback) {
     auto* app = new pdlExampleApp;
     if (!app) {
@@ -94,6 +100,7 @@ pdlExampleApp* pdlInitExampleApp(pdlExampleCallback callback) {
         delete app;
         return nullptr;
     }
+    glfwSetKeyCallback(app->window, keyCallback);
     glfwMakeContextCurrent(app->window);
     glfwSwapInterval(1);
 
