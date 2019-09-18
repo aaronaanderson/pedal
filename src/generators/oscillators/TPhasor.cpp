@@ -43,7 +43,7 @@ float* pdlTPhasor::generateBlock(){//it is best to do all
 }
 //Getters and setters
 //=========================================================
-inline void pdlTPhasor::setFrequency(float newFrequency){
+void pdlTPhasor::setFrequency(float newFrequency){
   frequency = newFrequency;
   phaseIncrement = frequency/pdlSettings::sampleRate;
 }

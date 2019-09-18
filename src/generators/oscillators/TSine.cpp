@@ -16,15 +16,15 @@ pdlTSine::pdlTSine(float frequency){//override constructor
 
 pdlTSine::~pdlTSine(){//when object is deleted
   if(currentBlock != nullptr){//if this memory was allocated
-      delete currentBlock;//free the memory
+    delete currentBlock;//free the memory
   }
 }
 
 //primary mechanics of class
 //=========================================================
 float pdlTSine::generateSample(){//generate and return single sample
-    currentSample = generateNextSample();//store the sample
-    return currentSample;//return a copy
+  currentSample = generateNextSample();//store the sample
+  return currentSample;//return a copy
 }
 
 float* pdlTSine::generateBlock(){//it is best to do all 
@@ -45,7 +45,7 @@ float* pdlTSine::generateBlock(){//it is best to do all
 //=========================================================
 void pdlTSine::setFrequency(float newFrequency){
   frequency = newFrequency;
-  phaseIncrement = (frequency * 2.0 * M_PI)/pdlSettings::sampleRate;//see notes on bottom
+  phaseIncrement = (frequency * 2.0 * M_PI)/pdlSettings::sampleRate;//*see notes on bottom
 }
 void pdlTSine::setPhase(float newPhase){phase = newPhase;}
 void pdlTSine::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
@@ -56,7 +56,7 @@ float pdlTSine::getSample(){return currentSample;}
 float* pdlTSine::getBlock(){return currentBlock;}
 
 /*
-Why is a phase increment needed? 
+*Why is a phase increment needed? 
 
 For a 1.0 Hz sinusoid, one could simply calculate the samples as a function of time
 sin(time * TWO_PI);

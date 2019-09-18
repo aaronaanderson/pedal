@@ -15,7 +15,7 @@ class pdlTPhasor{//Pedal Trivial Sine Oscillator
   float* generateBlock();//calculate and return next block of samples
 
     //"setters"
-    inline void setFrequency(float newFrequency);
+    void setFrequency(float newFrequency);
     void setPhase(float newPhase);
     void setAmplitude(float newAmplitude);
 
