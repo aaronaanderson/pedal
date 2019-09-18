@@ -1,16 +1,16 @@
-#ifndef TSaw_hpp
-#define TSaw_hpp
+#ifndef TPhasor_hpp
+#define TPhasor_hpp
 
 #include <stdio.h>
 #define _USE_MATH_DEFINES  //so we can use M_PI
 #include <math.h> //so we can use sin()
 #include "../../pdlSettings.hpp"//so we can access sampleRate and bufferSize
 
-class pdlTSaw {//Pedal Trivial Sine Oscillator
+class pdlTPhasor{//Pedal Trivial Sine Oscillator
   public:
-  pdlTSaw();//constructor, defined in the cpp
-  pdlTSaw(float frequency);//option to set frequency on construction
-  ~pdlTSaw();//deconstructor (may be needed to free memory)
+  pdlTPhasor();//constructor, defined in the cpp
+  pdlTPhasor(float frequency);//option to set frequency on construction
+  ~pdlTPhasor();//deconstructor (may be needed to free memory)
   float generateSample();//calculate and return next sample
   float* generateBlock();//calculate and return next block of samples
 
@@ -31,10 +31,10 @@ class pdlTSaw {//Pedal Trivial Sine Oscillator
     inline float generateNextSample(){
       phase += phaseIncrement;
       while(phase > 1.0){
-        phase -= 2.0;
+        phase -= 1.0;
       }
-      while(phase < -1.0){//to ensure that negative frequencies will work
-        phase += 2.0;
+      while(phase < 0.0){//to ensure that negative frequencies will work
+        phase += 1.0;
       }
       currentSample = phase * amplitude;
     }
