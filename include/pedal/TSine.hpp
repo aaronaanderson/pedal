@@ -4,7 +4,7 @@
 #include <stdio.h> //@KEE this isn't needed right?
 #define _USE_MATH_DEFINES  //so we can use M_PI
 #include <math.h> //so we can use sin()
-#include "../../pdlSettings.hpp"//so we can access sampleRate and bufferSize
+#include "pdlSettings.hpp"//so we can access sampleRate and bufferSize
 
 class pdlTSine {//Pedal Trivial Sine Oscillator
   public://everything listed after this is public
