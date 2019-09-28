@@ -11,10 +11,10 @@ class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   CTEnvelope(float initialAttack, float initialDecay, float initialSustain, float initialRelease);
   ~CTEnvelope();//deconstructor, used to clear memory if allocated
   
-  
+  void setup(float newAttack, float newDecay, float newSustain, float newRelease);
   float generateSample();//calculate and return next sample
   float* generateBlock();//calculate and return next block of samples
-  void setup(float newAttack, float newDecay, float newSustain, float newRelease);
+  
   enum modes {ADSR=0, ASR, AR};//3 envelope types
   
   //"getters"
@@ -31,12 +31,10 @@ class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   void setMode(modes newMode);
   void setAttack(float newAttack);
   void setDecay(float newDecay);
-  void setRelease(float newRelease);
   void setSustain(float newSustain);
-  
+  void setRelease(float newRelease);
   //=======================================================
   private://best practice to keep inner workings private
-  float calculateNextSample();//TODO find standard nomenclature for this
   enum states {OFF=0, ATTACK, DECAY, SUSTAIN, RELEASE};
   void calculateIncrement(states whichIncrement);//nead a 'state' variable
   int currentState;//which phase, off-a-d-s-r, is the envelope in
@@ -46,5 +44,4 @@ class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   float currentSample;//current working sample
   float* currentBlock;//(pointer to) current working block of samples
 };
-
 #endif

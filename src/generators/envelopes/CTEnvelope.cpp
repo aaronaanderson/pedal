@@ -18,9 +18,18 @@ CTEnvelope::~CTEnvelope(){//deconstructor
 
 //primary mechanics of class
 //=========================================================
+void CTEnvelope::setup(float newAttack, float newDecay, float newSustain, float newRelease){
+  setSustain(newSustain);
+  setAttack(newAttack);
+  setDecay(newDecay);
+  setRelease(newRelease);
+  currentSample = 0.0;
+  currentState = states::OFF;
+  currentMode = modes::ADSR;
+}
 
-float CTEnvelope::calculateNextSample(){
-  switch(currentMode){
+float CTEnvelope::generateSample(){//generate a single sample
+  switch(currentMode){//which mode (ADSR, ASR, or AR)
     case ADSR://Attack, Decay, Sustain, Release (default)
       switch(currentState){//envelope behaves differently based on which state it is in
         case OFF:
@@ -97,10 +106,28 @@ float CTEnvelope::calculateNextSample(){
         break;
       }
     break;
-  }
+  }//end of mode switch statement
   return currentSample;
 }
+
+float* CTEnvelope::generateBlock(){
+  //check if block has been allocated in memory yet
+  if(currentBlock == nullptr){
+    currentBlock = new float[pdlSettings::bufferSize];
+  }
+  //fill the block with samples
+  for(int i = 0; i < pdlSettings::bufferSize; i++){
+    currentBlock[i] = generateSample();
+  }
+  return currentBlock;//return (a pointer to) the block
+}
+
+
 void CTEnvelope::calculateIncrement(states whichIncrement){
+  //these are the values that are added or subtracted to currentSample
+  //depending on the current state of the envelope. These values will be 
+  //dependent on the sampling rate, the duration of the state, and where it 
+  //going next.
   switch(whichIncrement){
     case ATTACK:
       attackIncrement = 1/(pdlSettings::sampleRate * (attack * 0.001));
@@ -115,33 +142,6 @@ void CTEnvelope::calculateIncrement(states whichIncrement){
   }
 } 
 
-float CTEnvelope::generateSample(){//one sample at a time
-  currentSample = calculateNextSample();//calculate a single sample
-  return currentSample;//return a single sample
-}
-
-float* CTEnvelope::generateBlock(){
-  //check if block has been allocated in memory yet
-  if(currentBlock == nullptr){
-    currentBlock = new float[pdlSettings::bufferSize];
-  }
-  //fill the block with samples
-  for(int i = 0; i < pdlSettings::bufferSize; i++){
-    currentBlock[i] = calculateNextSample();
-  }
-  return currentBlock;//return (a pointer to) the block
-}
-
-void CTEnvelope::setup(float newAttack, float newDecay, float newSustain, float newRelease){
-  setSustain(newSustain);
-  setAttack(newAttack);
-  setDecay(newDecay);
-  setRelease(newRelease);
-  currentSample = 0.0;
-  currentState = states::OFF;
-  currentMode = modes::ADSR;
-}
-
 //Getters and setters
 //=========================================================
 float CTEnvelope::getAttack(){return attack;}
@@ -154,15 +154,15 @@ int CTEnvelope::getCurrentState(){return currentState;}
 int CTEnvelope::getCurrentMode(){return currentMode;}
 
 void CTEnvelope::setMode(modes newMode){currentMode = newMode;}
-void CTEnvelope::setAttack(float newAttack){
+void CTEnvelope::setAttack(float newAttack){//any positive value
   attack = newAttack;
   calculateIncrement(ATTACK);//changing value requires recalculating increment
 }
-void CTEnvelope::setDecay(float newDecay){
+void CTEnvelope::setDecay(float newDecay){//any positive value
   decay = newDecay;
   calculateIncrement(DECAY);//changing value requires recalculating increment
 }
-void CTEnvelope::setSustain(float newSustain){
+void CTEnvelope::setSustain(float newSustain){//amplitude from 0.0 to 1.0
   sustain = newSustain;
   sustain = fmin(1.0, fmax(sustain, 0.0));//clamp to 0.0 and 1.0
   if(currentMode == ADSR || currentMode == ASR){//protect a AR user from themselves
@@ -170,7 +170,7 @@ void CTEnvelope::setSustain(float newSustain){
     calculateIncrement(RELEASE);//New sustain value will changes this value
   }
 }
-void CTEnvelope::setRelease(float newRelease){
+void CTEnvelope::setRelease(float newRelease){//any positive value
   release = newRelease;
   calculateIncrement(RELEASE);//changing vale requires recalculating increment
 }
