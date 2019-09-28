@@ -1,40 +1,50 @@
 #ifndef CTEnvelope_hpp
 #define CTEnvelope_hpp
 
+#include "math.h"//for fmin and fmax
 #include "pdlSettings.hpp"//so we can access sampleRate and bufferSize
 
-class CTEnvelope{
+class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   public:
-  CTEnvelope();
+  CTEnvelope();//default constructor
+  //best to have a standard ADSR as an overload constructor
   CTEnvelope(float initialAttack, float initialDecay, float initialSustain, float initialRelease);
-  ~CTEnvelope();
+  ~CTEnvelope();//deconstructor, used to clear memory if allocated
   
   
-  float generateSample();
-  float* generateBlock();
-
+  float generateSample();//calculate and return next sample
+  float* generateBlock();//calculate and return next block of samples
+  void setup(float newAttack, float newDecay, float newSustain, float newRelease);
+  enum modes {ADSR=0, ASR, AR};//3 envelope types
+  
+  //"getters"
   float getAttack();
   float getDecay();
   float getSustain();
   float getRelease();
+  float getSample();
+  float* getBlock();
+  int getCurrentState();
+  int getCurrentMode();
 
-  enum mode {ADSR=0, AD, AR, ASR};
-  void setup(float newAttack, float newDecay, float newSustain, float newRelease);
-  void setMode(mode newMode);
+  //"setters"
+  void setMode(modes newMode);
   void setAttack(float newAttack);
   void setDecay(float newDecay);
   void setRelease(float newRelease);
   void setSustain(float newSustain);
- 
-  private:
-  float calculateNextSample();
+  
+  //=======================================================
+  private://best practice to keep inner workings private
+  float calculateNextSample();//TODO find standard nomenclature for this
   enum states {OFF=0, ATTACK, DECAY, SUSTAIN, RELEASE};
   void calculateIncrement(states whichIncrement);//nead a 'state' variable
-  int currentState;
-  float attack, decay, sustain, release;
-  float attackIncrement, decayIncrement, releaseIncrement;
-  float currentSample;
-  float* currentBlock;
+  int currentState;//which phase, off-a-d-s-r, is the envelope in
+  int currentMode;//which type of envelope is it, adsr,asr, or ar
+  float attack, decay, sustain, release;//internal values for these variables
+  float attackIncrement, decayIncrement, releaseIncrement;//necessary to calculate next sample
+  float currentSample;//current working sample
+  float* currentBlock;//(pointer to) current working block of samples
 };
 
 #endif
