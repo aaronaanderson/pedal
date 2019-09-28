@@ -6,11 +6,11 @@
 #include <math.h> //so we can use sin()
 #include "pdlSettings.hpp"//so we can access sampleRate and bufferSize
 
-class pdlTSine {//Pedal Trivial Sine Oscillator
+class TSine {//Pedal Trivial Sine Oscillator
   public://everything listed after this is public
-  pdlTSine();//constructor, defined in the cpp
-  pdlTSine(float frequency);//option to set frequency on construction
-  ~pdlTSine();//deconstructor (may be needed to free memory)
+  TSine();//constructor, defined in the cpp
+  TSine(float frequency);//option to set frequency on construction
+  ~TSine();//deconstructor (may be needed to free memory)
   float generateSample();//generate and return a single sample
   float* generateBlock();//generate and return a block of samples
 

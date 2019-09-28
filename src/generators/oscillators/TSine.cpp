@@ -1,20 +1,20 @@
-#include "TSine.hpp"
+#include "pedal/TSine.hpp"
 
 //constructors and deconstructors
 //=========================================================
-pdlTSine::pdlTSine(){//default constructor
+TSine::TSine(){//default constructor
   setFrequency(440);
   setPhase(0.0);
   setAmplitude(1.0);
 }
 
-pdlTSine::pdlTSine(float frequency){//override constructor
+TSine::TSine(float frequency){//override constructor
   setFrequency(frequency);
   setPhase(0.0);
   setAmplitude(1.0);
 }
 
-pdlTSine::~pdlTSine(){//when object is deleted
+TSine::~TSine(){//when object is deleted
   if(currentBlock != nullptr){//if this memory was allocated
     delete currentBlock;//free the memory
   }
@@ -22,12 +22,12 @@ pdlTSine::~pdlTSine(){//when object is deleted
 
 //primary mechanics of class
 //=========================================================
-float pdlTSine::generateSample(){//generate and return single sample
+float TSine::generateSample(){//generate and return single sample
   currentSample = generateNextSample();//store the sample
   return currentSample;//return a copy
 }
 
-float* pdlTSine::generateBlock(){//it is best to do all 
+float* TSine::generateBlock(){//it is best to do all 
   //calculations in a row if possible. This keeps the memory from 
   //jumping around looking for data
 
@@ -43,17 +43,17 @@ float* pdlTSine::generateBlock(){//it is best to do all
 
 //Getters and setters
 //=========================================================
-void pdlTSine::setFrequency(float newFrequency){
+void TSine::setFrequency(float newFrequency){
   frequency = newFrequency;
   phaseIncrement = (frequency * 2.0 * M_PI)/pdlSettings::sampleRate;//*see notes on bottom
 }
-void pdlTSine::setPhase(float newPhase){phase = newPhase;}
-void pdlTSine::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
+void TSine::setPhase(float newPhase){phase = newPhase;}
+void TSine::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 
-float pdlTSine::getFrequency(){return frequency;}
-float pdlTSine::getAmplitude(){return amplitude;}
-float pdlTSine::getSample(){return currentSample;}
-float* pdlTSine::getBlock(){return currentBlock;}
+float TSine::getFrequency(){return frequency;}
+float TSine::getAmplitude(){return amplitude;}
+float TSine::getSample(){return currentSample;}
+float* TSine::getBlock(){return currentBlock;}
 
 /*
 *Why is a phase increment needed? 

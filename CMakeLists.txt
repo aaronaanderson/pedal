@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 3.0)
 project(pedal)
 
-add_library(pedal STATIC src/pedal.cpp)
+add_library(pedal STATIC
+    src/pedal.cpp
+    src/generators/oscillators/TSine.cpp
+    src/pdlSettings.cpp
+)
 
 set_target_properties(pedal PROPERTIES
     DEBUG_POSTFIX d
