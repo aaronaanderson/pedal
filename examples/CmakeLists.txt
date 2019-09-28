@@ -64,7 +64,7 @@ set(example_list
     hello_pedal
 )
 
-# go through example targets
+# loop through example targets
 foreach(example ${example_list})
     add_executable(${example} "${example}.cpp")
     set_target_properties(${example} PROPERTIES
