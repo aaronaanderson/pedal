@@ -3,9 +3,14 @@
 CTEnvelope::CTEnvelope(){
     setup(100, 40, 0.7, 400);
 }
+
+CTEnvelope::CTEnvelope(float initialAttack, float initialDecay, float initialSustain, float initialRelease){
+    setup(initialAttack, initialDecay, initialSustain, initialRelease);
+}
+
 CTEnvelope::~CTEnvelope(){
-    if(currentBlock != nullptr){
-        delete currentBlock;
+    if(currentBlock != nullptr){//if block exists
+        delete currentBlock;//free the memory
     }
 }
 
@@ -32,13 +37,18 @@ float* CTEnvelope::generateBlock(){
 }
 
 void CTEnvelope::setup(float newAttack, float newDecay, float newSustain, float newRelease)){
+  attack = newAttack;
+  decay = newDecay;
+  sustain = newSustain;
+  release = newRelease;
   calculateIncrement(ATTACK);
   calculateIncrement(DECAY);
-  sustain = newSustain;
   calculateIncrement(RELEASE);
+  currentSample = 0.0;
+  currentState = states::OFF;
 }
 
-void CTEnvelope::calculateIncrement(state whichIncrement){
+void CTEnvelope::calculateIncrement(states whichIncrement){
   switch(whichIncrement){
     case ATTACK:
       attackIncrement = 1/(pdlSettings::sampleRate * (attack * 0.001));
