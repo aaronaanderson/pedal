@@ -49,6 +49,8 @@ struct pdlExampleApp {
     slider sliders[NUM_SLIDERS_MAX];
     toggle toggles[NUM_TOGGLES_MAX];
     trigger triggers[NUM_TRIGGERS_MAX];
+    std::atomic<float> cursorx;
+    std::atomic<float> cursory;
 };
 
 static int audioCallback(void *outputBuffer, void *inputBuffer,
@@ -64,6 +66,12 @@ static int audioCallback(void *outputBuffer, void *inputBuffer,
                       streamTime, app);
     }
     return 0;
+}
+
+static float clampf01(float x) {
+    if (x < 0.0f) return 0.0f;
+    else if (x > 1.0f) return 1.0f;
+    else return x;
 }
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -185,6 +193,15 @@ void pdlUpdateExampleApp(pdlExampleApp* app) {
     glfwGetFramebufferSize(app->window, &display_w, &display_h);
     int window_w, window_h;
     glfwGetWindowSize(app->window, &window_w, &window_h);
+    double cursorx, cursory;
+    glfwGetCursorPos(app->window, &cursorx, &cursory);
+
+    float cx = (float)(cursorx / window_w);
+    float cy = (float)(cursory / window_h);
+    cx = clampf01(cx);
+    cy = clampf01(cy);
+    app->cursorx.store(cx);
+    app->cursory.store(cy);
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
@@ -202,10 +219,13 @@ void pdlUpdateExampleApp(pdlExampleApp* app) {
     ImGui::SetNextWindowPos(ImVec2{0.0f,0.0f});
     ImGui::SetNextWindowSize(ImVec2{window_w/2.0f, float(window_h)});
     ImGui::Begin("Left Window", nullptr, flags);
+    ImGui::TextUnformatted("ctrl-q to quit");
     ImGui::TextUnformatted(app->device_name.c_str());
     ImGui::Value("channels", app->output_channels);
     ImGui::Value("sampling rate", app->sampling_rate);
     ImGui::Value("buffer size", app->buffer_size);
+    ImGui::Value("mx", cx);
+    ImGui::Value("my", cy);
     for (int i = 0; i < NUM_TOGGLES_MAX; i += 1) {
         toggle* t = app->toggles + i;
         if (t->name.empty()) continue;
@@ -267,6 +287,11 @@ void pdlDeleteExampleApp(pdlExampleApp* app) {
     glfwDestroyWindow(app->window);
     glfwTerminate();
     delete app;
+}
+
+void pdlGetCursorPos(pdlExampleApp* app, float* mx, float* my) {
+    *mx = app->cursorx.load();
+    *my = app->cursory.load();
 }
 
 void pdlAddSlider(pdlExampleApp* app, int sliderIndex, const char* name,

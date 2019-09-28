@@ -12,6 +12,8 @@ bool pdlRunExampleApp(pdlExampleApp* app);
 void pdlUpdateExampleApp(pdlExampleApp* app);
 void pdlDeleteExampleApp(pdlExampleApp* app);
 
+void pdlGetCursorPos(pdlExampleApp* app, float* mx, float* my);
+
 void pdlAddSlider(pdlExampleApp* app, int sliderIndex, const char* name,
                   float low, float high, float initialValue);
 float pdlGetSlider(pdlExampleApp* app, int idx);
