@@ -15,7 +15,9 @@ pdlTSine::pdlTSine(float frequency){//override constructor
 }
 
 pdlTSine::~pdlTSine(){//when object is deleted
+    // >> delete handles nullptr so no need to check
   if(currentBlock != nullptr){//if this memory was allocated
+      // for array, should use `delete[]`
     delete currentBlock;//free the memory
   }
 }
@@ -70,4 +72,4 @@ in the case of MaxMSP, a "signal vector". Since we have discretized time into sa
 we know how many samples exist per second AND how many samples we have to calculate in one group, 
 we can calculate how much further the phase must travel in the next sample. This value is called
 phaseIncrement.
-*/
+* /
