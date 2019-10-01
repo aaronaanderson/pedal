@@ -4,16 +4,11 @@ cmake_minimum_required(VERSION 3.0)
 # Name of the whole project: library, examples, and tests
 project(pedal)
 
-<<<<<<< HEAD
 add_library(pedal STATIC
     src/pedal.cpp
     src/generators/oscillators/TSine.cpp
     src/pdlSettings.cpp
 )
-=======
-# Name of static library target and its source files
-add_library(pedal STATIC src/pedal.cpp)
->>>>>>> 21834aae168ddc1645bd7901a57a2008ca0f3bb4
 
 set_target_properties(pedal PROPERTIES
     DEBUG_POSTFIX d # When debug build, put `d` in the end of the output library file

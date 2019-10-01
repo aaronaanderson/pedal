@@ -35,6 +35,8 @@ class TSine {//Pedal Trivial Sine Oscillator
     //we will define it here. 
     currentSample = sin(phase) * amplitude;//calculate single sample
     phase += phaseIncrement;//increment phase for the next sample
+    phase = fmod(phase, 6.283185307179586);
+    return currentSample;
   }
 
   float frequency, phase, amplitude;//standard oscillator variables
