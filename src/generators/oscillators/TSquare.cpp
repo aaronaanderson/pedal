@@ -18,7 +18,7 @@ TSquare::TSquare(float frequency){//override constructor
 
 TSquare::~TSquare(){//deconstructor (needed to be explicit if freeing memory)
   if(currentBlock != nullptr){//if space was allocated for current
-    delete currentBlock;//free the memory
+    delete[] currentBlock;//free the memory
   }
 }
 

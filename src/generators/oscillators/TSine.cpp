@@ -16,7 +16,7 @@ TSine::TSine(float frequency){//override constructor
 
 TSine::~TSine(){//when object is deleted
   if(currentBlock != nullptr){//if this memory was allocated
-    delete currentBlock;//free the memory
+    delete[] currentBlock;//free the memory
   }
 }
 

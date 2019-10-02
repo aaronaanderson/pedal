@@ -12,7 +12,7 @@ CTEnvelope::CTEnvelope(float initialAttack, float initialDecay, float initialSus
 
 CTEnvelope::~CTEnvelope(){//deconstructor
   if(currentBlock != nullptr){//if block exists
-    delete currentBlock;//free the memory
+    delete[] currentBlock;//free the memory
   }
 }
 
