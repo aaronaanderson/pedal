@@ -15,6 +15,11 @@ CTEnvelope envelope;
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
     saw.setFrequency(pdlGetSlider(app, 0));//set frequecy by slider
+    envelope.setAttack(pdlGetSlider(app, 1));
+    envelope.setDecay(pdlGetSlider(app, 2));
+    envelope.setSustain(pdlGetSlider(app, 3));
+    envelope.setRelease(pdlGetSlider(app, 4));
+
     bool trigger = pdlGetToggle(app, 0);//trigger envelope with toggle
     //bool trigger = pdlGetTrigger(app, 0);
     envelope.setTriger(trigger);//set trigger to up or down, on or off, etc
@@ -37,11 +42,17 @@ int main() {
     }
     
     // Add your GUI elements here
-    pdlAddSlider(app, 0, "freq", 0.0f, 1000.0f, 440.0f);
-    pdlAddToggle(app, 0, "loud", false);
-    pdlAddTrigger(app, 0, "trigger");
+    pdlAddSlider(app, 0, "frequency", 0.1f, 8000.0f, 440.0f);
+
+    pdlAddSlider(app, 1, "Attack", 2.0f, 300.0f, 80.0f);
+    pdlAddSlider(app, 2, "Decay", 2.0f, 200.0f, 30.0f);
+    pdlAddSlider(app, 3, "Sustain", 0.00f, 1.0f, 0.7f);
+    pdlAddSlider(app, 4, "Release", 5.0f, 1000.0f, 200.0f);
+
+    //pdlAddToggle(app, 0, "loud", false);
+    //pdlAddTrigger(app, 0, "trigger");
     
-    //begin the app
+    //begin the app--------
     pdlStartExampleApp(app);
     while (pdlRunExampleApp(app)) {//run forever
         pdlUpdateExampleApp(app);//run the application

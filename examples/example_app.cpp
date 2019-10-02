@@ -1,4 +1,5 @@
 #include "example_app.hpp"
+#include "pdlSettings.hpp"
 
 #include "GL/gl3w.h"
 #define GLFW_INCLUDE_NONE
@@ -179,6 +180,8 @@ pdlExampleApp* pdlInitExampleApp(pdlExampleCallback callback) {
 }
 
 void pdlStartExampleApp(pdlExampleApp* app) {
+    pdlSettings::sampleRate = app->sampling_rate;
+    pdlSettings::bufferSize = app->buffer_size;
     app->audio.startStream();
 }
 
