@@ -1,16 +1,4 @@
-//not done
-
-/*
-All wave Antialiased wavetables are in these two files. These
-classes only generate and provide access to wavetables; they 
-do not provide the functionality to play them. This is because
-only one wavetable is needed no matter how many instances of the 
-oscillator are needed. To achieve antialiasing, 10 distinct versions
-of the waveform are stored, one for each octave of the audible hearing
-range (20 Hz to 20,000 Hz). Only audible haromincs below the nyquist are 
-considered in the waveforms. 
-*/
-
+//incomplete
 #ifndef WTSine_hpp
 #define WTSine_hpp
 
@@ -19,19 +7,22 @@ considered in the waveforms.
 #include "math.h"
 
 #define TABLESIZE 2048
-
+//======================Define a wavetable template
 class SineTable{
     //since the sine table only contains energy at one frequency, 
     //there is no need to stack verisons of tables
-  private:
-  static SineTable* instance;
+  private://class members are private by default; added for clarity
+  static SineTable* instance;//store a pointer to an instance of the table
   float tableFundamentalFrequency = pdlSettings::sampleRate/float(TABLESIZE);
-  SineTable();
-
+  SineTable();//constructor is private, which is unusual 
+  float* table;//storage of the table;
   public:
-
+  
+  static SineTable* getInstance();//provide access to the single instance of the table
+  float* getTable();//return a pointer to the table
+  
 };
-
+//======================Play the table defined above
 class WTSine{
   public://everything listed after this is public
   WTSine();//constructor, defined in the cpp
