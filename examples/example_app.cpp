@@ -1,5 +1,4 @@
 #include "example_app.hpp"
-#include "pdlSettings.hpp"
 
 #include "GL/gl3w.h"
 #define GLFW_INCLUDE_NONE
@@ -180,8 +179,6 @@ pdlExampleApp* pdlInitExampleApp(pdlExampleCallback callback) {
 }
 
 void pdlStartExampleApp(pdlExampleApp* app) {
-    pdlSettings::sampleRate = app->sampling_rate;
-    pdlSettings::bufferSize = app->buffer_size;
     app->audio.startStream();
 }
 
@@ -290,6 +287,14 @@ void pdlDeleteExampleApp(pdlExampleApp* app) {
     glfwDestroyWindow(app->window);
     glfwTerminate();
     delete app;
+}
+
+unsigned pdlExampleAppGetSamplingRate(pdlExampleApp* app) {
+    return app->sampling_rate;
+}
+
+unsigned pdlExampleAppGetBufferSize(pdlExampleApp* app){
+    return app->buffer_size;
 }
 
 void pdlGetCursorPos(pdlExampleApp* app, float* mx, float* my) {

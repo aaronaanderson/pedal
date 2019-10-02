@@ -35,7 +35,7 @@ class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   void setDecay(float newDecay);
   void setSustain(float newSustain);
   void setRelease(float newRelease);
-  void setTriger(bool newTrigger);
+  void setTrigger(bool newTrigger);
   //=======================================================
   private://best practice to keep inner workings private
   enum states {OFF=0, ATTACK, DECAY, SUSTAIN, RELEASE};

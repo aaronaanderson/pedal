@@ -12,6 +12,9 @@ bool pdlRunExampleApp(pdlExampleApp* app);
 void pdlUpdateExampleApp(pdlExampleApp* app);
 void pdlDeleteExampleApp(pdlExampleApp* app);
 
+unsigned pdlExampleAppGetSamplingRate(pdlExampleApp* app);
+unsigned pdlExampleAppGetBufferSize(pdlExampleApp* app);
+
 void pdlGetCursorPos(pdlExampleApp* app, float* mx, float* my);
 
 void pdlAddSlider(pdlExampleApp* app, int sliderIndex, const char* name,

@@ -177,4 +177,4 @@ void CTEnvelope::setRelease(float newRelease){//any positive value
   release = newRelease;
   calculateIncrement(RELEASE);//changing vale requires recalculating increment
 }
-void CTEnvelope::setTriger(bool newTrigger){trigger = newTrigger;}
+void CTEnvelope::setTrigger(bool newTrigger){trigger = newTrigger;}
