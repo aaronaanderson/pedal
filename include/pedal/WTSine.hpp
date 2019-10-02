@@ -1,3 +1,5 @@
+//not done
+
 /*
 All wave Antialiased wavetables are in these two files. These
 classes only generate and provide access to wavetables; they 
@@ -9,13 +11,25 @@ range (20 Hz to 20,000 Hz). Only audible haromincs below the nyquist are
 considered in the waveforms. 
 */
 
+#ifndef WTSine_hpp
+#define WTSine_hpp
+
 #include "pdlSettings.hpp"
 #include "utilities.hpp"
 #include "math.h"
 
+#define TABLESIZE 2048
+
 class SineTable{
     //since the sine table only contains energy at one frequency, 
     //there is no need to stack verisons of tables
+  private:
+  static SineTable* instance;
+  float tableFundamentalFrequency = pdlSettings::sampleRate/float(TABLESIZE);
+  SineTable();
+
+  public:
+
 };
 
 class WTSine{
@@ -42,17 +56,10 @@ class WTSine{
   //a "getter" or a "setter"
   //best practice to leave inner workings private
 
-  inline float generateNextSample(){//return a float even if you don't use it
-    //inline functions must be located in the header file, so 
-    //we will define it here. 
-    currentSample = sin(phase) * amplitude;//calculate single sample
-    phase += phaseIncrement;//increment phase for the next sample
-    phase = fmod(phase, 6.283185307179586);
-    return currentSample;
-  }
-
+  SineTable* sineTable = SineTable::getInstance();
   float frequency, phase, amplitude;//standard oscillator variables
   float currentSample;//current working sample
   float* currentBlock;//current working block of samples
   double phaseIncrement;//extra precision necessary 
 };
+#endif
