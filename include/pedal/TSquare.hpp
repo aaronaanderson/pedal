@@ -16,7 +16,7 @@ class TSquare{//Pedal Trivial Square Oscillator
   void setFrequency(float newFrequency);
   void setPhase(float newPhase);
   void setAmplitude(float newAmplitude);
-  void setDutyCycle();
+  void setDutyCycle(float newDutyCycle);
 
   //"getters"
   float getFrequency();

@@ -1,4 +1,4 @@
-#include "TSquare.hpp"
+#include "pedal/TSquare.hpp"
 
 //constructors and deconstructors
 //=========================================================
@@ -6,12 +6,14 @@ TSquare::TSquare(){//default constructor
   setFrequency(440);//default frequency is 440
   setPhase(0.0);
   setAmplitude(1.0);
+  setDutyCycle(0.5);
 }
 
 TSquare::TSquare(float frequency){//override constructor
   setFrequency(frequency);
   setPhase(0.0);
   setAmplitude(1.0);
+  setDutyCycle(0.5);
 }
 
 TSquare::~TSquare(){//deconstructor (needed to be explicit if freeing memory)
@@ -27,11 +29,11 @@ float TSquare::generateSample(){//return a float even if you don't use it
   while(phase > 1.0){
     phase -= 1.0;
   }
-  while(phase < 1.0){
+  while(phase < 0.0){
       phase += 1.0;
   }
 
-  if(phase > phaseIncrement){
+  if(phase > dutyCycle){
     currentSample = -1.0;
   }else{
     currentSample = 1.0;
@@ -48,7 +50,7 @@ float* TSquare::generateBlock(){//it is best to do all
   }
 
   for(int i = 0; i < pdlSettings::bufferSize; ++i){//for every sample in the buffer
-    currentBlock[i] = generateNextSample();//place the calculated sample at current index
+    currentBlock[i] = generateSample();//place the calculated sample at current index
   }
   return currentBlock;//returns pointer to the begining of this block
 }
@@ -56,14 +58,15 @@ float* TSquare::generateBlock(){//it is best to do all
 //=========================================================
 void TSquare::setFrequency(float newFrequency){
   frequency = newFrequency;
-  phaseIncrement = (frequency * 2.0)/pdlSettings::sampleRate;
+  phaseIncrement = (frequency)/pdlSettings::sampleRate;
 }
 void TSquare::setPhase(float newPhase){//expecting (0-2PI)
-    phase = fmod(newPhase, 2.0 * M_PI);//ensure 0-2PI
-    phase -= M_PI;//now -PI to PI
-    phase /= M_PI;//nown -1 to 1
+    phase = fmod(newPhase, 2.0 * 3.1415926);//ensure 0-2PI
+    phase -= 3.1415926;//now -PI to PI
+    phase /= 3.1415926;//nown -1 to 1
     //we need an offset. 0.0 phase should be 0.0 result
 }
+void TSquare::setDutyCycle(float newDutyCycle){dutyCycle = newDutyCycle;}
 void TSquare::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 
 float TSquare::getFrequency(){return frequency;}

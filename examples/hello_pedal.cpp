@@ -4,27 +4,27 @@
 
 #include "pedal/TSine.hpp"
 #include "pedal/TSaw.hpp"
-//#include "pedal/TSquare.hpp"
+#include "pedal/TSquare.hpp"
 #include "pedal/TTriangle.hpp"
 //#include "pedal/Saw.hpp"
 
 float envelope = 0.0f;
-TSaw sine;
+TSquare square;
 
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
-    sine.setFrequency(pdlGetSlider(app, 0));
+    square.setFrequency(pdlGetSlider(app, 0));
     bool loud = pdlGetToggle(app, 0);
     bool trig = pdlGetTrigger(app, 0);
     float mx, my; pdlGetCursorPos(app, &mx, &my);
-
+    square.setDutyCycle(mx*0.5);
     float amp = loud? 1.0f : 0.5f;
     if (trig) envelope = 0.0f;
     for (unsigned i = 0; i < buffer; i += 1) {
         envelope += 0.0001f * (1.0f - envelope);
-        float currentSample = sine.generateSample() * envelope;
+        float currentSample = square.generateSample() * envelope;
         for (unsigned j = 0; j < channel; j += 1) {
-            out[channel * i + j] = amp * currentSample;
+          out[channel * i + j] = amp * currentSample;
         }
     }
 }

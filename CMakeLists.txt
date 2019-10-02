@@ -9,6 +9,8 @@ add_library(pedal STATIC
     src/generators/oscillators/TSine.cpp
     src/generators/oscillators/TSaw.cpp
     src/generators/oscillators/TTriangle.cpp
+    src/generators/oscillators/TSquare.cpp 
+    src/generators/oscillators/TPhasor.cpp
     src/pdlSettings.cpp
 )
 
