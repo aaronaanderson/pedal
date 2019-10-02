@@ -6,22 +6,26 @@
 #include "utilities.hpp"
 #include "math.h"
 
-#define TABLESIZE 2048
+#define TABLESIZE 2048//TODO revisit this
+//what's the smallest practical table? Calculate the StN ratio for bit depth
+
 //======================Define a wavetable template
 class SineTable{
-    //since the sine table only contains energy at one frequency, 
-    //there is no need to stack verisons of tables
   private://class members are private by default; added for clarity
   static SineTable* instance;//store a pointer to an instance of the table
-  float tableFundamentalFrequency = pdlSettings::sampleRate/float(TABLESIZE);
+  //The next value is simply 'what frequency would be played if 1 sample of 
+  //of the table was played per 1 sample of the audio out.
+  float fundamentalFrequency = pdlSettings::sampleRate/float(TABLESIZE);
   SineTable();//constructor is private, which is unusual 
+  ~SineTable();
   float* table;//storage of the table;
-  public:
   
+  public:
   static SineTable* getInstance();//provide access to the single instance of the table
   float* getTable();//return a pointer to the table
-  
+  float getFundamentalFrequency();
 };
+
 //======================Play the table defined above
 class WTSine{
   public://everything listed after this is public
