@@ -3,7 +3,7 @@
 //constructors and deconstructors
 //=========================================================
 CTEnvelope::CTEnvelope(){
-    setup(100, 40, 0.7, 400);//simple default values
+  setup(100, 40, 0.7, 400);//simple default values
 }
 
 CTEnvelope::CTEnvelope(float initialAttack, float initialDecay, float initialSustain, float initialRelease){
@@ -121,7 +121,6 @@ float* CTEnvelope::generateBlock(){
   }
   return currentBlock;//return (a pointer to) the block
 }
-
 
 void CTEnvelope::calculateIncrement(states whichIncrement){
   //these are the values that are added or subtracted to currentSample
