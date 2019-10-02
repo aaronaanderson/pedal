@@ -68,7 +68,9 @@ float CTEnvelope::generateSample(){//generate a single sample
     case ASR://Attack, Sustain, Release
       switch(currentState){
         case OFF:
-          //do nothing
+          if(trigger){
+              currentSample = SUSTAIN;
+          }
         break;
         case ATTACK://initial portion of a 'note'
         currentSample += attackIncrement;//increase value one sample at a time
@@ -78,7 +80,9 @@ float CTEnvelope::generateSample(){//generate a single sample
         }
         break;
         case SUSTAIN://the sustained, or 'held' portion of a 'note'
-          //do nothing, value is already at sustain value
+          if(!trigger){
+              currentState = RELEASE;
+          }
         break;
         case RELEASE://the tail-end of a 'note'
         currentSample -= releaseIncrement;//decrease value sample by sample
@@ -92,7 +96,9 @@ float CTEnvelope::generateSample(){//generate a single sample
     case AR://Attack, Release (useful for percusive envelopes)
       switch(currentState){
         case OFF:
-          //do nothing
+          if(trigger){
+              currentState = ATTACK;
+          }
         break;
         case ATTACK://initial portion of a 'note'
         currentSample += attackIncrement;//increase value one sample at a time
@@ -106,6 +112,7 @@ float CTEnvelope::generateSample(){//generate a single sample
         if(currentSample <= 0.0){//once we've arrived
           currentSample = 0.0;//only report 0.0 until on again
           currentState = OFF;//update the state to off
+          trigger = false;
         }
         break;
       }

@@ -28,11 +28,13 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
     
     square.setDutyCycle(pdlGetSlider(app, 4));
     
+    //envelopes are ADSR by default
     sustainedEnvelope.setAttack(pdlGetSlider(app, 5));
     sustainedEnvelope.setDecay(pdlGetSlider(app, 6));
     sustainedEnvelope.setSustain(pdlGetSlider(app, 7));
     sustainedEnvelope.setRelease(pdlGetSlider(app, 8));
-
+    
+    percussiveEnvelope.setMode(CTEnvelope::AR);//set to attack-release
     percussiveEnvelope.setAttack(pdlGetSlider(app, 5));
     percussiveEnvelope.setRelease(pdlGetSlider(app, 8));
 
