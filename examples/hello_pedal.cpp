@@ -7,24 +7,28 @@
 #include "pedal/TSquare.hpp"
 #include "pedal/TTriangle.hpp"
 #include "pedal/TSaw.hpp"
+#include "pedal/CTEnvelope.hpp"
 
-float envelope = 0.0f;
+//loat envelope = 0.0f;
 TSquare square;
-TSaw saw;
+TSine saw;
+CTEnvelope envelope;
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
     saw.setFrequency(pdlGetSlider(app, 0));
-    bool loud = pdlGetToggle(app, 0);
-    bool trig = pdlGetTrigger(app, 0);
+    bool trigger = pdlGetToggle(app, 0);
+   // bool trigger = pdlGetTrigger(app, 0);
+    envelope.setTriger(trigger);
     float mx, my; pdlGetCursorPos(app, &mx, &my);
     //square.setDutyCycle(mx*0.5);
-    float amp = loud? 1.0f : 0.5f;
-    if (trig) envelope = 0.0f;
+
+    //if (trig) envelope = 0.0f;
     for (unsigned i = 0; i < buffer; i += 1) {
-        envelope += 0.0001f * (1.0f - envelope);
-        float currentSample = saw.generateSample() * envelope;
+        //envelope += 0.0001f * (1.0f - envelope);
+        float currentSample = saw.generateSample();
+        currentSample *= envelope.generateSample();
         for (unsigned j = 0; j < channel; j += 1) {
-          out[channel * i + j] = amp * currentSample;
+          out[channel * i + j] = currentSample;
         }
     }
 }

@@ -7,7 +7,7 @@ CTEnvelope::CTEnvelope(){
 }
 
 CTEnvelope::CTEnvelope(float initialAttack, float initialDecay, float initialSustain, float initialRelease){
-  setup(initialAttack, initialDecay, clamp(initialSustain, 0.0, 1.0), initialRelease);
+  setup(initialAttack, initialDecay, initialSustain, initialRelease);
 }
 
 CTEnvelope::~CTEnvelope(){//deconstructor
@@ -19,7 +19,7 @@ CTEnvelope::~CTEnvelope(){//deconstructor
 //primary mechanics of class
 //=========================================================
 void CTEnvelope::setup(float newAttack, float newDecay, float newSustain, float newRelease){
-  setSustain(clamp(newSustain, 0.0, 1.0));//clamp sustain 0.0 to 1.0
+  setSustain(newSustain);//clamp sustain 0.0 to 1.0
   setAttack(newAttack);
   setDecay(newDecay);
   setRelease(newRelease);
@@ -155,7 +155,7 @@ float CTEnvelope::getSample(){return currentSample;}
 float* CTEnvelope::getBlock(){return currentBlock;}
 int CTEnvelope::getCurrentState(){return currentState;}
 int CTEnvelope::getCurrentMode(){return currentMode;}
-bool CTEnvelope::getTrigger(){return;}
+bool CTEnvelope::getTrigger(){return trigger;}
 
 void CTEnvelope::setMode(modes newMode){currentMode = newMode;}
 void CTEnvelope::setAttack(float newAttack){//any positive value
@@ -167,7 +167,7 @@ void CTEnvelope::setDecay(float newDecay){//any positive value
   calculateIncrement(DECAY);//changing value requires recalculating increment
 }
 void CTEnvelope::setSustain(float newSustain){//amplitude from 0.0 to 1.0
-  sustain = clamp(newSustain, 0.0f, 1.0f);
+  sustain = newSustain;
   if(currentMode == ADSR || currentMode == ASR){//protect a AR user from themselves
     calculateIncrement(DECAY);//New sustain value will change this value
     calculateIncrement(RELEASE);//New sustain value will changes this value

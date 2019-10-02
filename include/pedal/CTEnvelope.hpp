@@ -4,6 +4,7 @@
 #include "math.h"//for fmin and fmax
 #include "pdlSettings.hpp"//so we can access sampleRate and bufferSize
 #include "utilities.hpp"// for clamp 
+
 class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   public:
   CTEnvelope();//default constructor
