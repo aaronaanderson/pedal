@@ -3,6 +3,10 @@
 
 #include "math.h"
 
+/*
+@kee leaving these functions causes a redefinition error..hmmmmm
+*/
+
 //float mtof(float midiValue){//midi to frequency
 //    return 440.0f * (pow(2, (midiValue-69)/12.0f));
 //}
