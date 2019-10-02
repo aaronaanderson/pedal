@@ -1,14 +1,28 @@
-#ifndef TSine_hpp
-#define TSine_hpp
+/*
+All wave Antialiased wavetables are in these two files. These
+classes only generate and provide access to wavetables; they 
+do not provide the functionality to play them. This is because
+only one wavetable is needed no matter how many instances of the 
+oscillator are needed. To achieve antialiasing, 10 distinct versions
+of the waveform are stored, one for each octave of the audible hearing
+range (20 Hz to 20,000 Hz). Only audible haromincs below the nyquist are 
+considered in the waveforms. 
+*/
 
-#include <math.h> //so we can use sin()
-#include "pdlSettings.hpp"//so we can access sampleRate and bufferSize
+#include "pdlSettings.hpp"
+#include "utilities.hpp"
+#include "math.h"
 
-class TSine {//Pedal Trivial Sine Oscillator
+class SineTable{
+    //since the sine table only contains energy at one frequency, 
+    //there is no need to stack verisons of tables
+};
+
+class WTSine{
   public://everything listed after this is public
-  TSine();//constructor, defined in the cpp
-  TSine(float frequency);//option to set frequency on construction
-  ~TSine();//deconstructor (may be needed to free memory)
+  WTSine();//constructor, defined in the cpp
+  WTSine(float frequency);//option to set frequency on construction
+  ~WTSine();//deconstructor (may be needed to free memory)
   float generateSample();//generate and return a single sample
   float* generateBlock();//generate and return a block of samples
 
@@ -42,5 +56,3 @@ class TSine {//Pedal Trivial Sine Oscillator
   float* currentBlock;//current working block of samples
   double phaseIncrement;//extra precision necessary 
 };
-
-#endif 
