@@ -1,21 +1,21 @@
 
-#include "TTriangle.hpp"
+#include "pedal/TTriangle.hpp"
 
 //constructors and deconstructors
 //=========================================================
-pdlTTriangle::pdlTTriangle(){//default constructor
+TTriangle::TTriangle(){//default constructor
   setFrequency(440);//default frequency is 440
   setPhase(0.0);
   setAmplitude(1.0);
 }
 
-pdlTTriangle::pdlTTriangle(float frequency){//override constructor
+TTriangle::TTriangle(float frequency){//override constructor
   setFrequency(frequency);
   setPhase(0.0);
   setAmplitude(1.0);
 }
 
-pdlTTriangle::~pdlTTriangle(){//deconstructor (needed to be explicit if freeing memory)
+TTriangle::~TTriangle(){//deconstructor (needed to be explicit if freeing memory)
   if(currentBlock != nullptr){//if space was allocated for current
     delete currentBlock;//free the memory
   }
@@ -23,12 +23,22 @@ pdlTTriangle::~pdlTTriangle(){//deconstructor (needed to be explicit if freeing 
 
 //primary mechanics of class
 //=========================================================
-float pdlTTriangle::generateSample(){//return a float even if you don't use it
-  currentSample = generateNextSample();//defined in header (b/c inlined function)
+float TTriangle::generateSample(){//return a float even if you don't use it
+  //We can start by making a trivial sawtooth
+  phase += phaseIncrement;
+  while(phase > 1.0){
+    phase -= 2.0;
+  }
+  while(phase < -1.0){//to ensure that negative frequencies will work
+    phase += 2.0;
+  }
+  //then convert sawtooth to triangle by flipping the negative regions
+  currentSample = (fabs(phase) * 2.0) - 1.0;//convert from saw to triangle
+  currentSample *= amplitude;//scale by
   return currentSample;
 }
 
-float* pdlTTriangle::generateBlock(){//it is best to do all 
+float* TTriangle::generateBlock(){//it is best to do all 
   //calculations in a row if possible. This keeps the memory from 
   //jumping around looking for data
 
@@ -37,25 +47,25 @@ float* pdlTTriangle::generateBlock(){//it is best to do all
   }
 
   for(int i = 0; i < pdlSettings::bufferSize; ++i){//for every sample in the buffer
-    currentBlock[i] = generateNextSample();//place the calculated sample at current index
+    currentBlock[i] = generateSample();//place the calculated sample at current index
   }
   return currentBlock;//returns pointer to the begining of this block
 }
 //Getters and setters
 //=========================================================
-void pdlTTriangle::setFrequency(float newFrequency){
+void TTriangle::setFrequency(float newFrequency){
   frequency = newFrequency;
-  phaseIncrement = (frequency * 2.0)/pdlSettings::sampleRate;
+  phaseIncrement = (frequency * 2.0 )/pdlSettings::sampleRate;
 }
-void pdlTTriangle::setPhase(float newPhase){//expecting (0-2PI)
-    phase = fmod(newPhase, 2.0 * M_PI);//ensure 0-2PI
-    phase -= M_PI;//now -PI to PI
-    phase /= M_PI;//nown -1 to 1
+void TTriangle::setPhase(float newPhase){//expecting (0-2PI)
+    phase = fmod(newPhase, 2.0 * 3.1415926);//ensure 0-2PI
+    phase -= 3.1415926;//now -PI to PI
+    phase /= 3.1415926;//nown -1 to 1
     //we need an offset. 0.0 phase should be 0.0 result
 }
-void pdlTTriangle::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
+void TTriangle::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 
-float pdlTTriangle::getFrequency(){return frequency;}
-float pdlTTriangle::getAmplitude(){return amplitude;}
-float pdlTTriangle::getSample(){return currentSample;}
-float* pdlTTriangle::getBlock(){return currentBlock;}
+float TTriangle::getFrequency(){return frequency;}
+float TTriangle::getAmplitude(){return amplitude;}
+float TTriangle::getSample(){return currentSample;}
+float* TTriangle::getBlock(){return currentBlock;}

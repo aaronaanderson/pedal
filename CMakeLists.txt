@@ -7,6 +7,8 @@ project(pedal)
 add_library(pedal STATIC
     src/pedal.cpp
     src/generators/oscillators/TSine.cpp
+    src/generators/oscillators/TSaw.cpp
+    src/generators/oscillators/TTriangle.cpp
     src/pdlSettings.cpp
 )
 

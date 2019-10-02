@@ -3,9 +3,13 @@
 #include <cmath>
 
 #include "pedal/TSine.hpp"
+#include "pedal/TSaw.hpp"
+//#include "pedal/TSquare.hpp"
+#include "pedal/TTriangle.hpp"
+//#include "pedal/Saw.hpp"
 
 float envelope = 0.0f;
-TSine sine;
+TSaw sine;
 
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
@@ -29,7 +33,7 @@ int main() {
     pdlHello();
     pdlExampleApp* app = pdlInitExampleApp(callback);
     if (!app) {
-        return 1;
+      return 1;
     }
     
     // Add your GUI elements here
