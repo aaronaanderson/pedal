@@ -4,6 +4,7 @@
 
 #include "pdlSettings.hpp"
 #include "utilities.hpp"
+#include "pedal/Interpolation.hpp"
 #include "math.h"
 
 #define TABLESIZE 2048//TODO revisit this
@@ -24,6 +25,7 @@ class SineTable{
   static SineTable* getInstance();//provide access to the single instance of the table
   float* getTable();//return a pointer to the table
   float getFundamentalFrequency();
+  int getTableSize();
 };
 
 //======================Play the table defined above
