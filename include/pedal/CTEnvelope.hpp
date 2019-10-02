@@ -3,7 +3,7 @@
 
 #include "math.h"//for fmin and fmax
 #include "pdlSettings.hpp"//so we can access sampleRate and bufferSize
-
+#include "utilities.hpp"// for clamp 
 class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   public:
   CTEnvelope();//default constructor
@@ -26,6 +26,7 @@ class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   float* getBlock();
   int getCurrentState();
   int getCurrentMode();
+  bool getTrigger();
 
   //"setters"
   void setMode(modes newMode);
@@ -33,12 +34,14 @@ class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   void setDecay(float newDecay);
   void setSustain(float newSustain);
   void setRelease(float newRelease);
+  void setTriger(bool newTrigger);
   //=======================================================
   private://best practice to keep inner workings private
   enum states {OFF=0, ATTACK, DECAY, SUSTAIN, RELEASE};
   void calculateIncrement(states whichIncrement);//nead a 'state' variable
   int currentState;//which phase, off-a-d-s-r, is the envelope in
   int currentMode;//which type of envelope is it, adsr,asr, or ar
+  bool trigger;//on or off
   float attack, decay, sustain, release;//internal values for these variables
   float attackIncrement, decayIncrement, releaseIncrement;//necessary to calculate next sample
   float currentSample;//current working sample

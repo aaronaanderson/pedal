@@ -1,9 +1,9 @@
-#include "CTEnvelope.hpp"
+#include "pedal/CTEnvelope.hpp"
 
 //constructors and deconstructors
 //=========================================================
 CTEnvelope::CTEnvelope(){
-  setup(100, 40, 0.7, 400);//simple default values
+ setup(100, 40, 0.7, 400);//simple default values
 }
 
 CTEnvelope::CTEnvelope(float initialAttack, float initialDecay, float initialSustain, float initialRelease){
@@ -33,7 +33,9 @@ float CTEnvelope::generateSample(){//generate a single sample
     case ADSR://Attack, Decay, Sustain, Release (default)
       switch(currentState){//envelope behaves differently based on which state it is in
         case OFF:
-          //do nothing
+          if(trigger){
+              currentState = ATTACK;
+          }
         break;
         case ATTACK://initial portion of a 'note'
           currentSample += attackIncrement;//increase value one sample at a time
@@ -50,7 +52,9 @@ float CTEnvelope::generateSample(){//generate a single sample
           }
         break;
         case SUSTAIN://the sustained, or 'held' portion of a 'note'
-          //do nothing, value is already at sustain value
+          if(!trigger){//if note is not being held
+            currentState = RELEASE;
+          }
         break;
         case RELEASE://the tail-end of a 'note'
           currentSample -= releaseIncrement;//decrease value sample by sample
@@ -151,6 +155,7 @@ float CTEnvelope::getSample(){return currentSample;}
 float* CTEnvelope::getBlock(){return currentBlock;}
 int CTEnvelope::getCurrentState(){return currentState;}
 int CTEnvelope::getCurrentMode(){return currentMode;}
+bool CTEnvelope::getTrigger(){return;}
 
 void CTEnvelope::setMode(modes newMode){currentMode = newMode;}
 void CTEnvelope::setAttack(float newAttack){//any positive value
@@ -172,3 +177,4 @@ void CTEnvelope::setRelease(float newRelease){//any positive value
   release = newRelease;
   calculateIncrement(RELEASE);//changing vale requires recalculating increment
 }
+void CTEnvelope::setTriger(bool newTrigger){trigger = newTrigger;}
