@@ -3,6 +3,7 @@
 
 #include "pdlSettings.hpp"
 
+#define NUM_TABLES 10
 #define TABLESIZE 2048
 
 class SawTable{
@@ -14,14 +15,20 @@ class SawTable{
   SawTable();//constructor is private, which is unusual 
   ~SawTable();
   void normalize();//bring a range to -1 to 1
-  float** table;//storage of the table;
+  float** table;//storage of the table (two dimmensional array of floats);
+  float currentLowestFrequency;//used to keep track of table frequencies
+  static float* lowFrequencyList;//an array of the base frequencies per table
+  static float nyquist = pdlSettings::sampleRate * 0.5f;//nyquist frequency is 1/2 sr
   
   public:
   static SawTable* getInstance();//provide access to the single instance of the table
   float** getTable();//return a pointer to (a pointer to) the table
-  float getFundamentalFrequency();
-  int getTableSize();
+  float getFundamentalFrequency();//return table fundamental
+  int getTableSize();//return table size (-1)
 };
+
+//using Table = std::array<float, TABLESIZE>;
+//std::array<Table, 10> table;
 
 class WTSaw{
   public://everything listed after this is public

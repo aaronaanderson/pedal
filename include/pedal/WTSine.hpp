@@ -18,7 +18,7 @@ class SineTable{
   static SineTable* instance;//store a pointer to an instance of the table
   //The next value is simply 'what frequency would be played if 1 sample of 
   //of the table was played per 1 sample of the audio out.
-  float fundamentalFrequency = pdlSettings::sampleRate/float(TABLESIZE);
+  float fundamentalFrequency; 
   SineTable();//constructor is private, which is unusual 
   ~SineTable();
   float* table;//storage of the table;
