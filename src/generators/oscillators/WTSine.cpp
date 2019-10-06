@@ -5,7 +5,8 @@ SineTable::SineTable(){//when it is time to build a table (constructor)
   table = new float[TABLESIZE];//allocate memory for the table
   for(int i = 0; i < TABLESIZE; i++){//for every memory location
     //convert i from 0 - (TABLESIZE-1) to 0 - TWO_PI
-    float phase = (i * TABLESIZE * 6.2831853072)/float(TABLESIZE);
+    float phase = (i * 6.2831853072)/float(TABLESIZE-1);
+    //cout << phase << endl;
     table[i] = sin(phase);//store the sample in the table
   }
 }
@@ -26,9 +27,12 @@ SineTable* SineTable::getInstance(){
 //access to the data in the table
 float* SineTable::getTable(){return table;}
 float SineTable::getFundamentalFrequency(){return fundamentalFrequency;}
-int SineTable::getTableSize(){return TABLESIZE;}
+int SineTable::getTableSize(){
+  //tell the player that the wave table is 1 sample smaller, for linear interpolation
+  return TABLESIZE - 1;
+  }
 //initiate the static pointer as a nullptr
-SineTable* SineTable::instance = nullptr;//@kee is this necessary?
+SineTable* SineTable::instance = nullptr;
 
 //WaveTableSine==================================================
 
@@ -55,8 +59,8 @@ float WTSine::generateSample(){
                                       sineTable->getTable()[int(phase+1.0f)]);
   phase += phaseIncrement;//increment phase
   int tableSize = sineTable->getTableSize()-1;//store since we need it often
-  if(phase >= tableSize){phase -= tableSize; }//if the phase is past the end of the table
-  if(phase <= 0.0){phase += tableSize;}//if the phase is past the beginning of table (negative frequencies)
+  if(phase > tableSize){phase -= tableSize; }//if the phase is past the end of the table
+  if(phase < 0.0){phase += tableSize;}//if the phase is past the beginning of table (negative frequencies)
   currentSample *= amplitude;//scale result by amplitude
   return currentSample;//return results
 }

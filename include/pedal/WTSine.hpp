@@ -2,6 +2,8 @@
 #ifndef WTSine_hpp
 #define WTSine_hpp
 
+#include "stdio.h"
+
 #include "pdlSettings.hpp"
 #include "utilities.hpp"
 #include "pedal/Interpolation.hpp"

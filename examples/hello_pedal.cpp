@@ -8,8 +8,9 @@
 #include "pedal/TTriangle.hpp"
 //#include "pedal/TSaw.hpp"
 #include "pedal/CTEnvelope.hpp"
+#include "pedal/WTSine.hpp"
 
-TTriangle oscillator;
+WTSine oscillator;
 CTEnvelope envelope;
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
@@ -43,7 +44,7 @@ int main() {
     pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
     pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
     // Add your GUI elements here
-    pdlAddSlider(app, 0, "frequency", 0.1f, 8000.0f, 440.0f);
+    pdlAddSlider(app, 0, "frequency", 0.1f, 4000.0f, 200.0f);
 
     pdlAddSlider(app, 1, "Attack", 2.0f, 300.0f, 80.0f);
     pdlAddSlider(app, 2, "Decay", 2.0f, 200.0f, 30.0f);
