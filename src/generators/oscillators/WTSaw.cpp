@@ -108,40 +108,22 @@ WTSaw::WTSaw(float initialFrequency){
 WTSaw::~WTSaw(){
   delete[] currentBlock;
 }
+//Basic Functionallity of class==========
 float WTSaw::generateSample(){
-  //this is a process known as bilinear interpolation (2D linear interpolation)
   float** table = instance->getTable();
-  
-  // table idx
-  const int t0 = (int)currentTable;
-  const int t1 = (t0 < NUM_TABLES-1)? t0+1 : t0; // check if t0 is last table
-
-  // table
-  const float* T0 = table[t0];
-  const float* T1 = table[t1];
-
-  // phase idx
-  const int p0 = (int)phase;
-  const int p1 = (p0 + 1) % TABLESIZE; // wrap phase idx
-
-  // interpolate
-  const float s0 = linearInterpolation(phase, T0[p0], T0[p1]);
-  const float s1 = linearInterpolation(phase, T1[p0], T1[p1]);
-  const float s = linearInterpolation(currentTable, s0, s1);
-
-  currentSample = s;
-
-#if 0
-  float lowTable = linearInterpolation(phase,
-                                       table[int(currentTable)][int(phase)],
-                                       table[int(currentTable)][int(phase+1.0f)]);
-  float highTable = linearInterpolation(phase, 
-                                        table[int(fmin(currentTable+1.0f, float(TABLESIZE-1)))][int(phase)], 
-                                        table[int(fmin(currentTable+1.0f, float(TABLESIZE-1)))][int(phase+1.0)]);
-
-  currentSample = linearInterpolation(currentTable, lowTable, highTable);    
-#endif
-
+  // store which tables will be used (y axis of 2D array)
+  const int lowTableIndex = (int)currentTable;
+  const int highTableIndex = (lowTableIndex < NUM_TABLES-1)? lowTableIndex+1 : lowTableIndex; 
+  // access the necessary tables from the list of tables
+  const float* lowTable = table[lowTableIndex];
+  const float* highTable = table[highTableIndex];
+  // find the phase (x axis of 2D array)
+  const int previousIndex = (int)phase;
+  const int nextIndex = (previousIndex + 1) % TABLESIZE; // wrap phase idx
+  //this is a process known as bilinear interpolation (2D linear interpolation)
+  const float s0 = linearInterpolation(phase, lowTable[previousIndex], lowTable[nextIndex]);
+  const float s1 = linearInterpolation(phase, highTable[previousIndex], highTable[nextIndex]);
+  currentSample = linearInterpolation(currentTable, s0, s1);;
   currentSample *= amplitude;//scale for amplitude
   phase += (float)phaseIncrement;//progress phase
   int tableSize = instance->getTableSize()-1;//account for the extra sample
@@ -149,7 +131,7 @@ float WTSaw::generateSample(){
   if(phase <= 0.0f){phase += tableSize;}
   return currentSample;//return results
 }
-//Basic Functionallity of class=========
+
 float* WTSaw::generateBlock(){
   if(currentBlock == nullptr){//if the block hasn't been allocated
     currentBlock = new float[pdlSettings::bufferSize];//allocate the block
