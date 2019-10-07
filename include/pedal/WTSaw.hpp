@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "pdlSettings.hpp"
-#include "math.h"
+#include <cmath>
 #include "Interpolation.hpp"
 
 #define NUM_TABLES 10
@@ -14,7 +14,7 @@ class SawTable{
   static SawTable* instance;//store a pointer to an instance of the table
   //The next value is simply 'what frequency would be played if 1 sample of 
   //of the table was played per 1 sample of the audio out.
-  float fundamentalFrequency = pdlSettings::sampleRate/float(TABLESIZE);
+  float fundamentalFrequency = (float)pdlSettings::sampleRate/float(TABLESIZE);
   SawTable();//constructor is private, which is unusual 
   ~SawTable();
   void normalizeTables();//bring tables a range to -1 to 1

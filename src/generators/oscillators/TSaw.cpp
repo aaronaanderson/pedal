@@ -24,7 +24,7 @@ TSaw::~TSaw(){//deconstructor (needed to be explicit if freeing memory)
 //primary mechanics of class
 //=========================================================
 float TSaw::generateSample(){//return a float even if you don't use it
-  phase += phaseIncrement;
+  phase += (float)phaseIncrement;
   while(phase > 1.0){
     phase -= 2.0;
   }
@@ -56,9 +56,9 @@ void TSaw::setFrequency(float newFrequency){
 }
 void TSaw::setPhase(float newPhase){//set phase (0 - 2PI)
   //convert the standard 0-2PI range to -1 to 1 to make calculations cheap
-  phase = fmod(newPhase, 2.0 * 3.1415926);//make sure phase is in the 0-twopi range
-  phase -= 3.1415926;//now the range is (-pi, pi);
-  phase /= 3.1415926;//now the phase is (-1, 1);
+  phase = fmod(newPhase, 2.0f * 3.1415926535f);//make sure phase is in the 0-twopi range
+  phase -= 3.1415926535f;//now the range is (-pi, pi);
+  phase /= 3.1415926535f;//now the phase is (-1, 1);
 }
 void TSaw::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 
