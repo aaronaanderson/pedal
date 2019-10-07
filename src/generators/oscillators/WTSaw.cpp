@@ -2,8 +2,8 @@
 
 //Sine Table=====================================================
 SawTable::SawTable(){//when it is time to build a table (constructor)
-  nyquist = pdlSettings::sampleRate * 0.5;
-  fundamentalFrequency = pdlSettings::sampleRate/float(TABLESIZE - 1);
+  nyquist = (float)pdlSettings::sampleRate * 0.5f;
+  fundamentalFrequency = (float)pdlSettings::sampleRate/float(TABLESIZE - 1);
   lowFrequencyList = new float[NUM_TABLES];//allocate space for this list
   currentLowestFrequency = 20.0f;//20 will be considered the lowest frequency;
   for(int i = 0; i < NUM_TABLES; i++){//for each table 
@@ -34,7 +34,7 @@ SawTable::SawTable(){//when it is time to build a table (constructor)
     
     for(int j = 0; j < TABLESIZE; j++){//for each sample in that table
       for(int harmonic = 1;harmonic < availableHarmonics; harmonic++){//for each available harmonic
-        float harmonicPhase = (j * 6.2831853 * harmonic)/2047.0f;
+        float harmonicPhase = (j * 6.2831853f * harmonic)/float(getTableSize());
         float harmonicAmplitude = -1.0f/float(harmonic);
         table[i][j] += sin(harmonicPhase) * harmonicAmplitude;
       }
@@ -118,7 +118,7 @@ float WTSaw::generateSample(){
                                         table[int(fmin(currentTable+1.0f, float(TABLESIZE-1)))][int(phase+1.0)]);
   currentSample = linearInterpolation(currentTable, lowTable, highTable);    
   currentSample *= amplitude;//scale for amplitude
-  phase += phaseIncrement;//progress phase
+  phase += (float)phaseIncrement;//progress phase
   int tableSize = instance->getTableSize()-1;//account for the extra sample
   if(phase >= tableSize){phase -= tableSize;}                 
   if(phase <= 0.0f){phase += tableSize;}
@@ -153,6 +153,7 @@ float WTSaw::whichTable(float testFrequency){//essentially the Y value of a 2D a
       i++;//increase the increment
     }
   }
+  return 0;//windows compilers force this to be here
 }
 //Getters and Setters==================
 void WTSaw::setFrequency(float newFrequency){
@@ -161,14 +162,14 @@ void WTSaw::setFrequency(float newFrequency){
   phaseIncrement = frequency/float(instance->getFundamentalFrequency());
 }
 void WTSaw::setPhase(float newPhase){//expecting 0-TWO_PI
-  phase = fmod(fabs(newPhase), 6.2831853072);//wrap to 0 -TWO_PI
-  float scalar = instance->getTableSize()/6.2831853072;
+  phase = std::fmod(std::fabs(newPhase), 6.2831853072f);//wrap to 0 -TWO_PI
+  float scalar = instance->getTableSize()/6.2831853072f;
   phase = phase * scalar;//map 0-TWO_PI to 0 - tablSize
 }
 void WTSaw::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 float WTSaw::getFrequency(){return frequency;}
 float WTSaw::getPhase(){
-  return (phase * 6.2831853072)/float(instance->getTableSize());
+  return (phase * 6.2831853072f)/float(instance->getTableSize());
 }
 float WTSaw::getAmplitude(){return amplitude;}
 float WTSaw::getSample(){return currentSample;}

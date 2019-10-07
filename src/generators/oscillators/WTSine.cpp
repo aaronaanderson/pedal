@@ -2,13 +2,13 @@
 
 //Sine Table=====================================================
 SineTable::SineTable(){//when it is time to build a table (constructor)
-  fundamentalFrequency = pdlSettings::sampleRate/float(getTableSize());
+  fundamentalFrequency = (float)pdlSettings::sampleRate / float(getTableSize());
   table = new float[TABLESIZE];//allocate memory for the table
   for(int i = 0; i < TABLESIZE; i++){//for every memory location
     //convert i from 0 - (TABLESIZE-1) to 0 - TWO_PI
-    float phase = (i * 6.2831853072)/float(TABLESIZE-1);
+    float phase = (i * 6.2831853072f)/float(TABLESIZE-1);
     //cout << phase << endl;
-    table[i] = sin(phase);//store the sample in the table
+    table[i] = std::sin(phase);//store the sample in the table
   }
 }
 
@@ -59,7 +59,7 @@ float WTSine::generateSample(){
   currentSample = linearInterpolation(phase,
                                       table[int(phase)],
                                       table[int(phase+1.0f)]);
-  phase += phaseIncrement;//increment phase
+  phase += (float)phaseIncrement;//increment phase
   int tableSize = sineTable->getTableSize()-1;//store since we need it often
   if(phase > tableSize){phase -= tableSize; }//if the phase is past the end of the table
   if(phase < 0.0){phase += tableSize;}//if the phase is past the beginning of table (negative frequencies)
@@ -74,6 +74,7 @@ float* WTSine::generateBlock(){
   for(int i= 0; i < pdlSettings::bufferSize; i++){//for every sample in block
     currentBlock[i] = generateSample();//assign the next sample
   }
+  return currentBlock;
 }
 
 void WTSine::setFrequency(float newFrequency){
@@ -81,15 +82,15 @@ void WTSine::setFrequency(float newFrequency){
   phaseIncrement = frequency/float(sineTable->getFundamentalFrequency());
 }
 void WTSine::setPhase(float newPhase){//expecting 0-TWO_PI
-  phase = fmod(fabs(newPhase), 6.2831853072);//wrap to 0 -TWO_PI
-  float scalar = sineTable->getTableSize()/6.2831853072;
+  phase = std::fmod(std::fabs(newPhase), 6.2831853072f);//wrap to 0 -TWO_PI
+  float scalar = sineTable->getTableSize()/6.2831853072f;
   phase = phase * scalar;//map 0-TWO_PI to 0 - tablSize
 }
 void WTSine::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 
 float WTSine::getFrequency(){return frequency;}
 float WTSine::getPhase(){
-  return (phase * 6.2831853072)/float(sineTable->getTableSize());
+  return (phase * 6.2831853072f)/float(sineTable->getTableSize());
 }
 float WTSine::getAmplitude(){return amplitude;}
 float WTSine::getSample(){return currentSample;}

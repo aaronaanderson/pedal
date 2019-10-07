@@ -7,7 +7,7 @@
 #include "pdlSettings.hpp"
 #include "utilities.hpp"
 #include "pedal/Interpolation.hpp"
-#include "math.h"
+#include <cmath>
 
 #define TABLESIZE 2048//TODO revisit this
 //what's the smallest practical table? Calculate the StN ratio for bit depth
