@@ -2,6 +2,7 @@
 
 //Sine Table=====================================================
 SawTable::SawTable(){//when it is time to build a table (constructor)
+  nyquist = pdlSettings::sampleRate * 0.5;
   fundamentalFrequency = pdlSettings::sampleRate/float(TABLESIZE - 1);
   lowFrequencyList = new float[NUM_TABLES];//allocate space for this list
   currentLowestFrequency = 20.0f;//20 will be considered the lowest frequency;
@@ -18,6 +19,7 @@ SawTable::SawTable(){//when it is time to build a table (constructor)
       table[i][j] = 0.0f;//0 the memory   
     }
   }
+    
   //generate the harmonics
   for(int i = 0; i < NUM_TABLES; i++){//for each table
     //how many haromincs are available before aliasing?
@@ -27,8 +29,9 @@ SawTable::SawTable(){//when it is time to build a table (constructor)
       if(availableHarmonics > getTableSize() * 0.5){//check the table nyquist
         break;//can't store harmonics greater than 1/2 the fundamental 
       }
-      availableHarmonics += 1;//add the harmonic
+      availableHarmonics += 1;//add the next harmonic
     }
+    if(i==0){std::cout<<nyquist <<std::endl;}
     for(int j = 0; j < TABLESIZE; j++){//for each sample in that table
       for(int harmonic = 1;harmonic < availableHarmonics; harmonic++){//for each available harmonic
         float harmonicPhase = (j * 6.2831853 * harmonic)/float(getTableSize());
@@ -38,6 +41,7 @@ SawTable::SawTable(){//when it is time to build a table (constructor)
     }
     //normalize the table
     normalizeTables(); 
+    
   }
 }
 

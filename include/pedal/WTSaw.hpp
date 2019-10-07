@@ -1,6 +1,7 @@
 #ifndef WTSaw_hpp
 #define WTSaw_hpp
 
+#include <iostream>
 #include "pdlSettings.hpp"
 #include "math.h"
 #include "Interpolation.hpp"
