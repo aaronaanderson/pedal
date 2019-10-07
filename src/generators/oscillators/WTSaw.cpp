@@ -31,17 +31,22 @@ SawTable::SawTable(){//when it is time to build a table (constructor)
       }
       availableHarmonics += 1;//add the next harmonic
     }
-    if(i==0){std::cout<<availableHarmonics <<std::endl;}
+    
     for(int j = 0; j < TABLESIZE; j++){//for each sample in that table
       for(int harmonic = 1;harmonic < availableHarmonics; harmonic++){//for each available harmonic
-        float harmonicPhase = (j * 6.2831853 * harmonic)/float(getTableSize());
+        float harmonicPhase = (j * 6.2831853 * harmonic)/2047.0f;
         float harmonicAmplitude = -1.0f/float(harmonic);
         table[i][j] += sin(harmonicPhase) * harmonicAmplitude;
       }
     }
+    if(i==1){std::cout << availableHarmonics << std::endl;}
     //normalize the table
     normalizeTables(); 
-    
+    if(i == 1){
+      for(int j = 0; j < TABLESIZE; j++){
+        std::cout << table[1][j] << std::endl;
+      }
+    }
   }
 }
 
@@ -127,6 +132,7 @@ float* WTSaw::generateBlock(){
   for(int i= 0; i < pdlSettings::bufferSize; i++){//for every sample in block
     currentBlock[i] = generateSample();//assign the next sample
   }
+  return currentBlock;
 }
 float WTSaw::whichTable(float testFrequency){//essentially the Y value of a 2D array
   float* frequencyList = instance->getLowFrequencyList();//get the list of table frequencies
