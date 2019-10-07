@@ -45,7 +45,7 @@ int main() {
     pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
     pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
     // Add your GUI elements here
-    pdlAddSlider(app, 0, "frequency", 0.1f, 4000.0f, 140.0f);
+    pdlAddSlider(app, 0, "frequency", 0.1f, 20000.0f, 140.0f);
 
     pdlAddSlider(app, 1, "Attack", 2.0f, 300.0f, 80.0f);
     pdlAddSlider(app, 2, "Decay", 2.0f, 200.0f, 30.0f);
