@@ -179,5 +179,3 @@ float WTSquare::getPhase(){
 float WTSquare::getAmplitude(){return amplitude;}
 float WTSquare::getSample(){return currentSample;}
 float* WTSquare::getBlock(){return currentBlock;}
-
-
