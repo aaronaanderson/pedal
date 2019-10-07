@@ -26,10 +26,10 @@ SawTable::SawTable(){//when it is time to build a table (constructor)
     //add harmonics while under the nyquist frequency
     int availableHarmonics = 1;//start with a single available harmonic
     while(lowFrequencyList[i]*(availableHarmonics + 1) < nyquist){//test va
-      availableHarmonics += 1;
-      if(availableHarmonics > getTableSize() * 0.5){
+      if(availableHarmonics > getTableSize() * 0.5){//check the table nyquist
         break;//can't store harmonics greater than 1/2 the fundamental 
       }
+      availableHarmonics += 1;//add the harmonic
     }
     
     for(int j = 0; j < TABLESIZE; j++){//for each sample in that table
@@ -40,7 +40,7 @@ SawTable::SawTable(){//when it is time to build a table (constructor)
       }
     }
     //normalize the table
-    //normalizeTables(); 
+    normalizeTables(); 
   }
 }
 
@@ -93,13 +93,11 @@ WTSaw::WTSaw(){
   setFrequency(440.0f);
   setPhase(0.0f);
   setAmplitude(1.0f);
-  currentTable = whichTable(440.0f);
 }
 WTSaw::WTSaw(float initialFrequency){
   setFrequency(initialFrequency);
   setPhase(0.0f);
   setAmplitude(1.0f);
-  currentTable = whichTable(initialFrequency);
 }
 WTSaw::~WTSaw(){
   delete[] currentBlock;
@@ -137,19 +135,20 @@ float* WTSaw::generateBlock(){
   }
 }
 
-float WTSaw::whichTable(float frequency){//essentially the Y value of a 2D array
+float WTSaw::whichTable(float testFrequency){//essentially the Y value of a 2D array
   float* frequencyList = instance->getLowFrequencyList();//get the list of table frequencies
   //boundry check
-  if(frequency > frequencyList[NUM_TABLES-1]){//if the frequency is > than the highest table
+  if(testFrequency > frequencyList[NUM_TABLES-1]){//if the frequency is > than the highest table
     currentTable = NUM_TABLES-1;
     return float(currentTable);
-  }else if(frequency < frequencyList[0]){//if the frequency is < than the lowest table
+  }else if(testFrequency < frequencyList[0]){//if the frequency is < than the lowest table
+    currentTable = 0.0f;
     return 0.0f;
   }
   int i = 0;//create an index
-  while(frequency > frequencyList[i]){//eventually find a fit
-    if(frequency < frequencyList[i+1]){//if the next lowestFrequency is too high
-      float positionBetweenTables = ((frequency/frequencyList[i]) - 1.0f);//(0.0 - 1.0)
+  while(testFrequency > frequencyList[i]){//eventually find a fit
+    if(testFrequency < frequencyList[i+1]){//if the next lowestFrequency is too high
+      float positionBetweenTables = ((testFrequency/frequencyList[i]) - 1.0f);//(0.0 - 1.0)
       return i + positionBetweenTables;
     }else{//if the next increment is not too hight
       i++;//increase the increment
