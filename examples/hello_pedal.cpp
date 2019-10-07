@@ -9,8 +9,9 @@
 //#include "pedal/TSaw.hpp"
 #include "pedal/CTEnvelope.hpp"
 #include "pedal/WTSine.hpp"
+#include "pedal/WTSaw.hpp"
 
-WTSine oscillator;
+WTSaw oscillator;
 CTEnvelope envelope;
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,

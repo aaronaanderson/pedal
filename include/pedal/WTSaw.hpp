@@ -2,6 +2,8 @@
 #define WTSaw_hpp
 
 #include "pdlSettings.hpp"
+#include "math.h"
+#include "Interpolation.hpp"
 
 #define NUM_TABLES 10
 #define TABLESIZE 2048
@@ -17,12 +19,13 @@ class SawTable{
   void normalizeTables();//bring tables a range to -1 to 1
   float** table;//storage of the table (two dimmensional array of floats);
   float currentLowestFrequency;//used to keep track of table frequencies
-  static float* lowFrequencyList;//an array of the base frequencies per table
-  static float nyquist;//nyquist frequency is 1/2 sr
+  float* lowFrequencyList;//an array of the base frequencies per table
+  float nyquist;//nyquist frequency is 1/2 sr
   
   public:
   static SawTable* getInstance();//provide access to the single instance of the table
   float** getTable();//return a pointer to (a pointer to) the table
+  float* getLowFrequencyList();
   float getFundamentalFrequency();//return table fundamental
   int getTableSize();//return table size (-1)
 };
@@ -54,7 +57,7 @@ class WTSaw{
   //a "getter" or a "setter"
   //best practice to leave inner workings private
 
-  SawTable* sineTable = SawTable::getInstance();
+  SawTable* instance = SawTable::getInstance();
   float currentTable;
   float whichTable(float frequency);//input frequency, output which table to read
   float frequency, phase, amplitude;//standard oscillator variables

@@ -12,6 +12,7 @@ add_library(pedal STATIC
     src/generators/oscillators/TSquare.cpp 
     src/generators/oscillators/TPhasor.cpp
     src/generators/oscillators/WTSine.cpp
+    src/generators/oscillators/WTSaw.cpp
     src/generators/envelopes/CTEnvelope.cpp
     src/Interpolation.cpp
     src/utilities.cpp

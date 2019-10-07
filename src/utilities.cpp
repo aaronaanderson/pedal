@@ -7,13 +7,13 @@ void normalizeBuffer(float* inputBuffer, int bufferSize, bool correctDC = true){
     highestValue = -100000.0f;//TOOD make -inf
     for(int i = 0; i < bufferSize; i++){
       lowestValue = fmin(inputBuffer[i], lowestValue);
-      highesetValue = fmax(inputBuffer[i], highestValue);
+      highestValue = fmax(inputBuffer[i], highestValue);
     }
     float currentCenter = (highestValue - lowestValue) * 0.5;//find the average
     //offsetValue is added to each sample to bring to 0.0
     float offsetValue = -currentCenter;
     //adjust all values to have a currentCenter of 0.0
-    for(int i = 0; i < buffersize; i++){//for each sample in the buffer
+    for(int i = 0; i < bufferSize; i++){//for each sample in the buffer
       inputBuffer[i] += offsetValue;//addjust uniformly
     }
   }
@@ -21,14 +21,14 @@ void normalizeBuffer(float* inputBuffer, int bufferSize, bool correctDC = true){
     highestValue = 0.0f;//TODO this should really be -inf
     //find the largest value in the buffer
     for(int i = 0; i < bufferSize; i++){//for every sample in the buffer
-      largestValue = fmax(fabs(inputBuffer[i]), largestValue);
+      highestValue = fmax(fabs(inputBuffer[i]), highestValue);
       //the absolute value is taken as the value closest to the boundry,
       //-1 to 1, could be negative or positive, but we don't need the sign, 
       //just 'how close is the closest sample to the boarder?'
     }
   }
   //Do some math, largestValue*scalarValue=1.0
-  float scalarValue = 1/largestValue;
+  float scalarValue = 1/highestValue;
   //scale the entire buffer uniformly by this scalar value
   for(int i = 0; i < bufferSize; i++){
     inputBuffer[i] *= scalarValue;

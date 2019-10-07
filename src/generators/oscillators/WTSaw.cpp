@@ -10,7 +10,7 @@ SawTable::SawTable(){//when it is time to build a table (constructor)
   for(int i = 0; i < NUM_TABLES; i++){//for each table slot,
     table[i] = new float[TABLESIZE];//allocate space for the table
     for(int j = 0; j < TABLESIZE; j++){//for every sample in the table
-      table[i][j] = 0.0f;//0 the memory
+      table[i][j] = 0.0f;//0 the memory   
     }
   }
   
@@ -40,7 +40,7 @@ SawTable::SawTable(){//when it is time to build a table (constructor)
       }
     }
     //normalize the table
-    normalize();
+    //normalizeTables(); 
   }
 }
 
@@ -57,17 +57,18 @@ void SawTable::normalizeTables(){
     float largestValue = 0.0f;//TODO this should really be -inf
     //find the largest value in the buffer
     for(int j = 0; j < TABLESIZE; j++){
-      largestValue = fmax(fabs(inputBuffer[i]), largestValue);
+      largestValue = fmax(fabs(table[i][j]), largestValue);
     }
     //Do some math, largestValue*scalarValue=1.0
     float scalarValue = 1.0f/largestValue;
     //scale the entire buffer uniformly by this scalar value
-    for(int j = 0; j < bufferSize; j++){
+    for(int j = 0; j < TABLESIZE; j++){
       table[i][j] *= scalarValue;
     } 
   }
 }
 
+float* SawTable::getLowFrequencyList(){return lowFrequencyList;}
 //since the construct was private, an access method must be included
 SawTable* SawTable::getInstance(){
   if(instance == nullptr){
@@ -108,14 +109,14 @@ float WTSaw::generateSample(){
   //this is a process known as bilinear interpolation (2D linear interpolation)
   float** table = instance->getTable();
   float lowTable = linearInterpolation(phase,
-                                       table[int(currentOctave)][int(phase)],
-                                       table[int(currentOctave)][int(phase+1)]);
-  float hightTable = linearInterpolation(phase, 
-                                         table[int(fmin(currentOctave+1, 9.0))][int(phase)], 
-                                         table[int(fmin(currentOctave+1, 9.0))][int(phase+1)]);
+                                       table[int(currentTable)][int(phase)],
+                                       table[int(currentTable)][int(phase+1)]);
+  float highTable = linearInterpolation(phase, 
+                                        table[int(fmin(currentTable+1, 9.0))][int(phase)], 
+                                        table[int(fmin(currentTable+1, 9.0))][int(phase+1)]);
   currentSample = linearInterpolation(currentTable, lowTable, highTable);    
   currentSample *= amplitude;//scale for amplitude
-  phase += phseIncrement;//progress phase
+  phase += phaseIncrement;//progress phase
   
   //wrap table
   if(phase >= instance->getTableSize()){
@@ -136,22 +137,22 @@ float* WTSaw::generateBlock(){
   }
 }
 
-void WTSaw::whichTable(float frequency){//essentially the Y value of a 2D array
+float WTSaw::whichTable(float frequency){//essentially the Y value of a 2D array
   float* frequencyList = instance->getLowFrequencyList();//get the list of table frequencies
   //boundry check
   if(frequency > frequencyList[NUM_TABLES-1]){//if the frequency is > than the highest table
-    currentOctave = NUM_TABLES-1;
-    return float(currentOctave);
+    currentTable = NUM_TABLES-1;
+    return float(currentTable);
   }else if(frequency < frequencyList[0]){//if the frequency is < than the lowest table
     return 0.0f;
   }
   int i = 0;//create an index
-  while(frequency > frequencyList[index]){//eventually find a fit
-    if(frequency < frequencyList[index+1]){//if the next lowestFrequency is too high
-      float positionBetweenTables = ((frequency/frequencyList[index]) - 1.0f);//(0.0 - 1.0)
-      return index + positionBetweenTables;
+  while(frequency > frequencyList[i]){//eventually find a fit
+    if(frequency < frequencyList[i+1]){//if the next lowestFrequency is too high
+      float positionBetweenTables = ((frequency/frequencyList[i]) - 1.0f);//(0.0 - 1.0)
+      return i + positionBetweenTables;
     }else{//if the next increment is not too hight
-      index++;//increase the increment
+      i++;//increase the increment
     }
   }
 }
@@ -160,18 +161,18 @@ void WTSaw::whichTable(float frequency){//essentially the Y value of a 2D array
 void WTSaw::setFrequency(float newFrequency){
   frequency = newFrequency;
   currentTable = whichTable(frequency);
-  phaseIncrement = frequency/float(sineTable->getFundamentalFrequency());
+  phaseIncrement = frequency/float(instance->getFundamentalFrequency());
 }
 void WTSaw::setPhase(float newPhase){//expecting 0-TWO_PI
   phase = fmod(fabs(newPhase), 6.2831853072);//wrap to 0 -TWO_PI
-  float scalar = sineTable->getTableSize()/6.2831853072;
+  float scalar = instance->getTableSize()/6.2831853072;
   phase = phase * scalar;//map 0-TWO_PI to 0 - tablSize
 }
 void WTSaw::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 
 float WTSaw::getFrequency(){return frequency;}
 float WTSaw::getPhase(){
-  return (phase * 6.2831853072)/float(sineTable->getTableSize());
+  return (phase * 6.2831853072)/float(instance->getTableSize());
 }
 float WTSaw::getAmplitude(){return amplitude;}
 float WTSaw::getSample(){return currentSample;}
