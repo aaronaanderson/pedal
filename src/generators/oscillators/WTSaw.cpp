@@ -92,18 +92,38 @@ WTSaw::WTSaw(){
   setFrequency(440.0f);
   setPhase(0.0f);
   setAmplitude(1.0f);
+  currentTable = whichTable(440.0f);
 }
 WTSaw::WTSaw(float initialFrequency){
   setFrequency(initialFrequency);
   setPhase(0.0f);
   setAmplitude(1.0f);
+  currentTable = whichTable(initialFrequency);
 }
 WTSaw::~WTSaw(){
   delete[] currentBlock;
 }
 
 float WTSaw::generateSample(){
-
+  //this is a process known as bilinear interpolation (2D linear interpolation)
+  float** table = instance->getTable();
+  float lowTable = linearInterpolation(phase,
+                                       table[int(currentOctave)][int(phase)],
+                                       table[int(currentOctave)][int(phase+1)]);
+  float hightTable = linearInterpolation(phase, 
+                                         table[int(fmin(currentOctave+1, 9.0))][int(phase)], 
+                                         table[int(fmin(currentOctave+1, 9.0))][int(phase+1)]);
+  currentSample = linearInterpolation(currentTable, lowTable, highTable);    
+  currentSample *= amplitude;//scale for amplitude
+  phase += phseIncrement;//progress phase
+  
+  //wrap table
+  if(phase >= instance->getTableSize()){
+    phase -= instance->getTableSize();
+  }                 
+  if(phase <= 0.0f){//needed for negative frequencies
+    phase += instance->getTableSize();
+  }
   return currentSample;//return results
 }
 //Basic Functionallity of class=========
@@ -116,9 +136,30 @@ float* WTSaw::generateBlock(){
   }
 }
 
+void WTSaw::whichTable(float frequency){//essentially the Y value of a 2D array
+  float* frequencyList = instance->getLowFrequencyList();//get the list of table frequencies
+  //boundry check
+  if(frequency > frequencyList[NUM_TABLES-1]){//if the frequency is > than the highest table
+    currentOctave = NUM_TABLES-1;
+    return float(currentOctave);
+  }else if(frequency < frequencyList[0]){//if the frequency is < than the lowest table
+    return 0.0f;
+  }
+  int i = 0;//create an index
+  while(frequency > frequencyList[index]){//eventually find a fit
+    if(frequency < frequencyList[index+1]){//if the next lowestFrequency is too high
+      float positionBetweenTables = ((frequency/frequencyList[index]) - 1.0f);//(0.0 - 1.0)
+      return index + positionBetweenTables;
+    }else{//if the next increment is not too hight
+      index++;//increase the increment
+    }
+  }
+}
+
 //Getters and Setters==================
 void WTSaw::setFrequency(float newFrequency){
   frequency = newFrequency;
+  currentTable = whichTable(frequency);
   phaseIncrement = frequency/float(sineTable->getFundamentalFrequency());
 }
 void WTSaw::setPhase(float newPhase){//expecting 0-TWO_PI

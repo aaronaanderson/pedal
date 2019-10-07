@@ -55,6 +55,8 @@ class WTSaw{
   //best practice to leave inner workings private
 
   SawTable* sineTable = SawTable::getInstance();
+  float currentTable;
+  float whichTable(float frequency);//input frequency, output which table to read
   float frequency, phase, amplitude;//standard oscillator variables
   float currentSample;//current working sample
   float* currentBlock;//current working block of samples
