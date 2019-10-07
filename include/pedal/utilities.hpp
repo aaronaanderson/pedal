@@ -14,4 +14,6 @@
 //float clamp(float input, float lowerBound, float upperBound){
 //    return fmin(1.0, fmax(input, 0.0));
 //}
+
+void normalize(float* inputBuffer, int bufferSize, float min, float max);//normalize data in place
 #endif
