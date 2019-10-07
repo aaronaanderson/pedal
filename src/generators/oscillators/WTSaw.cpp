@@ -31,7 +31,7 @@ SawTable::SawTable(){//when it is time to build a table (constructor)
       }
       availableHarmonics += 1;//add the next harmonic
     }
-    if(i==0){std::cout<<nyquist <<std::endl;}
+    if(i==0){std::cout<<availableHarmonics <<std::endl;}
     for(int j = 0; j < TABLESIZE; j++){//for each sample in that table
       for(int harmonic = 1;harmonic < availableHarmonics; harmonic++){//for each available harmonic
         float harmonicPhase = (j * 6.2831853 * harmonic)/float(getTableSize());
