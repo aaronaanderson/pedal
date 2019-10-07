@@ -11,6 +11,8 @@
 #include "pedal/WTSine.hpp"
 #include "pedal/WTSaw.hpp"
 
+#include <iostream>
+
 WTSaw oscillator;
 CTEnvelope envelope;
 //========================Audio Callback

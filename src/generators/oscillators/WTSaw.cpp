@@ -43,14 +43,8 @@ SawTable::SawTable(){//when it is time to build a table (constructor)
         table[i][j] += std::sin(harmonicPhase) * harmonicAmplitude;
       }
     }
-    if(i==1){std::cout << availableHarmonics << std::endl;}
     //normalize the table
     normalizeTables(); 
-    if(i == 1){
-      for(int j = 0; j < TABLESIZE; j++){
-        std::cout << table[1][j] << std::endl;
-      }
-    }
   }
 
   //normalize the table
@@ -117,13 +111,37 @@ WTSaw::~WTSaw(){
 float WTSaw::generateSample(){
   //this is a process known as bilinear interpolation (2D linear interpolation)
   float** table = instance->getTable();
+  
+  // table idx
+  const int t0 = (int)currentTable;
+  const int t1 = (t0 < NUM_TABLES-1)? t0+1 : t0; // check if t0 is last table
+
+  // table
+  const float* T0 = table[t0];
+  const float* T1 = table[t1];
+
+  // phase idx
+  const int p0 = (int)phase;
+  const int p1 = (p0 + 1) % TABLESIZE; // wrap phase idx
+
+  // interpolate
+  const float s0 = linearInterpolation(phase, T0[p0], T0[p1]);
+  const float s1 = linearInterpolation(phase, T1[p0], T1[p1]);
+  const float s = linearInterpolation(currentTable, s0, s1);
+
+  currentSample = s;
+
+#if 0
   float lowTable = linearInterpolation(phase,
                                        table[int(currentTable)][int(phase)],
                                        table[int(currentTable)][int(phase+1.0f)]);
   float highTable = linearInterpolation(phase, 
                                         table[int(fmin(currentTable+1.0f, float(TABLESIZE-1)))][int(phase)], 
                                         table[int(fmin(currentTable+1.0f, float(TABLESIZE-1)))][int(phase+1.0)]);
+
   currentSample = linearInterpolation(currentTable, lowTable, highTable);    
+#endif
+
   currentSample *= amplitude;//scale for amplitude
   phase += (float)phaseIncrement;//progress phase
   int tableSize = instance->getTableSize()-1;//account for the extra sample

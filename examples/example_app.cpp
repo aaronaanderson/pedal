@@ -88,7 +88,6 @@ pdlExampleApp* pdlInitExampleApp(pdlExampleCallback callback) {
     }
     app->callback = callback;
 
-    std::cout << "init" << std::endl;
     if (!glfwInit()) {
         std::cerr << "Fail: glfwInit\n";
         delete app;
