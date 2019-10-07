@@ -31,7 +31,7 @@ float SineTable::getFundamentalFrequency(){return fundamentalFrequency;}
 int SineTable::getTableSize(){
   //tell the player that the wave table is 1 sample smaller, for linear interpolation
   return TABLESIZE - 1;
-  }
+}
 //initiate the static pointer as a nullptr
 SineTable* SineTable::instance = nullptr;
 
@@ -55,9 +55,10 @@ WTSine::~WTSine(){
 
 float WTSine::generateSample(){
   //interpolate between the prvious and next stored value
+  float* table = sineTable->getTable();
   currentSample = linearInterpolation(phase,
-                                      sineTable->getTable()[int(phase)],
-                                      sineTable->getTable()[int(phase+1.0f)]);
+                                      table[int(phase)],
+                                      table[int(phase+1.0f)]);
   phase += phaseIncrement;//increment phase
   int tableSize = sineTable->getTableSize()-1;//store since we need it often
   if(phase > tableSize){phase -= tableSize; }//if the phase is past the end of the table

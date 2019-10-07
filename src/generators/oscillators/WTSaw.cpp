@@ -2,9 +2,14 @@
 
 //Sine Table=====================================================
 SawTable::SawTable(){//when it is time to build a table (constructor)
-  currentLowestFrequency = 20.0f;//20 will be considered the lowest frequency;
   fundamentalFrequency = pdlSettings::sampleRate/float(TABLESIZE - 1);
   lowFrequencyList = new float[NUM_TABLES];//allocate space for this list
+  currentLowestFrequency = 20.0f;//20 will be considered the lowest frequency;
+  for(int i = 0; i < NUM_TABLES; i++){//for each table 
+    lowFrequencyList[i] = currentLowestFrequency;//keep track of the lowest frequency per octave
+    currentLowestFrequency *= 2.0f;//advance to the next octave
+    //20,40,80,160,320,640,1280,2560,5120,10240
+  }
   //allocate space for the 2D array of tables
   table = new float*[NUM_TABLES];//allocate each table slot
   for(int i = 0; i < NUM_TABLES; i++){//for each table slot,
@@ -13,13 +18,6 @@ SawTable::SawTable(){//when it is time to build a table (constructor)
       table[i][j] = 0.0f;//0 the memory   
     }
   }
-  
-  for(int i = 0; i < NUM_TABLES; i++){//for each table 
-    lowFrequencyList[i] = currentLowestFrequency;//keep track of the lowest frequency per octave
-    currentLowestFrequency *= 2.0f;//advance to the next octave
-    //20,40,80,160,320,640,1280,2560,5120,10240
-  }
-  
   //generate the harmonics
   for(int i = 0; i < NUM_TABLES; i++){//for each table
     //how many haromincs are available before aliasing?
@@ -31,12 +29,11 @@ SawTable::SawTable(){//when it is time to build a table (constructor)
       }
       availableHarmonics += 1;//add the harmonic
     }
-    
     for(int j = 0; j < TABLESIZE; j++){//for each sample in that table
       for(int harmonic = 1;harmonic < availableHarmonics; harmonic++){//for each available harmonic
-        float phase = (j * 6.2831853 * harmonic)/float(getTableSize());
+        float harmonicPhase = (j * 6.2831853 * harmonic)/float(getTableSize());
         float harmonicAmplitude = -1.0f/float(harmonic);
-        table[i][j] += sin(phase) * harmonicAmplitude;
+        table[i][j] += sin(harmonicPhase) * harmonicAmplitude;
       }
     }
     //normalize the table
@@ -87,7 +84,6 @@ int SawTable::getTableSize(){
 SawTable* SawTable::instance = nullptr;
 
 //WaveTableSine==================================================
-
 //Constructors and Deconstructors=========
 WTSaw::WTSaw(){
   setFrequency(440.0f);
@@ -102,27 +98,21 @@ WTSaw::WTSaw(float initialFrequency){
 WTSaw::~WTSaw(){
   delete[] currentBlock;
 }
-
 float WTSaw::generateSample(){
   //this is a process known as bilinear interpolation (2D linear interpolation)
   float** table = instance->getTable();
   float lowTable = linearInterpolation(phase,
                                        table[int(currentTable)][int(phase)],
-                                       table[int(currentTable)][int(phase+1)]);
+                                       table[int(currentTable)][int(phase+1.0f)]);
   float highTable = linearInterpolation(phase, 
-                                        table[int(fmin(currentTable+1, 9.0))][int(phase)], 
-                                        table[int(fmin(currentTable+1, 9.0))][int(phase+1)]);
+                                        table[int(fmin(currentTable+1.0f, float(TABLESIZE-1)))][int(phase)], 
+                                        table[int(fmin(currentTable+1.0f, float(TABLESIZE-1)))][int(phase+1.0)]);
   currentSample = linearInterpolation(currentTable, lowTable, highTable);    
   currentSample *= amplitude;//scale for amplitude
   phase += phaseIncrement;//progress phase
-  
-  //wrap table
-  if(phase >= instance->getTableSize()){
-    phase -= instance->getTableSize();
-  }                 
-  if(phase <= 0.0f){//needed for negative frequencies
-    phase += instance->getTableSize();
-  }
+  int tableSize = instance->getTableSize()-1;//account for the extra sample
+  if(phase >= tableSize){phase -= tableSize;}                 
+  if(phase <= 0.0f){phase += tableSize;}
   return currentSample;//return results
 }
 //Basic Functionallity of class=========
@@ -134,7 +124,6 @@ float* WTSaw::generateBlock(){
     currentBlock[i] = generateSample();//assign the next sample
   }
 }
-
 float WTSaw::whichTable(float testFrequency){//essentially the Y value of a 2D array
   float* frequencyList = instance->getLowFrequencyList();//get the list of table frequencies
   //boundry check
@@ -155,7 +144,6 @@ float WTSaw::whichTable(float testFrequency){//essentially the Y value of a 2D a
     }
   }
 }
-
 //Getters and Setters==================
 void WTSaw::setFrequency(float newFrequency){
   frequency = newFrequency;
@@ -168,7 +156,6 @@ void WTSaw::setPhase(float newPhase){//expecting 0-TWO_PI
   phase = phase * scalar;//map 0-TWO_PI to 0 - tablSize
 }
 void WTSaw::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
-
 float WTSaw::getFrequency(){return frequency;}
 float WTSaw::getPhase(){
   return (phase * 6.2831853072)/float(instance->getTableSize());
