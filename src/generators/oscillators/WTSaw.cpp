@@ -1,5 +1,7 @@
 #include "pedal/WTSaw.hpp"
 
+#include <cstring>
+
 //Sine Table=====================================================
 SawTable::SawTable(){//when it is time to build a table (constructor)
   nyquist = (float)pdlSettings::sampleRate * 0.5f;
@@ -11,6 +13,7 @@ SawTable::SawTable(){//when it is time to build a table (constructor)
     currentLowestFrequency *= 2.0f;//advance to the next octave
     //20,40,80,160,320,640,1280,2560,5120,10240
   }
+
   //allocate space for the 2D array of tables
   table = new float*[NUM_TABLES];//allocate each table slot
   for(int i = 0; i < NUM_TABLES; i++){//for each table slot,
@@ -31,18 +34,18 @@ SawTable::SawTable(){//when it is time to build a table (constructor)
       }
       availableHarmonics += 1;//add the next harmonic
     }
-    if(i==0){std::cout<<nyquist <<std::endl;}
     for(int j = 0; j < TABLESIZE; j++){//for each sample in that table
+      table[i][j] = 0.0f;
       for(int harmonic = 1;harmonic < availableHarmonics; harmonic++){//for each available harmonic
         float harmonicPhase = (j * 6.2831853f * harmonic)/float(getTableSize());
         float harmonicAmplitude = -1.0f/float(harmonic);
-        table[i][j] += sin(harmonicPhase) * harmonicAmplitude;
+        table[i][j] += std::sin(harmonicPhase) * harmonicAmplitude;
       }
     }
-    //normalize the table
-    normalizeTables(); 
-    
   }
+
+  //normalize the table
+  normalizeTables(); 
 }
 
 SawTable::~SawTable(){//deconstructor (what to do when done)
