@@ -1,5 +1,5 @@
 #include "pedal/utilities.hpp"
-#include "iostream"
+
 float mtof(float midiValue){//midi to frequency
     return 440.0f * (pow(2, (midiValue-69)/12.0f));
 }

@@ -8,7 +8,7 @@
 #include "pedal/CTEnvelope.hpp"
 #include "pedal/utilities.hpp"
 
-#define NUM_CHIMES 30
+#define NUM_CHIMES 20
 
 float currentSample;
 ImpulseGenerator trigger;
@@ -35,7 +35,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
         //trigger a random chime
         for(int j = 0; j < 40; j++){//try 40 times to find a free random chime
             int index = rangedRandom(0.0f, float(NUM_CHIMES));
-            std::cout << index << std::endl;
+            //std::cout << index << std::endl;
             if(chimes[index].envelope.isBusy() == false){
                 chimes[index].envelope.setTrigger(true);
                 break;
@@ -50,7 +50,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
       }
 
       for (unsigned j = 0; j < channel; j += 1) {//for every sample in frame
-        out[channel * i + j] = currentSample * 0.1;
+        out[channel * i + j] = trigger.getSample() * 0.1;
       }
     }
 }
@@ -63,9 +63,10 @@ int main() {
     }
     for(int i = 0; i < NUM_CHIMES; i++){
       chimes[i].envelope.setMode(CTEnvelope::AR);
-      chimes[i].oscillator.setFrequency(mtof(40.0f + (i*2.0f)));
-      chimes[i].envelope.setAttack(20.0f);
-      chimes[i].envelope.setRelease(1000.0f);
+      float frequency = mtof(40.0f + (i*2.0f));
+      std::cout << frequency << std::endl;
+      chimes[i].oscillator.setFrequency(frequency);
+      chimes[i].oscillator.setAmplitude(rangedRandom(0.001, 0.8));
     }
 
     pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
