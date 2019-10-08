@@ -163,6 +163,14 @@ float* CTEnvelope::getBlock(){return currentBlock;}
 int CTEnvelope::getCurrentState(){return currentState;}
 int CTEnvelope::getCurrentMode(){return currentMode;}
 bool CTEnvelope::getTrigger(){return trigger;}
+bool CTEnvelope::isBusy(){
+  if(currentState == OFF){
+    return false;
+  }else{
+    return true;
+  }
+  return false;//for windows compiler, should never happen
+}
 
 void CTEnvelope::setMode(modes newMode){currentMode = newMode;}
 void CTEnvelope::setAttack(float newAttack){//any positive value

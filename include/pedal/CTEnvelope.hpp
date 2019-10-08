@@ -28,7 +28,8 @@ class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   int getCurrentState();
   int getCurrentMode();
   bool getTrigger();
-
+  bool isBusy();
+  
   //"setters"
   void setMode(modes newMode);
   void setAttack(float newAttack);
