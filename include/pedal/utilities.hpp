@@ -1,6 +1,7 @@
 #ifndef utilities_hpp
 #define utilities_hpp
 
+#include "stdlib.h"
 #include "math.h"
 
 float mtof(float midiValue);

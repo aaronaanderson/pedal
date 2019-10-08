@@ -18,24 +18,27 @@ ImpulseGenerator::~ImpulseGenerator(){
 }
 //core functionality======================
 float ImpulseGenerator::generateSample(){
-  if(phase >= period){
+  if(phase >= period+randomOffset){
+    if(rangedRandom(0.0, 1.0) > maskChance){
       currentSample = 1.0f;
       phase -= period;
+      randomOffset = rangedRandom(0.0, deviation) * (period*0.5f);
+    }
   }else{
-      currentSample = 0.0f;
-      phase += 1.0f;//increase phase by 1 sample 
+    currentSample = 0.0f;
+    phase += 1.0f;//increase phase by 1 sample 
   }
   return currentSample;
 }
 float* ImpulseGenerator::generateBlock(){
   if(currentBlock == nullptr){
-      currentBlock = new float[pdlSettings::bufferSize];
+    currentBlock = new float[pdlSettings::bufferSize];
   }
   for(int i = 0; i < pdlSettings::bufferSize; i++){
-      currentBlock[i] = generateSample();
+    currentBlock[i] = generateSample();
   }
 }
-//Getters and Setters
+//Getters and Setters======================
 void ImpulseGenerator::setFrequency(float newFrequency){
   frequency = fabs(newFrequency);//no need for negative frequencies for this
   period = pdlSettings::sampleRate/frequency;//period in samples
