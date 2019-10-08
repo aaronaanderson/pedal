@@ -47,8 +47,9 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
 
       float currentSample = 0.0f;
       for(int j = 0; j < NUM_CHIMES;j++){
-        currentSample += chimes[j].oscillator.generateSample();
-        currentSample *= chimes[j].envelope.generateSample();
+        float sample = chimes[j].oscillator.generateSample();
+        sample *= chimes[j].envelope.generateSample();
+        currentSample += sample;
       }
 
       for (unsigned j = 0; j < channel; j += 1) {//for every sample in frame
