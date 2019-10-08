@@ -34,7 +34,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
       if(trigger.generateSample() == 1.0f){//if the impulse is 1.0
         //trigger a random chime
         for(int j = 0; j < 40; j++){//try 40 times to find a free random chime
-            int index = rangedRandom(0.0f, 1.0f)*NUM_CHIMES;
+            int index = rangedRandom(0.0f, float(NUM_CHIMES));
             std::cout << index << std::endl;
             if(chimes[index].envelope.isBusy() == false){
                 chimes[index].envelope.setTrigger(true);

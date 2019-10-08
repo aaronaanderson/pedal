@@ -9,13 +9,10 @@ float clamp(float input, float lowerBound, float upperBound){
 }
 
 float rangedRandom(float minimum, float maximum){
-  float normalizedRandom = rand()/float(RAND_MAX);
-  std::cout << normalizedRandom << std::endl;
+  float signedHalfNormal = (rand()/float(RAND_MAX))-0.5f;
   float range = maximum - minimum;
   float center = (maximum + minimum) * 0.5f;
-  float offset = 0.5 - center;
-  //std::cout << (normalizedRandom*range) + center << std::endl;
-  return (normalizedRandom*range) + offset;
+  return (signedHalfNormal*range) + center;
 }
 
 void normalizeBuffer(float* inputBuffer, int bufferSize, bool correctDC = true){
