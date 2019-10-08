@@ -14,7 +14,9 @@ float rangedRandom(float minimum, float maximum){
   float center = (maximum + minimum) * 0.5f;
   return (signedHalfNormal*range) + center;
 }
-
+float msToSamples(float time){
+  return (time * 0.001f) * pdlSettings::sampleRate;
+}
 void normalizeBuffer(float* inputBuffer, int bufferSize, bool correctDC = true){
   float highestValue;
   if(correctDC){
