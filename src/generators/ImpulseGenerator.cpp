@@ -22,7 +22,8 @@ float ImpulseGenerator::generateSample(){
     if(rangedRandom(0.0, 1.0) > maskChance){
       currentSample = 1.0f;
       phase -= period;
-      randomOffset = rangedRandom(0.0, deviation) * (period*0.5f);
+      float halfPeriod = period*0.5f;
+      randomOffset = rangedRandom(-halfPeriod, halfPeriod) * deviation;
     }
   }else{
     currentSample = 0.0f;
