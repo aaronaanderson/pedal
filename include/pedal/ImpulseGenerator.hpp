@@ -2,6 +2,7 @@
 #define ImpulseGenerator_hpp
 
 #include "pdlSettings.hpp"
+#include "math.h"
 
 class ImpulseGenerator{
   public:
@@ -11,11 +12,12 @@ class ImpulseGenerator{
 
   float generateSample();
   float* generateBlock();
-  
+
   void setFrequency(float newFrequency);
   void setMaskChance(float newMaskChance);
   void setDeviation(float newDeviation);
-  
+  void setPhase(float newPhase);
+
   float getSample();
   float* getBlock();
   float getFrequency();
@@ -23,7 +25,7 @@ class ImpulseGenerator{
   float getDeviation();
   
   private:
-  float frequency;
+  float frequency, phase, period;
   float maskChance;
   float deviation;//deviation from periodicity
   float currentSample;

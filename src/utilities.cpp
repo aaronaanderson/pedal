@@ -1,5 +1,20 @@
 #include "pedal/utilities.hpp"
 
+float mtof(float midiValue){//midi to frequency
+    return 440.0f * (pow(2, (midiValue-69)/12.0f));
+}
+
+float clamp(float input, float lowerBound, float upperBound){
+    return fmin(1.0, fmax(input, 0.0));
+}
+
+float rangedRandom(float minimum, float maximum){
+  float normalizedRandom = rand()/float(RAND_MAX);
+  float range = maximum - minimum;
+  float center = (maximum * minimum) * 0.5f;
+  return (normalizedRandom*range) + center;
+}
+
 void normalizeBuffer(float* inputBuffer, int bufferSize, bool correctDC = true){
   float highestValue;
   if(correctDC){
