@@ -1,17 +1,19 @@
 #include "pedal/ImpulseGenerator.hpp"
-
+#include "iostream"
 //Constructors and Deconstructors=========
 ImpulseGenerator::ImpulseGenerator(){
   setFrequency(1.0f);//one impulse per second
   setPhase(0.0f);//initialize phase to 0
   setDeviation(0.0f);//ensure periodicity
   setMaskChance(0.0f);//no missing impulses
+  randomOffset = rangedRandom(-period*0.5, period*0.5) * deviation;
 }
 ImpulseGenerator::ImpulseGenerator(float initialFrequency){
   setFrequency(initialFrequency);
   setPhase(0.0f);//initialize phase to 0
   setDeviation(0.0f);//ensure periodicity
   setMaskChance(0.0f);//no missing impulses
+  randomOffset = rangedRandom(-period*0.5, period*0.5) * deviation;
 }
 ImpulseGenerator::~ImpulseGenerator(){
     delete[] currentBlock;
@@ -19,7 +21,9 @@ ImpulseGenerator::~ImpulseGenerator(){
 //core functionality======================
 float ImpulseGenerator::generateSample(){
   if(phase >= period+randomOffset){
-    if(rangedRandom(0.0, 1.0) > maskChance){
+    float test = rangedRandom(0.0f, 1.0f);
+    if(test > maskChance){
+      std::cout<<test << " " << maskChance << std::endl;
       currentSample = 1.0f;
       phase -= period;
       float halfPeriod = period*0.5f;
