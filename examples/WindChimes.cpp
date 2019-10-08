@@ -4,7 +4,7 @@
 //include class if using
 
 #include "pedal/ImpulseGenerator.hpp"
-#include "pedal/WTTriangle.hpp"
+#include "pedal/WTSine.hpp"
 #include "pedal/CTEnvelope.hpp"
 #include "pedal/utilities.hpp"
 
@@ -14,7 +14,7 @@ float currentSample;
 ImpulseGenerator trigger;
 struct Chime{
   CTEnvelope envelope;
-  WTTriangle oscillator;
+  WTSine oscillator;
 };
 Chime chimes[NUM_CHIMES];
 //========================Audio Callback
@@ -35,8 +35,10 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
         //trigger a random chime
         for(int j = 0; j < 40; j++){//try 40 times to find a free random chime
             int index = rangedRandom(0.0f, float(NUM_CHIMES));
-            //std::cout << index << std::endl;
             if(chimes[index].envelope.isBusy() == false){
+                float newFrequency = mtof((int)rangedRandom(20.0f, 100.0f));
+                chimes[index].oscillator.setFrequency(newFrequency);
+                chimes[index].oscillator.setAmplitude(rangedRandom(0.01, 0.7));
                 chimes[index].envelope.setTrigger(true);
                 break;
             }
@@ -63,16 +65,12 @@ int main() {
     }
     for(int i = 0; i < NUM_CHIMES; i++){
       chimes[i].envelope.setMode(CTEnvelope::AR);
-      float frequency = mtof(40.0f + (i*2.0f));
-      std::cout << frequency << std::endl;
-      chimes[i].oscillator.setFrequency(frequency);
-      chimes[i].oscillator.setAmplitude(rangedRandom(0.001, 0.8));
     }
 
     pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
     pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
     // Add your GUI elements here
-    pdlAddSlider(app, 0, "ChimesPerSecond", 0.0f, 50.0f, 35.0f);
+    pdlAddSlider(app, 0, "ChimesPerSecond", 0.0f, 200.0f, 35.0f);
     pdlAddSlider(app, 1, "Periodicity", 0.0f, 1.0f, 0.0f);
 
     pdlAddSlider(app, 2, "Attack", 2.0f, 200.0f, 13.0f);

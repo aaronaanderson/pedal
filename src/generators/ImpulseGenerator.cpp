@@ -22,7 +22,6 @@ ImpulseGenerator::~ImpulseGenerator(){
 float ImpulseGenerator::generateSample(){
   if(phase >= period+randomOffset){
     float test = rangedRandom(0.0f, 1.0f);
-    std::cout << test << " " << maskChance << " " << (test>maskChance) << std::endl;
     if(test > maskChance){
       currentSample = 1.0f;
       float halfPeriod = period*0.5f;
