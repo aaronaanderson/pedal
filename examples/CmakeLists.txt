@@ -63,6 +63,7 @@ target_link_libraries(example_app PUBLIC glfw gl3w imgui rtaudio)
 set(example_list
     hello_pedal
     SimpleEnvelope
+    WindChimes
 )
 
 # loop through example targets

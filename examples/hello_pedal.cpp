@@ -13,9 +13,11 @@
 #include "pedal/WTSquare.hpp"
 #include "pedal/WTTriangle.hpp"
 #include "pedal/HanningWindow.hpp"
+#include "pedal/ImpulseGenerator.hpp"
 #include <iostream>
 
-WTTriangle oscillator;
+
+ImpulseGenerator oscillator;
 CTEnvelope envelope;
 HanningWindow window;
 //========================Audio Callback
@@ -35,7 +37,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
 
     for (unsigned i = 0; i < buffer; i += 1) {//for entire buffer of frames
         float currentSample = oscillator.generateSample();//assign the saw to current sample
-        currentSample *= window.generateSample();
+        currentSample *= envelope.generateSample();
         for (unsigned j = 0; j < channel; j += 1) {//for every sample in frame
           out[channel * i + j] = currentSample;
         }
@@ -51,7 +53,7 @@ int main() {
     pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
     pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
     // Add your GUI elements here
-    pdlAddSlider(app, 0, "frequency", 0.1f, 4000.0f, 140.0f);
+    pdlAddSlider(app, 0, "frequency", 0.1f, 40.0f, 3.0f);
 
     pdlAddSlider(app, 1, "Attack", 2.0f, 300.0f, 80.0f);
     pdlAddSlider(app, 2, "Decay", 2.0f, 200.0f, 30.0f);
