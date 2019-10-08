@@ -12,10 +12,12 @@
 #include "pedal/WTSaw.hpp"
 #include "pedal/WTSquare.hpp"
 #include "pedal/WTTriangle.hpp"
+#include "pedal/HanningWindow.hpp"
 #include <iostream>
 
 WTTriangle oscillator;
 CTEnvelope envelope;
+HanningWindow window(1000.0f);
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
@@ -24,15 +26,16 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
     envelope.setDecay(pdlGetSlider(app, 2));
     envelope.setSustain(pdlGetSlider(app, 3));
     envelope.setRelease(pdlGetSlider(app, 4));
-
+    
     bool trigger = pdlGetToggle(app, 0);//trigger envelope with toggle
     //bool trigger = pdlGetTrigger(app, 0);
+    window.setTrigger(trigger);
     envelope.setTrigger(trigger);//set trigger to up or down, on or off, etc
     float mx, my; pdlGetCursorPos(app, &mx, &my);//obtain mouse x and y coordinates
 
     for (unsigned i = 0; i < buffer; i += 1) {//for entire buffer of frames
         float currentSample = oscillator.generateSample();//assign the saw to current sample
-        currentSample *= envelope.generateSample();//scale current sample by envelope
+        currentSample *= window.generateSample();//scale current sample by envelope
         for (unsigned j = 0; j < channel; j += 1) {//for every sample in frame
           out[channel * i + j] = currentSample;
         }

@@ -47,6 +47,6 @@ void HanningWindow::setDuration(float newDuration){
 void HanningWindow::setPhase(float newPhase){phase = newPhase;}
 
 float HanningWindow::getCurrentSample(){return currentSample;}
-float* HannngWindow::getCurrentBlock(){return currentBlock;}
+float* HanningWindow::getCurrentBlock(){return currentBlock;}
 float HanningWindow::getDuration(){return duration;}
 double HanningWindow::getPhase(){return phase;}

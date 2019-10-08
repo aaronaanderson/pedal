@@ -1,5 +1,5 @@
 #ifndef WTTriangle_hpp
-#define WTtriangle_hpp
+#define WTTriangle_hpp
 
 #include <iostream>
 #include "pdlSettings.hpp"

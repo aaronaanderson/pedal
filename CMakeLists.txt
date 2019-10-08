@@ -16,6 +16,7 @@ add_library(pedal STATIC
     src/generators/oscillators/WTTriangle.cpp
     src/generators/oscillators/WTSquare.cpp
     src/generators/envelopes/CTEnvelope.cpp
+    src/generators/windows/HanningWindow.cpp
     src/Interpolation.cpp
     src/utilities.cpp
     src/pdlSettings.cpp
