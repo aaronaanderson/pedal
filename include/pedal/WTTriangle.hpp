@@ -63,5 +63,4 @@ class WTTriangle{
   float* currentBlock;//current working block of samples
   double phaseIncrement;//extra precision necessary 
 };
-
 #endif

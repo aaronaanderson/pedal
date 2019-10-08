@@ -12,7 +12,7 @@ class HanningWindow{
 
   float generateSample();
   float* generateBlock();
-  static inline float sampleFromPhase(float inputPhase){
+  inline float sampleFromPhase(float inputPhase){
     return 0.5f * (1.0f - cos((2.0f * 3.1415926 * inputPhase)/1.0f));
   }
   void setTrigger(bool newTrigger);
@@ -21,15 +21,14 @@ class HanningWindow{
 
   float getCurrentSample();
   float* getCurrentBlock();
-
   float getDuration();
-  double getPhase();
+  float getPhase();
 
   private:
   bool trigger;
   bool active;
   float duration;
-  double phase, phaseIncrement;
+  float phase, phaseIncrement;
   float currentSample;
   float* currentBlock;
 };

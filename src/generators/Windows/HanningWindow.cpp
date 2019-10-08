@@ -22,6 +22,7 @@ float HanningWindow::generateSample(){
       active = false;
     }
   } 
+  return currentSample;
 }
 float* HanningWindow::generateBlock(){
   if(currentBlock == nullptr){
@@ -37,6 +38,7 @@ float* HanningWindow::generateBlock(){
 void HanningWindow::setTrigger(bool newTrigger){
   if(trigger == false && newTrigger == true){//if it was off but now will be on
     phase = 0.0;//reset
+    active = true;
   }
   trigger = newTrigger;//update the trigger status
 }
@@ -49,4 +51,4 @@ void HanningWindow::setPhase(float newPhase){phase = newPhase;}
 float HanningWindow::getCurrentSample(){return currentSample;}
 float* HanningWindow::getCurrentBlock(){return currentBlock;}
 float HanningWindow::getDuration(){return duration;}
-double HanningWindow::getPhase(){return phase;}
+float HanningWindow::getPhase(){return phase;}
