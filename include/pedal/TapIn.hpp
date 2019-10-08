@@ -11,6 +11,10 @@ class TapIn{
   
   void inputSample(float inputSample);//input a sample and automatically progress buffer
   void inputBlock(float* inputBlock);//process a block at a time
+  
+  void setBufferSizeMS(float newSize);
+  void setBufferSizeSamples(float newSizeInSamples);
+  
   float getSample(float timeBack = 0.0f);//give most recent sample by default
   float* getBuffer();//retrieve a pointer to the entire buffer
   int getBufferSize();
