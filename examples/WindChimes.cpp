@@ -50,7 +50,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
       }
 
       for (unsigned j = 0; j < channel; j += 1) {//for every sample in frame
-        out[channel * i + j] = trigger.getSample() * 0.1;
+        out[channel * i + j] = currentSample * 0.1;
       }
     }
 }
