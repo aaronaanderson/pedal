@@ -9,6 +9,11 @@ Buffer::~Buffer(){
   delete[] content;
 }
 
+void Buffer::writeSample(float inputSample, int index){
+    index = clamp(inputSample, 0, sizeInSamps);
+    content[index] = inputSample;
+}
+
 void Buffer::setDuration(float newDuration){
   if(newDuration != duration){
     duration = newDuration;

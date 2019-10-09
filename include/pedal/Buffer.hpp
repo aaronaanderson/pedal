@@ -8,8 +8,12 @@ class Buffer{
   Buffer(float initialSize = 1000.0f);
   ~Buffer();
   
+  void writeSample(float inputSample, int index);
+
   void setDuration(float newDuration);
   void setSizeInSamples(int newSizeInSamples);
+
+  float getSample(int index);
   float* getContent();
   int getSizeInSamples();
 

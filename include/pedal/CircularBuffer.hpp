@@ -2,12 +2,14 @@
 #define CircularBuffer_hpp
 
 #include "pdlSettings.hpp"
+#include "utilities.hpp"
+#include "Buffer.hpp"
 
 class CircularBuffer{
   public:
   //TapIn();
   CircularBuffer(float initialSize = 1000.0f);
-  ~CircularBuffer();//willl need to free memory
+  //~CircularBuffer();//willl need to free memory
   
   void inputSample(float inputSample);//input a sample and automatically progress buffer
   void inputBlock(float* inputBlock);//process a block at a time
@@ -21,8 +23,7 @@ class CircularBuffer{
   int getBufferSize();
 
   private:
-  float* buffer;//a (pointer to a) buffer (array) of floats 
-  float bufferLocation;//location within the buffer
-  int bufferSize;
+  Buffer buffer;//buffer in which to store audio
+  int writeLocation;//location within the buffer
 };
 #endif 
