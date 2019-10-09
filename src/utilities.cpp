@@ -18,7 +18,7 @@ float rangedRandom(float minimum, float maximum){
 float msToSamples(float time){
   return time * 0.001f * pdlSettings::sampleRate;
 }
-float samplesToMS(int samples){
+float samplesToMS(float samples){
   return (samples*1000.0f)/pdlSettings::sampleRate;
 }
 void normalizeBuffer(float* inputBuffer, int bufferSize, bool correctDC = true){

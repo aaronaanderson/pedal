@@ -20,7 +20,7 @@ add_library(pedal STATIC
     src/generators/windows/HanningWindow.cpp
     src/Buffer.cpp
     src/CircularBuffer.cpp
-
+    src/modifiers/delay/BufferTap.cpp
     src/Interpolation.cpp
     src/utilities.cpp
     src/pdlSettings.cpp

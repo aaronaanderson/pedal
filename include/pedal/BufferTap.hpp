@@ -10,6 +10,7 @@ class BufferTap{
   ~BufferTap();
 
   void setDelayTime(float newDelayTime);
+  void setReference(CircularBuffer* newReference);
   float getSample();
   float* getBlock();
 

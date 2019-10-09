@@ -7,6 +7,10 @@
 #include "pedal/WTSine.hpp"
 #include "pedal/CTEnvelope.hpp"
 #include "pedal/utilities.hpp"
+#include "pedal/CircularBuffer.hpp"
+#include "pedal/BufferTap.hpp"
+
+#include <iostream>
 
 #define NUM_CHIMES 20
 
@@ -17,6 +21,10 @@ struct Chime{
   WTSine oscillator;
 };
 Chime chimes[NUM_CHIMES];
+
+CircularBuffer delayBuffer;
+BufferTap delayTap(&delayBuffer);
+
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
@@ -24,6 +32,8 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
     trigger.setFrequency(pdlGetSlider(app, 0));
     trigger.setDeviation(1.0f - pdlGetSlider(app, 1));
     trigger.setMaskChance(pdlGetSlider(app, 4));
+    delayTap.setDelayTime(pdlGetSlider(app,5));
+
     for(int i = 0; i < NUM_CHIMES; i++){
         chimes[i].envelope.setAttack(pdlGetSlider(app, 2));
         chimes[i].envelope.setRelease(pdlGetSlider(app,3));
@@ -51,7 +61,9 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
         sample *= chimes[j].envelope.generateSample();
         currentSample += sample;
       }
-
+      
+      delayBuffer.inputSample(currentSample);
+      currentSample = delayTap.getSample();
       for (unsigned j = 0; j < channel; j += 1) {//for every sample in frame
         out[channel * i + j] = currentSample * 0.1;
       }
@@ -67,7 +79,8 @@ int main() {
     for(int i = 0; i < NUM_CHIMES; i++){
       chimes[i].envelope.setMode(CTEnvelope::AR);
     }
-
+    delayBuffer.setDuration(2000.0f);
+    delayTap.setDelayTime(1000.0f);
     pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
     pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
     // Add your GUI elements here
@@ -77,6 +90,7 @@ int main() {
     pdlAddSlider(app, 2, "Attack", 2.0f, 200.0f, 13.0f);
     pdlAddSlider(app, 3, "Release", 5.0f, 1000.0f, 900.0f);
     pdlAddSlider(app, 4, "burstMask", 0.0f, 1.0f, 0.7f);
+    pdlAddSlider(app, 5, "delayTime", 0.0f, 2000.0f, 300.0f);
 
     //begin the app--------
     pdlStartExampleApp(app);
