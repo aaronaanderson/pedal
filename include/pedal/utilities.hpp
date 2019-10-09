@@ -6,6 +6,7 @@
 #include "pdlSettings.hpp"
 
 float msToSamples(float time);
+float samplesToMS(float samples);
 float mtof(float midiValue);
 float clamp(float input, float lowerBound, float upperBound);
 void normalize(float* inputBuffer, int bufferSize, float min, float max);//normalize data in place
