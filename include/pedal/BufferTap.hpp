@@ -1,5 +1,5 @@
-#ifndef Tap_hpp
-#define Tap_hpp
+#ifndef BufferTap_hpp
+#define BufferTap_hpp
 
 #include "CircularBuffer.hpp"
 #include "math.h"
