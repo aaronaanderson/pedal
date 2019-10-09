@@ -9,13 +9,14 @@ float clamp(float input, float lowerBound, float upperBound){
 }
 
 float rangedRandom(float minimum, float maximum){
-  float signedHalfNormal = (rand()/float(RAND_MAX))-0.5f;
-  float range = maximum - minimum;
-  float center = (maximum + minimum) * 0.5f;
+  //find an initial random value
+  float signedHalfNormal = (rand()/float(RAND_MAX))-0.5f;//(range of -0.5, 0.5)
+  float range = maximum - minimum;//distance between max and min
+  float center = (maximum + minimum) * 0.5f;//center point
   return (signedHalfNormal*range) + center;
 }
 float msToSamples(float time){
-  return (time * 0.001f) * pdlSettings::sampleRate;
+  return time * 0.001f * pdlSettings::sampleRate;
 }
 void normalizeBuffer(float* inputBuffer, int bufferSize, bool correctDC = true){
   float highestValue;
