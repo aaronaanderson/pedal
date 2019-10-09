@@ -18,6 +18,8 @@ add_library(pedal STATIC
     src/generators/ImpulseGenerator.cpp
     src/generators/envelopes/CTEnvelope.cpp
     src/generators/windows/HanningWindow.cpp
+    src/Buffer.cpp
+    src/CircularBuffer.cpp
     src/Interpolation.cpp
     src/utilities.cpp
     src/pdlSettings.cpp

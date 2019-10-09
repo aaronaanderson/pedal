@@ -3,24 +3,28 @@
 
 #include "pdlSettings.hpp"
 #include "utilities.hpp"
+#include "Interpolation.hpp"
 #include "Buffer.hpp"
 
 class CircularBuffer{
   public:
   //TapIn();
-  CircularBuffer(float initialSize = 1000.0f);
+  CircularBuffer(float initialDuration = 1000.0f);
   //~CircularBuffer();//willl need to free memory
   
   void inputSample(float inputSample);//input a sample and automatically progress buffer
   void inputBlock(float* inputBlock);//process a block at a time
   
-  void setBufferSize(float newSizeInSamples);
-  void setDuration(float newSize);
-  void setBufferSizeSamples(float newSizeInSamples);
+  void setDuration(float newDuration);
+  void setSizeInSamples(int newSizeInSamples);
   
-  float getSample(float timeBack = 0.0f);//give most recent sample by default
+  float getDelayed(float timeBack = 0.0f);//give most recent sample by default
   float* getBuffer();//retrieve a pointer to the entire buffer
-  int getBufferSize();
+  float getDuration();
+  int getSizeInSamples();
+  int getWriteLocation();
+
+  Buffer* getBufferReference();
 
   private:
   Buffer buffer;//buffer in which to store audio
