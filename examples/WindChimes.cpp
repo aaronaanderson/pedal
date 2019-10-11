@@ -24,7 +24,7 @@ Chime chimes[NUM_CHIMES];
 
 CircularBuffer delayBuffer;
 BufferTap delayTap(&delayBuffer);
-
+float previousSample = 0.0f;
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
@@ -61,9 +61,10 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
         sample *= chimes[j].envelope.generateSample();
         currentSample += sample;
       }
-      
+      currentSample += delayTap.getSample()*0.7f;
       delayBuffer.inputSample(currentSample);
-      currentSample = delayTap.getSample();
+      
+      previousSample = currentSample;
       for (unsigned j = 0; j < channel; j += 1) {//for every sample in frame
         out[channel * i + j] = currentSample * 0.1;
       }

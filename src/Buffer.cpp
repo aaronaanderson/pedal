@@ -9,8 +9,14 @@ Buffer::~Buffer(){
 }
 
 void Buffer::writeSample(float inputSample, int index){
-    index = clamp(inputSample, 0, sizeInSamples-1);
+    //index = clamp(inputSample, 0, sizeInSamples-1);
+    index = clamp(index, 0, sizeInSamples-1);
     content[index] = inputSample;
+}
+
+void Buffer::addToSample(float inputSample, int index){
+  index = clamp(index, 0, sizeInSamples-1);
+  content[index] += inputSample;
 }
 
 float Buffer::getSample(float index){

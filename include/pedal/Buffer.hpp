@@ -10,7 +10,8 @@ class Buffer{
   ~Buffer();
   
   void writeSample(float inputSample, int index);
-
+  void addToSample(float inputSample, int index);
+  
   void setDuration(float newDuration);
   void setSizeInSamples(int newSizeInSamples);
 
