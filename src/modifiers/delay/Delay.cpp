@@ -1,4 +1,4 @@
-#include "Delay.hpp"
+#include "pedal/Delay.hpp"
 
 Delay::Delay(){
   buffer.setDuration(4000.0f);//allocate 4 seconds worth of samples
