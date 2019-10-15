@@ -55,4 +55,3 @@ void normalizeBuffer(float* inputBuffer, int bufferSize, bool correctDC = true){
     inputBuffer[i] *= scalarValue;
   }
 }
-
