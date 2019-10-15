@@ -9,7 +9,7 @@
 #include "pedal/utilities.hpp"
 #include "pedal/CircularBuffer.hpp"
 #include "pedal/BufferTap.hpp"
-
+#include "pedal/Delay.hpp"
 #include <iostream>
 
 #define NUM_CHIMES 20
@@ -22,9 +22,7 @@ struct Chime{
 };
 Chime chimes[NUM_CHIMES];
 
-CircularBuffer delayBuffer;
-BufferTap delayTap(&delayBuffer);
-float previousSample = 0.0f;
+Delay delay;
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
@@ -32,7 +30,8 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
     trigger.setFrequency(pdlGetSlider(app, 0));
     trigger.setDeviation(1.0f - pdlGetSlider(app, 1));
     trigger.setMaskChance(pdlGetSlider(app, 4));
-    delayTap.setDelayTime(pdlGetSlider(app,5));
+    delay.setDelayTime(pdlGetSlider(app, 5));
+    delay.setFeedback(pdlGetSlider(app, 6));
 
     for(int i = 0; i < NUM_CHIMES; i++){
         chimes[i].envelope.setAttack(pdlGetSlider(app, 2));
@@ -51,7 +50,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
                 chimes[index].oscillator.setAmplitude(rangedRandom(0.01, 0.7));
                 chimes[index].envelope.setTrigger(true);
                 break;
-            }
+            } 
         }
       }
 
@@ -61,10 +60,10 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
         sample *= chimes[j].envelope.generateSample();
         currentSample += sample;
       }
-      currentSample += delayTap.getSample()*0.7f;
-      delayBuffer.inputSample(currentSample);
       
-      previousSample = currentSample;
+      
+      currentSample = delay.insertSample(currentSample);
+
       for (unsigned j = 0; j < channel; j += 1) {//for every sample in frame
         out[channel * i + j] = currentSample * 0.1;
       }
@@ -80,10 +79,10 @@ int main() {
     for(int i = 0; i < NUM_CHIMES; i++){
       chimes[i].envelope.setMode(CTEnvelope::AR);
     }
-    delayBuffer.setDuration(2000.0f);
-    delayTap.setDelayTime(1000.0f);
     pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
     pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
+    delay.setMaximumFeedbackTime(4000.0f);//set maximum to 4 seconds
+    
     // Add your GUI elements here
     pdlAddSlider(app, 0, "ChimesPerSecond", 0.0f, 200.0f, 35.0f);
     pdlAddSlider(app, 1, "Periodicity", 0.0f, 1.0f, 0.0f);
@@ -92,6 +91,7 @@ int main() {
     pdlAddSlider(app, 3, "Release", 5.0f, 1000.0f, 900.0f);
     pdlAddSlider(app, 4, "burstMask", 0.0f, 1.0f, 0.7f);
     pdlAddSlider(app, 5, "delayTime", 0.0f, 2000.0f, 300.0f);
+    pdlAddSlider(app, 6, "feedback", 0.0f, 0.9999f, 0.95f);
 
     //begin the app--------
     pdlStartExampleApp(app);

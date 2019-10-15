@@ -11,12 +11,13 @@ void CircularBuffer::inputSample(float inputSample){
     writeLocation = 0;
   }
 }
+
 float CircularBuffer::getDelayed(float timeBack){
   timeBack = clamp(timeBack, 0.0f, buffer.getDuration());
   float samplesToLookBack = msToSamples(timeBack);
   samplesToLookBack = writeLocation - samplesToLookBack;
   samplesToLookBack = fmod(samplesToLookBack + buffer.getSizeInSamples(), 
-                           buffer.getSizeInSamples());
+                           (float)buffer.getSizeInSamples());
   return buffer.getSample(samplesToLookBack);//buffer automatically interpolates
 }
 void CircularBuffer::inputBlock(float* inputBlock){

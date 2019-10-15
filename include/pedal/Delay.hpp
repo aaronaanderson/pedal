@@ -7,9 +7,9 @@
 
 class Delay{
   public:
-  Delay();//default
-  Delay(float initialTime, float initialFeedback);
-  ~Delay();
+  Delay();//default constructor
+  Delay(float initialTime, float initialFeedback);//override constructor
+  ~Delay();//free RAM
   
   float insertSample(float inputSample);
   float* insertBlock(float* inputBlock);

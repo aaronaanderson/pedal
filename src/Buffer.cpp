@@ -1,11 +1,9 @@
 #include "pedal/Buffer.hpp"
-
 #include <cstring> // memcpy
 
+//Constructors and deconstructors=====================
 Buffer::Buffer(float initialDuration){
-  duration = initialDuration;
-  sizeInSamples = msToSamples(duration);
-  content = new float[sizeInSamples];
+  setDuration(initialDuration);  
 }
 
 Buffer::Buffer(const Buffer& other) {
@@ -46,6 +44,7 @@ Buffer::~Buffer(){
   delete[] content;
 }
 
+//Core functionality of class=========================
 void Buffer::writeSample(float inputSample, int index){
 
   // TODO !!!!!!!!!!!!!!!!!!!! clamp works on floats!
@@ -74,7 +73,7 @@ float Buffer::getSample(float index){
   //do some linear interpolation
   float previousSample = content[int(index)];// take the 'floor' 
   //grab the next sample. wrap for edge cases
-  float nextSample = content[int(index+1.0f)%sizeInSamples];
+  float nextSample = content[int(index+1.0f)%sizeInSamples];// take the 'ceiling'
   //interpolate between the samples
   retrievedSample = linearInterpolation(index, previousSample, nextSample);
   return retrievedSample;
@@ -95,12 +94,15 @@ float Buffer::getSample(float index){
 
 }
 
+//getters and setters================================
 void Buffer::setDuration(float newDuration){
-  if(newDuration != duration){
-    duration = newDuration;
-    delete[] content;
-    sizeInSamples = msToSamples(duration);
-    content = new float[sizeInSamples];
+  duration = newDuration;
+  delete[] content;
+  sizeInSamples = msToSamples(duration);
+  content = new float[sizeInSamples];
+  
+  for(int i = 0; i < sizeInSamples; i++){
+    content[i] = 0.0f;
   }
 }
 
