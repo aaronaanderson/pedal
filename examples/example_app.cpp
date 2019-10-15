@@ -271,7 +271,6 @@ void pdlUpdateExampleApp(pdlExampleApp* app) {
 }
 
 void pdlDeleteExampleApp(pdlExampleApp* app) {
-    std::cout << "delete" << std::endl;
     try {
         app->audio.stopStream();
     }
