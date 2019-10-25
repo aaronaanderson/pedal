@@ -23,7 +23,6 @@ class CircularBuffer{
   float getDuration();
   int getSizeInSamples();
   int getWriteLocation();
-
   Buffer* getBufferReference();
 
   private:
