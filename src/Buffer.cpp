@@ -2,6 +2,7 @@
 #include <cstring> // memcpy
 
 //Constructors and deconstructors=====================
+// -----rule of 5 --------------------
 Buffer::Buffer(float initialDuration){
   setDuration(initialDuration);  
 }
@@ -39,24 +40,21 @@ Buffer& Buffer::operator=(Buffer&& other) noexcept {
   }
   return *this;
 }
-
+//-----------------------------------
 Buffer::~Buffer(){
   delete[] content;
 }
 
 //Core functionality of class=========================
 void Buffer::writeSample(float inputSample, int index){
-
   // TODO !!!!!!!!!!!!!!!!!!!! clamp works on floats!
   // Use templated clamp for have separate function for ints
 
-  //index = clamp(inputSample, 0, sizeInSamples-1);
   index = clamp(index, 0, sizeInSamples-1);
   content[index] = inputSample;
 }
 
 void Buffer::addToSample(float inputSample, int index){
-
   // TODO !!!!!!!!!!!!!!!!!!!! clamp works on floats!
   // use templated clamp for have separate function for ints
 
@@ -65,9 +63,8 @@ void Buffer::addToSample(float inputSample, int index){
 }
 
 float Buffer::getSample(float index){
-
 // switch between implementations by going back and forth `#if 0` and `#if 1`
-#if 0
+#if 1
   index = clamp(index, 0.0f, sizeInSamples-1);//clamp for safety
   float retrievedSample = 0.0f;//start with a sample
   //do some linear interpolation
@@ -77,7 +74,6 @@ float Buffer::getSample(float index){
   //interpolate between the samples
   retrievedSample = linearInterpolation(index, previousSample, nextSample);
   return retrievedSample;
-
 #else
 
   if (index < 0.0f) index = 0.0f; // TODO? maybe negative index for wrapping backwards? for now we clamp
@@ -91,7 +87,6 @@ float Buffer::getSample(float index){
 
   return linearInterpolation(t, content[i0], content[i1]);
 #endif
-
 }
 
 //getters and setters================================
@@ -100,7 +95,6 @@ void Buffer::setDuration(float newDuration){
   delete[] content;
   sizeInSamples = msToSamples(duration);
   content = new float[sizeInSamples];
-  
   for(int i = 0; i < sizeInSamples; i++){
     content[i] = 0.0f;
   }
