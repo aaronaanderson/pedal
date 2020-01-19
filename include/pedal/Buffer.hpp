@@ -26,7 +26,7 @@ class Buffer{
   // ex) Buffer b1;
   //     b1 = b0;
   Buffer& operator=(const Buffer& other);
-
+  
   // move assignment
   // ex) Buffer b1;
   // b1 = functionThatReturnsBuffer();

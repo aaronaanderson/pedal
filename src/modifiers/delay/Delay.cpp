@@ -41,7 +41,7 @@ float* Delay::insertBlock(float* inputBlock){//insert (buffersize) channels at a
 }
 
 void Delay::setDelayTime(float newDelayTime){
-    clamp<float>(newDelayTime, 0.0f, buffer.getDuration());//clamp value to useable range
+    clamp(newDelayTime, 0.0f, buffer.getDuration());//clamp value to useable range
     delayTime = newDelayTime;
 }
 void Delay::setFeedback(float newFeedback){feedback = newFeedback;}

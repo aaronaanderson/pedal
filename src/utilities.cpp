@@ -4,11 +4,14 @@ float mtof(float midiValue){//midi to frequency
   return 440.0f * (pow(2, (midiValue-69)/12.0f));
 }
 
-template <class T> 
-T clamp(T input, float lowerBound, float upperBound){
-  T result = min(max(input, lowerBound), upperBound);
+/*
+template <class T, class U, class Z> 
+T clamp(T input, U lowerBound, Z upperBound){
+  T result;
+  result = min(max(input, lowerBound), upperBound);
   return result;
 }
+*/
 
 float rangedRandom(float minimum, float maximum){
   //find an initial random value
@@ -23,6 +26,7 @@ float msToSamples(float time){
 float samplesToMS(float samples){
   return (samples*1000.0f)/pdlSettings::sampleRate;
 }
+/* //function unnecessary, will be moved to buffer class
 void normalizeBuffer(float* inputBuffer, int bufferSize, bool correctDC = true){
   float highestValue;
   if(correctDC){
@@ -50,6 +54,7 @@ void normalizeBuffer(float* inputBuffer, int bufferSize, bool correctDC = true){
       //just 'how close is the closest sample to the boarder?'
     }
   }
+  
   //Do some math, largestValue*scalarValue=1.0
   float scalarValue = 1/highestValue;
   //scale the entire buffer uniformly by this scalar value
@@ -57,3 +62,4 @@ void normalizeBuffer(float* inputBuffer, int bufferSize, bool correctDC = true){
     inputBuffer[i] *= scalarValue;
   }
 }
+*/
