@@ -63,8 +63,7 @@ void Buffer::addToSample(float inputSample, int index){
 }
 
 float Buffer::getSample(float index){
-// switch between implementations by going back and forth `#if 0` and `#if 1`
-#if 1
+#if 0
   index = clamp(index, 0.0f, sizeInSamples-1);//clamp for safety
   float retrievedSample = 0.0f;//start with a sample
   //do some linear interpolation

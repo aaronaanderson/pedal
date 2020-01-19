@@ -1,22 +1,21 @@
 #include "pedal/CircularBuffer.hpp"
 
 CircularBuffer::CircularBuffer(float initialDuration){
-  buffer.setDuration(initialDuration);
-  writeLocation = 0;
+  buffer.setDuration(initialDuration);//request space in ram
+  writeLocation = 0;//start the write index at the beginning
 }
 void CircularBuffer::inputSample(float inputSample){
   buffer.writeSample(inputSample, writeLocation);
-  writeLocation++;
+  writeLocation++;// increment the write index
   if(writeLocation >= buffer.getSizeInSamples()){
     writeLocation = 0;
   }
 }
-
 float CircularBuffer::getDelayed(float timeBack){
-  timeBack = clamp(timeBack, 0.0f, buffer.getDuration());
-  float samplesToLookBack = msToSamples(timeBack);
-  samplesToLookBack = writeLocation - samplesToLookBack;
-  samplesToLookBack = fmod(samplesToLookBack + buffer.getSizeInSamples(), 
+  timeBack = clamp(timeBack, 0.0f, buffer.getDuration()); // clamp to 0 .. bufferDuration
+  float samplesToLookBack = msToSamples(timeBack); // convert ms to samples
+  samplesToLookBack = writeLocation - samplesToLookBack; // sample index location that could be negative
+  samplesToLookBack = fmod(samplesToLookBack + buffer.getSizeInSamples(), // modulo to wrap sample index around
                            (float)buffer.getSizeInSamples());
   return buffer.getSample(samplesToLookBack);//buffer automatically interpolates
 }

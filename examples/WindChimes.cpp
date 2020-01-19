@@ -40,6 +40,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
     //audio loop
     for (unsigned i = 0; i < buffer; i ++) {//for entire buffer of frames
       
+      //if there is a new chime
       if(trigger.generateSample() == 1.0f){//if the impulse is 1.0
         //trigger a random chime
         for(int j = 0; j < 40; j++){//try 40 times to find a free random chime
@@ -55,6 +56,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
       }
 
       float currentSample = 0.0f;
+      //basically the 'processChime' function
       for(int j = 0; j < NUM_CHIMES;j++){
         float sample = chimes[j].oscillator.generateSample();
         sample *= chimes[j].envelope.generateSample();
@@ -81,7 +83,7 @@ int main() {
     }
     pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
     pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
-    delay.setMaximumFeedbackTime(4000.0f);//set maximum to 4 seconds
+    //delay.setMaximumFeedbackTime(4000.0f);//set maximum to 4 seconds
     
     // Add your GUI elements here
     pdlAddSlider(app, 0, "ChimesPerSecond", 0.0f, 200.0f, 35.0f);

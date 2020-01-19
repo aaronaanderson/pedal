@@ -8,7 +8,7 @@ class Buffer{
   public:
   Buffer(float initialDuration = 1000.0f);
 
-  // madatory video for cpp programmers!
+  // mandatory video for cpp programmers!
   // rule of 0, 3, and 5, copy contructors, move constructors,
   // copy assignment operators, and move assignment operators
   // https://youtu.be/7Qgd9B1KuMQ
@@ -29,10 +29,10 @@ class Buffer{
 
   // move assignment
   // ex) Buffer b1;
-  //     b1 = functionThatReturnsBuffer();
+  // b1 = functionThatReturnsBuffer();
   Buffer& operator=(Buffer&& other) noexcept;
 
-  // dtor
+  // deconstructor
   ~Buffer();
   
   void writeSample(float inputSample, int index);
