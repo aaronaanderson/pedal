@@ -4,8 +4,10 @@ float mtof(float midiValue){//midi to frequency
   return 440.0f * (pow(2, (midiValue-69)/12.0f));
 }
 
-float clamp(float input, float lowerBound, float upperBound){
-  return fmin(fmax(input, lowerBound), upperBound);
+template <class T> 
+T clamp(T input, float lowerBound, float upperBound){
+  T result = min(max(input, lowerBound), upperBound);
+  return result;
 }
 
 float rangedRandom(float minimum, float maximum){
