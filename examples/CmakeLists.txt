@@ -64,6 +64,7 @@ set(example_list
     hello_pedal
     SimpleEnvelope
     WindChimes
+    BufferPlayground
 )
 
 # loop through example targets
