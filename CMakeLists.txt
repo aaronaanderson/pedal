@@ -25,6 +25,7 @@ add_library(pedal STATIC
     src/Interpolation.cpp
     src/utilities.cpp
     src/pdlSettings.cpp
+    src/DebugTool.cpp
 )
 
 set_target_properties(pedal PROPERTIES

@@ -15,10 +15,13 @@
 #include "pedal/HanningWindow.hpp"
 #include "pedal/ImpulseGenerator.hpp"
 #include <iostream>
+#include "pedal/Delay.hpp"
+#include "pedal/DebugTool.hpp"
 
 ImpulseGenerator oscillator;
 CTEnvelope envelope;
 HanningWindow window;
+//DebugTool debugger;
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
@@ -35,11 +38,13 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
     float mx, my; pdlGetCursorPos(app, &mx, &my);//obtain mouse x and y coordinates
 
     for (unsigned i = 0; i < buffer; i += 1) {//for entire buffer of frames
-        float currentSample = oscillator.generateSample();//assign the saw to current sample
-        currentSample *= envelope.generateSample();
-        for (unsigned j = 0; j < channel; j += 1) {//for every sample in frame
-          out[channel * i + j] = currentSample;
-        }
+      //debugger.update(i);
+      DebugTool::printOncePerBuffer(oscillator.getFrequency(), i);
+      float currentSample = oscillator.generateSample();//assign the saw to current sample
+      currentSample *= envelope.generateSample();
+      for (unsigned j = 0; j < channel; j += 1) {//for every sample in frame
+        out[channel * i + j] = currentSample;
+      }
     }
 }
 //======================main loop
