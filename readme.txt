@@ -1,7 +1,8 @@
 
   PEDAL
   -----
-
+# Pedagogical Audio Library
+  
 # BUILDING
 
  . cmake -G ${GENERATOR} -A ${PLATFORM} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -S ${PEDAL_DIR} -B ${BUILD_DIR}
