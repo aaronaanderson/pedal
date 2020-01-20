@@ -3,6 +3,9 @@
   -----
 # Pedagogical Audio Library
   
+  (in progress) Pedal is a C++ audio library. It is intended to be both a versitle tool for programmers and a
+  useful resource to learn C++ audio programming.
+
 # BUILDING
 
  . cmake -G ${GENERATOR} -A ${PLATFORM} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -S ${PEDAL_DIR} -B ${BUILD_DIR}
