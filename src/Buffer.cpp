@@ -47,9 +47,6 @@ Buffer::~Buffer(){
 
 //Core functionality of class=========================
 void Buffer::writeSample(float inputSample, int index){
-  // TODO !!!!!!!!!!!!!!!!!!!! clamp works on floats!
-  // Use templated clamp for have separate function for ints
-
   index = clamp(index, 0, sizeInSamples-1);
   content[index] = inputSample;
 }
@@ -63,7 +60,6 @@ void Buffer::addToSample(float inputSample, int index){
 }
 
 float Buffer::getSample(float index){
-#if 1
   index = clamp(index, 0.0f, sizeInSamples-1);//clamp for safety
   float retrievedSample = 0.0f;//start with a sample
   //do some linear interpolation
@@ -73,19 +69,19 @@ float Buffer::getSample(float index){
   //interpolate between the samples
   retrievedSample = linearInterpolation(index, previousSample, nextSample);
   return retrievedSample;
-#else
+}
 
-  if (index < 0.0f) index = 0.0f; // TODO? maybe negative index for wrapping backwards? for now we clamp
-  int i0 = (int)index;  // index for previous sample
-  int i1 = i0 + 1;      // index for next sample
-  float t = index - i0; // interpolation amount
-
-  // wrap indices
-  i0 = i0 % sizeInSamples;
-  i1 = i1 % sizeInSamples;
-
-  return linearInterpolation(t, content[i0], content[i1]);
-#endif
+void Buffer::fillSineSweep(float lowFrequency, float highFrequency){
+  float lowExponent = log(lowFrequency)/log(2.0f);
+  float highExponent = log(highFrequency)/log(2.0f);
+  float linearRange = highExponent - lowExponent;
+  TSine sineOscillator;
+  for(int i = 0; i < sizeInSamples; i++){
+    float linearPosition = (i/float(sizeInSamples))*linearRange;
+    float frequency = pow(2, linearPosition);
+    sineOscillator.setFrequency(frequency);
+    content[i] = sineOscillator.generateSample();
+  }
 }
 
 //getters and setters================================

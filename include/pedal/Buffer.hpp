@@ -3,6 +3,7 @@
 
 #include "utilities.hpp"
 #include "Interpolation.hpp"
+#include "TSine.hpp"
 
 class Buffer{
   public:
@@ -40,7 +41,8 @@ class Buffer{
   
   void setDuration(float newDuration);
   void setSizeInSamples(int newSizeInSamples);
-
+  
+  void fillSineSweep(float lowFrequency = 20.0f, float highFrequency = 20000.0f);
   float getSample(float index);
   float* getContent();
   float getDuration();
