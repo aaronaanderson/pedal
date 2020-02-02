@@ -15,11 +15,8 @@ int bufferIndex = 0;
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
-  // oscillator.setFrequency(pdlGetSlider(app, 0));//set frequecy by slider
-  //bool trigger = pdlGetToggle(app, 0);//trigger envelope with toggle
-  //float mx, my; pdlGetCursorPos(app, &mx, &my);//obtain mouse x and y coordinates
 
-  testBuffer.fillSineSweep();
+  //testBuffer.fillSineSweep();//fails here, but delayed.
   for (unsigned i = 0; i < buffer; i += 1) {//for entire buffer of frames
     //DebugTool::printOncePerBuffer(oscillator.getFrequency(), i);
     float currentSample = 0.0f;
@@ -36,7 +33,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
 }
 //======================main loop
 int main() {
-    //testBuffer.fillSineSweep();//breaks here
+    testBuffer.fillSineSweep(20.0f, 20000.0f);//breaks here
     //make an app (a pointer to an app, actually)
     pdlExampleApp* app = pdlInitExampleApp(callback);
     if (!app) {//if app doesn't succesfully allocate
@@ -46,8 +43,8 @@ int main() {
     pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
     
     // Add your GUI elements here
-    pdlAddSlider(app, 0, "frequency", 0.1f, 40.0f, 3.0f);
-    pdlAddToggle(app, 0, "loud", false);
+    //pdlAddSlider(app, 0, "frequency", 0.1f, 40.0f, 3.0f);
+    //pdlAddToggle(app, 0, "loud", false);
     //pdlAddTrigger(app, 0, "trigger");
     
     //begin the app--------

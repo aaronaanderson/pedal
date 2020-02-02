@@ -52,9 +52,6 @@ void Buffer::writeSample(float inputSample, int index){
 }
 
 void Buffer::addToSample(float inputSample, int index){
-  // TODO !!!!!!!!!!!!!!!!!!!! clamp works on floats!
-  // use templated clamp for have separate function for ints
-
   index = clamp(index, 0, sizeInSamples-1);
   content[index] += inputSample;
 }
