@@ -9,7 +9,8 @@
 
 
 //DebugTool debugger;
-Buffer testBuffer(4000);//Initiate buffer with 10 seconds duration
+Buffer testBuffer(6000.0f);//Initiate buffer with 10 seconds duration
+//testBuffer.fillSineSweep();//breaks
 int bufferIndex = 0;
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
@@ -17,6 +18,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
   // oscillator.setFrequency(pdlGetSlider(app, 0));//set frequecy by slider
   //bool trigger = pdlGetToggle(app, 0);//trigger envelope with toggle
   //float mx, my; pdlGetCursorPos(app, &mx, &my);//obtain mouse x and y coordinates
+
   testBuffer.fillSineSweep();
   for (unsigned i = 0; i < buffer; i += 1) {//for entire buffer of frames
     //DebugTool::printOncePerBuffer(oscillator.getFrequency(), i);
@@ -34,6 +36,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
 }
 //======================main loop
 int main() {
+    //testBuffer.fillSineSweep();//breaks here
     //make an app (a pointer to an app, actually)
     pdlExampleApp* app = pdlInitExampleApp(callback);
     if (!app) {//if app doesn't succesfully allocate
