@@ -58,7 +58,7 @@ class WTSine{
   SineTable* sineTable = SineTable::getInstance();
   float frequency, phase, amplitude;//standard oscillator variables
   float currentSample;//current working sample
-  float* currentBlock;//current working block of samples
+  float* currentBlock = nullptr;//current working block of samples
   double phaseIncrement;//extra precision necessary 
 };
 #endif

@@ -60,7 +60,7 @@ class WTSquare{
   float whichTable(float frequency);//input frequency, output which table to read
   float frequency, phase, amplitude;//standard oscillator variables
   float currentSample;//current working sample
-  float* currentBlock;//current working block of samples
+  float* currentBlock = nullptr;//current working block of samples
   double phaseIncrement;//extra precision necessary 
 };
 

@@ -49,7 +49,7 @@ class Buffer{
   int getSizeInSamples();
   
   private:
-  float* content;
+  float* content = nullptr;
   int sizeInSamples;
   float duration;
 };

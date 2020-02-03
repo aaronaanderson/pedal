@@ -30,6 +30,6 @@ class HanningWindow{
   float duration;
   float phase, phaseIncrement;
   float currentSample;
-  float* currentBlock;
+  float* currentBlock = nullptr;
 };
 #endif

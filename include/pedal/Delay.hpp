@@ -23,7 +23,7 @@ class Delay{
 
   private:
   float currentSample;
-  float* currentBlock;
+  float* currentBlock = nullptr;
   CircularBuffer buffer;//storage for past samples 
   BufferTap* tap;//@kee remind me of question here
   float feedback;//how much of the feed back is re-inserted

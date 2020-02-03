@@ -19,6 +19,6 @@ class BufferTap{
   float delayTime;
   float readIndex;
   float currentSample;
-  float* currentBlock;
+  float* currentBlock = nullptr;
 };
 #endif

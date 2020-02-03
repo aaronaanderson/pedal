@@ -30,6 +30,6 @@ class ImpulseGenerator{
   float maskChance;
   float deviation, randomOffset;//deviation from periodicity
   float currentSample;
-  float* currentBlock;
+  float* currentBlock = nullptr;
 };
 #endif

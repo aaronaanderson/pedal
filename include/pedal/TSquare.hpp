@@ -31,7 +31,7 @@ class TSquare{//Pedal Trivial Square Oscillator
   float frequency, phase, amplitude;//standard oscillator variables
   float dutyCycle;//width of rectangular wave (square if 0.5);
   float currentSample;//current working sample
-  float* currentBlock;//current working block of samples
+  float* currentBlock = nullptr;//current working block of samples
   double phaseIncrement;//extra precision necessary 
 };
 #endif
