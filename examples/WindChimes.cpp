@@ -21,7 +21,7 @@ struct Chime{
   WTSine oscillator;
 };
 Chime chimes[NUM_CHIMES];
-
+CircularBuffer circularBuffer(10000.0f);
 Delay delay;
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
@@ -46,7 +46,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
         for(int j = 0; j < 40; j++){//try 40 times to find a free random chime
             int index = rangedRandom(0.0f, float(NUM_CHIMES));
             if(chimes[index].envelope.isBusy() == false){
-                float newFrequency = mtof((int)rangedRandom(20.0f, 100.0f));
+                float newFrequency = mtof((int)rangedRandom(40.0f, 110.0f));
                 chimes[index].oscillator.setFrequency(newFrequency);
                 chimes[index].oscillator.setAmplitude(rangedRandom(0.01, 0.7));
                 chimes[index].envelope.setTrigger(true);
@@ -63,9 +63,8 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
         currentSample += sample;
       }
       
-      
-      currentSample = delay.insertSample(currentSample);
-
+      currentSample += delay.insertSample(currentSample);
+      currentSample *= 0.1f;
       for (unsigned j = 0; j < channel; j += 1) {//for every sample in frame
         out[channel * i + j] = currentSample * 0.1;
       }

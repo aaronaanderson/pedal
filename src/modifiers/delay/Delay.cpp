@@ -16,19 +16,11 @@ Delay::~Delay(){
 }
 
 float Delay::insertSample(float inputSample){//returns current sample for convenience
-
-  float delayedSample = buffer.getDelayed(delayTime);
-  float outputSample = delayedSample;
-  
-  buffer.inputSample(outputSample*feedback);
-  return outputSample;
-  // Delay class has a circuluar buffer
-  // Delay.insertSample inputSample
-  // 1. get the delayed sample /
-  // 2. add scaled delayed sample to the inputSample
-  // 3. feed the mixed result back into the circular buffer
-  // 4. return the mixed result...
+  float delayedSample = buffer.getDelayed(delayTime);//retrieve the delayed sample
+  buffer.inputSample(inputSample + delayedSample * feedback);
+  return delayedSample;
 }
+
 float* Delay::insertBlock(float* inputBlock){//insert (buffersize) channels at a time
   if(currentBlock == nullptr){//if the block has not been allocated
       currentBlock = new float[pdlSettings::bufferSize];//allocate space
