@@ -42,5 +42,4 @@ class TSine {//Pedal Trivial Sine Oscillator
   float* currentBlock = nullptr;//current working block of samples
   double phaseIncrement;//extra precision necessary 
 };
-
 #endif 

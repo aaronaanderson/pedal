@@ -43,6 +43,8 @@ class Buffer{
   void setSizeInSamples(int newSizeInSamples);
   
   void fillSineSweep(float lowFrequency = 20.0f, float highFrequency = 20000.0f);
+  void fillNoise();
+  void fillSinc(int numberZeroCrossings = 20);
   float getSample(float index);
   float* getContent();
   float getDuration();

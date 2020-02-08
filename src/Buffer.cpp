@@ -69,15 +69,31 @@ float Buffer::getSample(float index){
 }
 
 void Buffer::fillSineSweep(float lowFrequency, float highFrequency){
-  float lowExponent = log(lowFrequency)/log(2.0f);
-  float highExponent = log(highFrequency)/log(2.0f);
+  float lowExponent = log(lowFrequency)/log(2.0f);//2^x = 20.0Hz, find x
+  float highExponent = log(highFrequency)/log(2.0f);//2^x = 20,000Hz, find x
   float linearRange = highExponent - lowExponent;
-  TSine sineOscillator;
+  TSine sineOscillator;//briefly create a sine oscillator to generate samples
+  for(int i = 0; i < sizeInSamples; i++){//for every sample in array
+    float linearPosition = (i/float(sizeInSamples))*linearRange;//find the linear position between ranges
+    float frequency = pow(2, linearPosition);//determine appropriate frequency for sample
+    sineOscillator.setFrequency(frequency);//set oscillator frequency
+    content[i] = sineOscillator.generateSample();//generate and assign sample to array
+  }
+}
+void Buffer::fillNoise(){
   for(int i = 0; i < sizeInSamples; i++){
-    float linearPosition = (i/float(sizeInSamples))*linearRange;
-    float frequency = pow(2, linearPosition);
-    sineOscillator.setFrequency(frequency);
-    content[i] = sineOscillator.generateSample();
+    content[i] = rangedRandom(-1.0f, 1.0f);
+  }
+}
+void Buffer::fillSinc(int numberZeroCrossings){
+  for(int i = 0; i < sizeInSamples; i++){
+    float currentSample = 0.0f;
+    //convert buffer index to phase position (-PI to PI
+    float sincPhase = ((i*2)/(float)sizeInSamples) - 1.0f;
+    for(float j = 1.0f; j < numberZeroCrossings+1.0f; j += 1.0f){
+      currentSample += std::sin(sincPhase*M_PI*j)/(sincPhase);
+    }
+    content[i] = currentSample;
   }
 }
 

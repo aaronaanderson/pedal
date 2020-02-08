@@ -12,7 +12,9 @@ T clamp(T input, U lowerBound, Z upperBound){
   return result;
 }
 */
-
+float pedalSinc(const float phase){
+    return std::sin(phase)/phase;
+}
 float rangedRandom(float minimum, float maximum){
   //find an initial random value
   float signedHalfNormal = (rand()/float(RAND_MAX))-0.5f;//(range of -0.5, 0.5)
