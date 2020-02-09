@@ -12,8 +12,6 @@
 //4       x               x        16 | 7 
 //5               x                32 | 15
 
-
-
 class PinkNoise{
   public:
   PinkNoise(int octaves = 12);
@@ -29,6 +27,5 @@ class PinkNoise{
   private:
   std::vector<WhiteNoise> noiseArray;
   unsigned numberOctaves;
-
 };
 #endif

@@ -26,6 +26,8 @@ add_library(pedal STATIC
     src/utilities.cpp
     src/pdlSettings.cpp
     src/DebugTool.cpp
+    src/generators/noise/WhiteNoise.cpp 
+    src/generators/noise/PinkNoise.cpp
 )
 
 set_target_properties(pedal PROPERTIES

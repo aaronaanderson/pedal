@@ -9,4 +9,3 @@ float WhiteNoise::process(){
 }
 
 float WhiteNoise::getSample(){return currentSample;}
-
