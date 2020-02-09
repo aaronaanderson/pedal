@@ -16,7 +16,7 @@
 */
 class PinkNoise{
   public:
-  PinkNoise(int octaves = 12);
+  PinkNoise();
   float generateSample();
   
   private:

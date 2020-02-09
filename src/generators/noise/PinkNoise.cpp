@@ -1,8 +1,7 @@
 #include "pedal/PinkNoise.hpp"
 
 #include "math.h"
-PinkNoise::PinkNoise(int octaves){
-  
+PinkNoise::PinkNoise(){
   indexMax = pow(2, NUM_OCTAVES) - 1;
   runningSum = 0.0f;
   //generate a random value to start for all white noise generators
@@ -20,6 +19,8 @@ float PinkNoise::generateSample(){
   runningSum -= noiseArray[whichOctave].getSample();
   //now we replace it with the new sample
   runningSum += noiseArray[whichOctave].generateSample();
+  currentSample = runningSum + rangedRandom(-1.0f, 1.0f);
+  return currentSample;
 }
 
 void PinkNoise::checkGetOctaveLogic(){

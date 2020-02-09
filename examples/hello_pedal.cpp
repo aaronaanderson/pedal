@@ -17,11 +17,14 @@
 #include <iostream>
 #include "pedal/Delay.hpp"
 #include "pedal/DebugTool.hpp"
+#include "pedal/WhiteNoise.hpp"
+#include "pedal/PinkNoise.hpp"
 
 ImpulseGenerator oscillator;
 CTEnvelope envelope;
 HanningWindow window;
 //DebugTool debugger;
+PinkNoise noise;
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
@@ -39,11 +42,11 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
 
     for (unsigned i = 0; i < buffer; i += 1) {//for entire buffer of frames
       //debugger.update(i);
-      DebugTool::printOncePerBuffer(oscillator.getFrequency(), i);
+      //DebugTool::printOncePerBuffer(oscillator.getFrequency(), i);
       float currentSample = oscillator.generateSample();//assign the saw to current sample
       currentSample *= envelope.generateSample();
       for (unsigned j = 0; j < channel; j += 1) {//for every sample in frame
-        out[channel * i + j] = currentSample;
+        out[channel * i + j] = noise.generateSample() * 0.01f;
       }
     }
 }
