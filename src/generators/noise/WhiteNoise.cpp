@@ -1,10 +1,10 @@
 #include "pedal/WhiteNoise.hpp"
 
 WhiteNoise::WhiteNoise(){
-  currentSample = process();
+  currentSample = generateSample();
 }
 
-float WhiteNoise::process(){
+float WhiteNoise::generateSample(){
   currentSample = rangedRandom(-1.0f, 1.0f);
 }
 

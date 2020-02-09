@@ -6,10 +6,10 @@
 class WhiteNoise{
   public:
   WhiteNoise();
-  float process();
+  float generateSample();
   float getSample();
 
   private:
   float currentSample;
-}
+};
 #endif
