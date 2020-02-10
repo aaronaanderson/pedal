@@ -2,7 +2,7 @@
 #include "example_app.hpp"
 
 //include class if using
-//#include "pedal/TSine.hpp"
+#include "pedal/TSine.hpp"
 //#include "pedal/TSaw.hpp"
 //#include "pedal/TSquare.hpp"
 #include "pedal/TTriangle.hpp"
@@ -19,34 +19,34 @@
 #include "pedal/DebugTool.hpp"
 #include "pedal/WhiteNoise.hpp"
 #include "pedal/PinkNoise.hpp"
+#include "pedal/utilities.hpp"
 
-ImpulseGenerator oscillator;
-CTEnvelope envelope;
 HanningWindow window;
-//DebugTool debugger;
 PinkNoise noise;
+SmoothValue<float> frequency;
+TSine oscillator;
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
-    oscillator.setFrequency(pdlGetSlider(app, 0));//set frequecy by slider
-    envelope.setAttack(pdlGetSlider(app, 1));
-    envelope.setDecay(pdlGetSlider(app, 2));
-    envelope.setSustain(pdlGetSlider(app, 3));
-    envelope.setRelease(pdlGetSlider(app, 4));
-    
-    bool trigger = pdlGetToggle(app, 0);//trigger envelope with toggle
-    //bool trigger = pdlGetTrigger(app, 0);
-    window.setTrigger(trigger);
-    envelope.setTrigger(trigger);//set trigger to up or down, on or off, etc
     float mx, my; pdlGetCursorPos(app, &mx, &my);//obtain mouse x and y coordinates
+    oscillator.setFrequency(pdlGetSlider(app, 0));//set frequecy by slider
+
+    bool trigger = pdlGetToggle(app, 0);//trigger envelope with toggle
+    float frequencyTarget = pow(2,4.0f + mx * 10.0f);
+    if(trigger){
+     frequency.setTarget(frequencyTarget);
+    }else{
+      oscillator.setFrequency(frequencyTarget);//set frequecy by slider
+    }
+    
 
     for (unsigned i = 0; i < buffer; i += 1) {//for entire buffer of frames
-      //debugger.update(i);
-      //DebugTool::printOncePerBuffer(oscillator.getFrequency(), i);
+      if(trigger){
+       oscillator.setFrequency(frequency.process());
+      }
       float currentSample = oscillator.generateSample();//assign the saw to current sample
-      currentSample *= envelope.generateSample();
       for (unsigned j = 0; j < channel; j += 1) {//for every sample in frame
-        out[channel * i + j] = noise.generateSample() * 0.01f;
+        out[channel * i + j] = currentSample * 0.1f;
       }
     }
 }
