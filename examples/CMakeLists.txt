@@ -65,6 +65,7 @@ set(example_list
     SimpleEnvelope
     WindChimes
     BufferPlayground
+    BiquadExample
 )
 
 # loop through example targets

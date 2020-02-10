@@ -28,6 +28,7 @@ add_library(pedal STATIC
     src/DebugTool.cpp
     src/generators/noise/WhiteNoise.cpp 
     src/generators/noise/PinkNoise.cpp
+    src/modifiers/filters/Biquad.cpp
 )
 
 set_target_properties(pedal PROPERTIES
