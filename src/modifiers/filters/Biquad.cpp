@@ -8,9 +8,23 @@ Biquad::Biquad(FilterType initialMode, float initialFrequency, float initialQ){
   gain = 0.0f;
   calculateCoefficients();
 }
-
+Biquad::~Biquad(){
+  delete[] currentBlock;
+}
 //primary mechanics of class
-//===============================v
+//========================================================
+float* Biquad::processBlock(float* input){
+  if(currentBlock != nullptr){//if we don't have a local currentBlock yet, 
+    currentBlock = new float[pdlSettings::bufferSize];//create a new array of floats
+  }
+
+  for(int i = 0; i < pdlSettings::bufferSize; ++i){//for every sample in the buffer
+    //TODO check input block before iterating
+    currentBlock[i] = processSample(input[i]);
+  }
+  return currentBlock;//returns pointer to the begining of this block
+}
+
 void Biquad::calculateCoefficients(){
   float norm;
   float v = pow(10, fabs(gain)/20.0f);
@@ -114,3 +128,26 @@ void Biquad::calculateCoefficients(){
 
 //Getters and setters
 //=========================================================
+void Biquad::setFrequency(float newFrequency){
+  frequency = newFrequency/pdlSettings::sampleRate;
+  calculateCoefficients();
+}
+void Biquad::setGain(float newGain){
+  gain = newGain;
+  calculateCoefficients();
+}
+void Biquad::setQ(float newQ){
+  q = newQ;
+  calculateCoefficients();
+}
+void Biquad::setMode(FilterType newMode){
+  mode = newMode;
+  calculateCoefficients();
+}
+
+float Biquad::getFrequency(){return frequency * pdlSettings::sampleRate;}
+float Biquad::getGain(){return gain;}
+float Biquad::getQ(){return q;}
+FilterType Biquad::getMode(){return mode;}
+float Biquad::getSample(){return currentSample;}
+float* Biquad::getBlock(){return currentBlock;}

@@ -2,6 +2,7 @@
 #define Biquad_hpp
 
 #include "math.h"
+#include "pdlSettings.hpp"
 //in progress....
 
 enum FilterType{
@@ -23,7 +24,7 @@ class Biquad{
 
   inline float processSample(float input);
   float* processBlock(float* input);
-
+  void reset();//0 internal values (stop explosion)
   void setFrequency(float newFrequency);
   void setGain(float newGain);
   void setQ(float newQ);
@@ -46,7 +47,7 @@ class Biquad{
   float b1, b2;//feed-back coefficients
   float z1, z2;//containers for previous output
   float currentSample;
-  float* currentBlock;//storage for processing entire block
+  float* currentBlock = nullptr;//storage for processing entire block
 };
 /*
 Transposed Direct Form II, thanks to Nigel Redmon
