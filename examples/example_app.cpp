@@ -17,6 +17,7 @@
 #define NUM_SLIDERS_MAX 16
 #define NUM_TOGGLES_MAX 16
 #define NUM_TRIGGERS_MAX 16
+#define NUM_DROPDOWNS_MAX 16
 
 struct slider {
     std::string name;
@@ -37,6 +38,13 @@ struct trigger {
     bool val;
 };
 
+struct dropDown{
+    std::string name;
+    std::atomic<int> atomic_val;
+    char** content;
+    int val;
+};
+
 struct pdlExampleApp {
     GLFWwindow* window;
     RtAudio audio;
@@ -49,6 +57,7 @@ struct pdlExampleApp {
     slider sliders[NUM_SLIDERS_MAX];
     toggle toggles[NUM_TOGGLES_MAX];
     trigger triggers[NUM_TRIGGERS_MAX];
+    dropDown dropDowns[NUM_DROPDOWNS_MAX];
     std::atomic<float> cursorx;
     std::atomic<float> cursory;
 };
@@ -235,6 +244,11 @@ void pdlUpdateExampleApp(pdlExampleApp* app) {
         if (t->name.empty()) continue;
         t->val = ImGui::Button(t->name.c_str());
     }
+    for(int i = 0; i < NUM_DROPDOWNS_MAX; i += 1){
+        dropDown* t = app->dropDowns + i;
+        if (t->name.empty()) continue;
+        ImGui::Combo(t->name.c_str(), &t->val, t->content, IM_ARRAYSIZE(&t->content));
+    }//Combo(const char* label, int* current_item, const char* const items[], int items_count, int popup_max_height_in_items = -1);
     ImGui::End();
 
     ImGui::SetNextWindowPos(ImVec2{window_w/2.0f,0.0f});
@@ -266,6 +280,10 @@ void pdlUpdateExampleApp(pdlExampleApp* app) {
 
     for (int i = 0; i < NUM_TRIGGERS_MAX; i += 1) {
         trigger* t = app->triggers + i;
+        t->atomic_val.store(t->val);
+    }
+    for (int i = 0; i < NUM_DROPDOWNS_MAX; i += 1){
+        dropDown* t = app->dropDowns + i;
         t->atomic_val.store(t->val);
     }
 }
@@ -336,3 +354,11 @@ void pdlAddTrigger(pdlExampleApp* app, int triggerIndex, const char* name) {
 bool pdlGetTrigger(pdlExampleApp* app, int idx) {
     return app->triggers[idx].atomic_val.exchange(false);
 }
+void pdlAddDropDown(pdlExampleApp* app, int idx, const char* name,char* content[]){
+    dropDown* t = app->dropDowns + idx;
+    t->name = name;
+    t->content = content;
+    t->val = 0;
+    t->atomic_val.store(0);
+}
+

@@ -24,7 +24,7 @@ class Biquad{
 
   inline float processSample(float input);
   float* processBlock(float* input);
-  void reset();//0 internal values (stop explosion)
+
   void setFrequency(float newFrequency);
   void setGain(float newGain);
   void setQ(float newQ);
@@ -40,6 +40,7 @@ class Biquad{
   private:
   void calculateCoefficients();//called when parameters change
   float frequency;//center/cutoff/shelf frequency depending on mode
+  //Frequency is stored in normalized mode to reduce calculations (0.0 -> 1.0)
   float q;
   float gain;
   FilterType mode;//enumerated above
