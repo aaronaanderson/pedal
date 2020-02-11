@@ -24,7 +24,8 @@ class Biquad{
 
   inline float processSample(float input);
   float* processBlock(float* input);
-
+  void flush();//0.0f history
+  
   void setFrequency(float newFrequency);
   void setGain(float newGain);
   void setQ(float newQ);
