@@ -126,6 +126,9 @@ void Biquad::calculateCoefficients(){
     break; 
   }
 }
+void Biquad::flush(){
+  z1 = z2 = 0.0f;
+}
 //Getters and setters
 //=========================================================
 void Biquad::setFrequency(float newFrequency){
@@ -142,6 +145,7 @@ void Biquad::setQ(float newQ){
 }
 void Biquad::setMode(FilterType newMode){
   mode = newMode;
+  flush();
   calculateCoefficients();
 }
 //frequency is stored in normalized form, so must adjust to retrieve
