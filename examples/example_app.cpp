@@ -42,6 +42,7 @@ struct dropDown{
     std::string name;
     std::atomic<int> atomic_val;
     char** content;
+    int length;
     int val;
 };
 
@@ -247,7 +248,7 @@ void pdlUpdateExampleApp(pdlExampleApp* app) {
     for(int i = 0; i < NUM_DROPDOWNS_MAX; i += 1){
         dropDown* t = app->dropDowns + i;
         if (t->name.empty()) continue;
-        ImGui::Combo(t->name.c_str(), &t->val, t->content, IM_ARRAYSIZE(&t->content));
+        ImGui::Combo(t->name.c_str(), &t->val, t->content, t->length, 4);
     }//Combo(const char* label, int* current_item, const char* const items[], int items_count, int popup_max_height_in_items = -1);
     ImGui::End();
 
@@ -354,11 +355,12 @@ void pdlAddTrigger(pdlExampleApp* app, int triggerIndex, const char* name) {
 bool pdlGetTrigger(pdlExampleApp* app, int idx) {
     return app->triggers[idx].atomic_val.exchange(false);
 }
-void pdlAddDropDown(pdlExampleApp* app, int idx, const char* name,char* content[]){
+void pdlAddDropDown(pdlExampleApp* app, int idx, const char* name,char* content[],int length){
     dropDown* t = app->dropDowns + idx;
     t->name = name;
     t->content = content;
     t->val = 0;
+    t->length = length;
     t->atomic_val.store(0);
 }
 

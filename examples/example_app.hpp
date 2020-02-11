@@ -29,5 +29,5 @@ bool pdlGetToggle(pdlExampleApp* app, int idx);
 void pdlAddTrigger(pdlExampleApp* app, int triggerIndex, const char* name);
 bool pdlGetTrigger(pdlExampleApp* app, int idx);
 
-void pdlAddDropDown(pdlExampleApp* app, int idx, const char* name,  char*  content[]);
+void pdlAddDropDown(pdlExampleApp* app, int idx, const char* name,  char*  content[], int length);
 #endif
