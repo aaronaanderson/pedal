@@ -17,15 +17,17 @@ enum FilterType{
 
 class Biquad{
   public:
-  Biquad(FilterType initialMode = LOW_PASS, 
-         float initialFrequency = 2000.0f,
-         float initialQ = 2.0f);
+  Biquad(FilterType initialMode = LOW_SHELF, 
+         float initialFrequency = 2000.0f/pdlSettings::sampleRate,
+         float initialQ = 0.7f);
   ~Biquad();
 
   inline float processSample(float input);
   float* processBlock(float* input);
   void flush();//0.0f history
   
+  void setBiquad(FilterType mode, float newFrequency, 
+                 float newQ, float newGain);
   void setFrequency(float newFrequency);
   void setGain(float newGain);
   void setQ(float newQ);
@@ -45,9 +47,9 @@ class Biquad{
   float q;
   float gain;
   FilterType mode;//enumerated above
-  float a0, a1, a2;//feed-forward coefficients
-  float b1, b2;//feed-back coefficients
-  float z1, z2;//containers for previous output
+  double a0, a1, a2;//feed-forward coefficients
+  double b1, b2;//feed-back coefficients
+  double z1, z2;//containers for previous output
   float currentSample;
   float* currentBlock = nullptr;//storage for processing entire block
 };

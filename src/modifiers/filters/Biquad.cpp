@@ -25,12 +25,12 @@ float* Biquad::processBlock(float* input){
   return currentBlock;//returns pointer to the begining of this block
 }
 void Biquad::calculateCoefficients(){
-  float norm;
-  float v = pow(10, fabs(gain)/20.0f);
-  float k = tan(M_PI * frequency);
+  double norm;
+  double v = pow(10, fabs(gain)/20.0f);
+  double k = tan(M_PI * frequency);
   //calculate and store these since used frequently
-  float k_squared = k * k;
-  float kdivbyq = k / q;
+  double k_squared = k * k;
+  double kdivbyq = k / q;
   switch(mode){
     case LOW_PASS:
     norm = 1.0f / (1.0f + kdivbyq + k_squared);
@@ -50,9 +50,9 @@ void Biquad::calculateCoefficients(){
     break;
     case BAND_PASS:
     norm = 1.0f / (1.0f + kdivbyq + k_squared);
-    a0 = norm;
-    a1 = -2.0f * a0;
-    a2 = a0;
+    a0 = k / q * norm;
+    a1 = 0.0f;
+    a2 = -a0;
     b1 = 2.0f * (k_squared - 1.0f) * norm;
     b2 = (1.0f - kdivbyq + k_squared) * norm;
     break;
@@ -68,7 +68,7 @@ void Biquad::calculateCoefficients(){
     {
     a1 = 2.0f * (k_squared - 1.0f) * norm;
     b1 = a1;
-    float vqk = v / q * k;//calculate and store, since used often
+    double vqk = v / q * k;//calculate and store, since used often
     if(gain > 0.0f){
       norm = 1.0f / (1.0f + 1.0f / q * k + k_squared);
       a0 = (1.0f + vqk + k_squared) * norm;
@@ -84,12 +84,12 @@ void Biquad::calculateCoefficients(){
     break;
     case LOW_SHELF:
     {
-    float sqrt2k = sqrt(2.0f)*k;//calculate and store, since used often
-    float sqrt2vk = sqrt(2.0f * v) * k;
+    double sqrt2k = sqrt(2.0f)*k;//calculate and store, since used often
+    double sqrt2vk = sqrt(2.0f * v) * k;
     if(gain >= 0.0f){
       norm = 1.0f / (1.0f + sqrt2k + k_squared);
       a0 = (1.0f + sqrt2vk + v * k_squared)  * norm;
-      a1 = 2.0f * (v * k_squared - v) * norm;
+      a1 = 2.0f * (v * k_squared - 1.0f) * norm;
       a2 = (1.0f - sqrt2vk + v * k_squared) * norm;
       b1 = 2.0f * (k_squared - 1.0f) * norm;
       b2 = (1.0f - sqrt2k + k_squared) * norm;
@@ -99,7 +99,7 @@ void Biquad::calculateCoefficients(){
       a1 = 2.0f * (k_squared - 1.0f) * norm;
       a2 = (1.0f - sqrt2k + k_squared) * norm;
       b1 = 2.0f * (v * k_squared - 1.0f) * norm;
-      b2 = (1.0f - sqrt2vk + k_squared) * norm;
+      b2 = (1.0f - sqrt2vk + v * k_squared) * norm;
     }
     }
     break;
@@ -131,22 +131,38 @@ void Biquad::flush(){
 }
 //Getters and setters
 //=========================================================
-void Biquad::setFrequency(float newFrequency){
+void Biquad::setBiquad(FilterType newMode, float newFrequency, 
+                       float newQ, float newGain){
+  mode = newMode;
   frequency = newFrequency/pdlSettings::sampleRate;
-  calculateCoefficients();
-}
-void Biquad::setGain(float newGain){
+  q = newQ;
   gain = newGain;
   calculateCoefficients();
 }
+void Biquad::setFrequency(float newFrequency){
+  if(newFrequency != frequency){
+    frequency = newFrequency/pdlSettings::sampleRate;
+    calculateCoefficients();
+  }
+}
+void Biquad::setGain(float newGain){
+  if(newGain != gain){
+    gain = newGain;
+    calculateCoefficients();
+  }
+}
 void Biquad::setQ(float newQ){
-  q = newQ;
-  calculateCoefficients();
+  if(newQ != q){
+    q = newQ;
+    calculateCoefficients();
+  }
 }
 void Biquad::setMode(FilterType newMode){
-  mode = newMode;
-  flush();
-  calculateCoefficients();
+  if(newMode != mode){
+    mode = newMode;
+    flush();
+    calculateCoefficients();
+  }
 }
 //frequency is stored in normalized form, so must adjust to retrieve
 float Biquad::getFrequency(){return frequency * pdlSettings::sampleRate;}

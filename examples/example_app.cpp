@@ -363,4 +363,7 @@ void pdlAddDropDown(pdlExampleApp* app, int idx, const char* name,char* content[
     t->length = length;
     t->atomic_val.store(0);
 }
+int pdlGetDropDown(pdlExampleApp* app, int idx){
+    return app->dropDowns[idx].atomic_val.load();
+}
 

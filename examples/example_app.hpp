@@ -30,4 +30,5 @@ void pdlAddTrigger(pdlExampleApp* app, int triggerIndex, const char* name);
 bool pdlGetTrigger(pdlExampleApp* app, int idx);
 
 void pdlAddDropDown(pdlExampleApp* app, int idx, const char* name,  char*  content[], int length);
+int pdlGetDropDown(pdlExampleApp* app, int indx);
 #endif
