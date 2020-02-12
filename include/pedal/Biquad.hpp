@@ -3,7 +3,12 @@
 
 #include "math.h"
 #include "pdlSettings.hpp"
-//in progress....
+
+/*
+This biquad object was based heavily on Nigel Redmon's
+implementation:
+https://www.earlevel.com/main/2012/11/26/biquad-c-source-code/
+*/
 
 enum FilterType{
   LOW_PASS = 0,

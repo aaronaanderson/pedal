@@ -1,4 +1,9 @@
 #include "pedal/Biquad.hpp"
+/*
+This biquad object was based heavily on Nigel Redmon's
+implementation:
+https://www.earlevel.com/main/2012/11/26/biquad-c-source-code/
+*/
 //constructors and deconstructors
 //=========================================================
 Biquad::Biquad(FilterType initialMode, float initialFrequency, float initialQ){
