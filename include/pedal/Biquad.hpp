@@ -44,8 +44,8 @@ class Biquad{
   void calculateCoefficients();//called when parameters change
   float frequency;//center/cutoff/shelf frequency depending on mode
   //Frequency is stored in normalized mode to reduce calculations (0.0 -> 1.0)
-  float q;
-  float gain;
+  double q;
+  double gain;
   FilterType mode;//enumerated above
   double a0, a1, a2;//feed-forward coefficients
   double b1, b2;//feed-back coefficients
