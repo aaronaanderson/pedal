@@ -49,8 +49,8 @@ set_target_properties(pedal PROPERTIES
 
 # Directory to look for header files for `#include`
 # `PUBLIC` means any target that links to this target will also have these items
-target_include_directories(pedal PUBLIC include)
-
+target_include_directories(pedal PUBLIC include external)
+#target_include_directories(pedal PUBLIC external)
 # Libraries to link when building this target
 # target_link_libraries(pedal PUBLIC "")
 

@@ -68,6 +68,31 @@ float Buffer::getSample(float index){
   return retrievedSample;
 }
 
+void Buffer::loadSoundFile(char* pathToFile){
+    
+    
+    content = drwav_open_file_and_read_pcm_frames_f32(pathToFile,
+                                                       &fileChannels, 
+                                                       &fileSampleRate, 
+                                                       &totalFramesInFile,
+                                                       NULL);
+                                                       
+
+  /*
+  waveFile = drwav_open_file(pathToFile);
+  if (waveFile == nullptr) {
+    std::cout << "error loading soundfile" << std::end;
+  }else{
+    content = (float*)malloc((size_t)waveFile->totalPCMFrameCount *
+                              waveFile->channels * sizeof(float));
+    drwav_read_f32(waveFile, waveFile->totalPCMFrameCount, content); 
+  }
+
+  */
+  
+
+}
+
 void Buffer::fillSineSweep(float lowFrequency, float highFrequency){
   float lowExponent = log(lowFrequency)/log(2.0f);//2^x = 20.0Hz, find x
   float highExponent = log(highFrequency)/log(2.0f);//2^x = 20,000Hz, find x

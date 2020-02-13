@@ -12,11 +12,14 @@ Version 0.11.0 has breaking API changes.
 
 Improved Client-Defined Memory Allocation
 -----------------------------------------
-The main change with this release is the addition of a more flexible way of implementing custom memory allocation routines. The
-existing system of DRWAV_MALLOC, DRWAV_REALLOC and DRWAV_FREE are still in place and will be used by default when no custom
+The main change with this release is the addition of a more flexible way of implementing
+ custom memory allocation routines. The
+existing system of DRWAV_MALLOC, DRWAV_REALLOC and DRWAV_FREE are still 
+in place and will be used by default when no custom
 allocation callbacks are specified.
 
-To use the new system, you pass in a pointer to a drwav_allocation_callbacks object to drwav_init() and family, like this:
+To use the new system, you pass in a pointer to a drwav_allocation_callbacks 
+object to drwav_init() and family, like this:
 
     void* my_malloc(size_t sz, void* pUserData)
     {
@@ -40,9 +43,11 @@ To use the new system, you pass in a pointer to a drwav_allocation_callbacks obj
     allocationCallbacks.onFree    = my_free;
     drwav_init_file(&wav, "my_file.wav", &allocationCallbacks);
 
-The advantage of this new system is that it allows you to specify user data which will be passed in to the allocation routines.
+The advantage of this new system is that it allows you to specify user data 
+which will be passed in to the allocation routines.
 
-Passing in null for the allocation callbacks object will cause dr_wav to use defaults which is the same as DRWAV_MALLOC,
+Passing in null for the allocation callbacks object will cause dr_wav to use 
+defaults which is the same as DRWAV_MALLOC,
 DRWAV_REALLOC and DRWAV_FREE and the equivalent of how it worked in previous versions.
 
 Every API that opens a drwav object now takes this extra parameter. These include the following:

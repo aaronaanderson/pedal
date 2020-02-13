@@ -9,7 +9,7 @@
 
 
 //DebugTool debugger;
-Buffer testBuffer(1000.0f);//Initiate buffer with 10 seconds duration
+Buffer testBuffer(4000.0f);//Initiate buffer with 10 seconds duration
 //testBuffer.fillSineSweep();//breaks
 int bufferIndex = 0;
 //========================Audio Callback
@@ -33,7 +33,8 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
 }
 //======================main loop
 int main() {
-    testBuffer.fillSinc(40);//breaks here
+    char* pathToSoundFile = "ding.wav";
+    //testBuffer.loadSoundFile(pathToSoundFile);//breaks here
     //make an app (a pointer to an app, actually)
     pdlExampleApp* app = pdlInitExampleApp(callback);
     if (!app) {//if app doesn't succesfully allocate

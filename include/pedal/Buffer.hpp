@@ -4,6 +4,8 @@
 #include "utilities.hpp"
 #include "Interpolation.hpp"
 #include "TSine.hpp"
+#include <iostream>
+#include "../../external/dr_wav.h"//for reading and writing .wav
 
 class Buffer{
   public:
@@ -39,6 +41,9 @@ class Buffer{
   void writeSample(float inputSample, int index);
   void addToSample(float inputSample, int index);
   
+  void loadSoundFile(char* soundFilePath);
+  void writeSoundFile(char* destinationPath);
+
   void setDuration(float newDuration);
   void setSizeInSamples(int newSizeInSamples);
   
@@ -51,7 +56,12 @@ class Buffer{
   int getSizeInSamples();
   
   private:
+  drwav* waveFile;
   float* content = nullptr;
+  char* pathToLoad = nullptr;//storage for path in case of loading
+  unsigned fileChannels, fileSampleRate;
+  drwav_uint64 totalFramesInFile;
+  //const drwav_allocation_callbacks callBack;//aaron don't forget about this
   int sizeInSamples;
   float duration;
 };
