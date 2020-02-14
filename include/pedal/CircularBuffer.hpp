@@ -16,12 +16,12 @@ class CircularBuffer{
   void inputBlock(float* inputBlock);//process a block at a time
   
   void setDuration(float newDuration);
-  void setSizeInSamples(int newSizeInSamples);
+  void setDurationInSamples(int newDurationInSamples);
   
   float getDelayed(float timeBack = 0.0f);//give most recent sample by default
   float* getBuffer();//retrieve a pointer to the entire buffer
   float getDuration();
-  int getSizeInSamples();
+  int getDurationInSamples();
   int getWriteLocation();
   Buffer* getBufferReference();
 

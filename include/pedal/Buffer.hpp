@@ -7,6 +7,13 @@
 #include <iostream>
 #include "../../external/dr_wav.h"//for reading and writing .wav
 
+/*
+Buffers are used to store audio. Each buffer may contain
+a number of channels, but will contain only one channel by
+default. The channels are interleaved. A soundfile may be
+read in to a buffer, and a buffer may be saved to disk as
+a soundfile. Currently, only .wav is supported.
+*/
 class Buffer{
   public:
   Buffer(float initialDuration = 1000.0f);
@@ -41,29 +48,33 @@ class Buffer{
   void writeSample(float inputSample, int index);
   void addToSample(float inputSample, int index);
   
-  void loadSoundFile(char* soundFilePath);
-  void writeSoundFile(char* destinationPath);
+  void loadSoundFile(const char* soundFilePath);
+  void writeSoundFile(const char* destinationPath);
 
   void setDuration(float newDuration);
-  void setSizeInSamples(int newSizeInSamples);
+  void setDurationInSamples(unsigned long newdurationInSamples);
   
   void fillSineSweep(float lowFrequency = 20.0f, float highFrequency = 20000.0f);
   void fillNoise();
-  void fillSinc(int numberZeroCrossings = 20);
-  float getSample(float index);
+  float getSample(float index);//interleaved retrieval (can request floating point index)
+  float getSample(int index);//non-interleaved retrieval
   float* getContent();
   float getDuration();
-  int getSizeInSamples();
+  unsigned long getDurationInSamples();
   
   private:
-  drwav* waveFile;
-  float* content = nullptr;
+  float* content = nullptr;//the actual buffer data
+  unsigned numberChannels;//number of channels
+  long unsigned numberFrames;//could potentially be massive
   char* pathToLoad = nullptr;//storage for path in case of loading
-  unsigned fileChannels, fileSampleRate;
+  unsigned fileChannels, fileSampleRate;//This information is needed for proper playback
   drwav_uint64 totalFramesInFile;
   //const drwav_allocation_callbacks callBack;//aaron don't forget about this
-  int sizeInSamples;
+  long unsigned durationInSamples;
   float duration;
+
+  drwav_data_format format;
+  drwav wavTemp;
 };
 /*
 TODO make buffer N channel

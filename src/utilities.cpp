@@ -22,8 +22,11 @@ float rangedRandom(float minimum, float maximum){
   float center = (maximum + minimum) * 0.5f;//center point
   return (signedHalfNormal*range) + center;
 }
-float msToSamples(float time){
-  return time * 0.001f * pdlSettings::sampleRate;
+float msToSamples(float timeInMS){
+  return timeInMS * 0.001f * pdlSettings::sampleRate;
+}
+float secondsToSamples(float timeInSeconds){
+  return timeInSeconds * pdlSettings::sampleRate;
 }
 float samplesToMS(float samples){
   return (samples*1000.0f)/pdlSettings::sampleRate;

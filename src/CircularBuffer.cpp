@@ -7,7 +7,7 @@ CircularBuffer::CircularBuffer(float initialDuration){
 void CircularBuffer::inputSample(float inputSample){
   buffer.writeSample(inputSample, writeLocation);
   writeLocation++;// increment the write index
-  if(writeLocation >= buffer.getSizeInSamples()){
+  if(writeLocation >= buffer.getDurationInSamples()){
     writeLocation = 0;
   }
 }
@@ -15,8 +15,8 @@ float CircularBuffer::getDelayed(float timeBack){
   timeBack = clamp(timeBack, 0.0f, buffer.getDuration()); // clamp to 0 .. bufferDuration
   float samplesToLookBack = msToSamples(timeBack); // convert ms to samples
   samplesToLookBack = writeLocation - samplesToLookBack; // sample index location that could be negative
-  samplesToLookBack = fmod(samplesToLookBack + buffer.getSizeInSamples(), // modulo to wrap sample index around
-                           (float)buffer.getSizeInSamples());
+  samplesToLookBack = fmod(samplesToLookBack + buffer.getDurationInSamples(), // modulo to wrap sample index around
+                           (float)buffer.getDurationInSamples());
   return buffer.getSample(samplesToLookBack);//buffer automatically interpolates
 }
 void CircularBuffer::inputBlock(float* inputBlock){
@@ -28,11 +28,11 @@ void CircularBuffer::inputBlock(float* inputBlock){
 void CircularBuffer::setDuration(float newDuration){
   buffer.setDuration(newDuration);
 }
-void CircularBuffer::setSizeInSamples(int newSizeInSamples){
-  buffer.setDuration(samplesToMS(newSizeInSamples));
+void CircularBuffer::setDurationInSamples(int newDurationInSamples){
+  buffer.setDuration(samplesToMS(newDurationInSamples));
 }
 float* CircularBuffer::getBuffer(){return buffer.getContent();}
 float CircularBuffer::getDuration(){return buffer.getDuration();}
-int CircularBuffer::getSizeInSamples(){return buffer.getSizeInSamples();}
+int CircularBuffer::getDurationInSamples(){return buffer.getDurationInSamples();}
 int CircularBuffer::getWriteLocation(){return writeLocation;}
 Buffer* CircularBuffer::getBufferReference(){return &buffer;}

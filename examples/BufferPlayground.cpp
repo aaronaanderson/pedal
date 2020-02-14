@@ -20,7 +20,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
   for (unsigned i = 0; i < buffer; i += 1) {//for entire buffer of frames
     //DebugTool::printOncePerBuffer(oscillator.getFrequency(), i);
     float currentSample = 0.0f;
-    if(bufferIndex > testBuffer.getSizeInSamples()-1){
+    if(bufferIndex > testBuffer.getDurationInSamples()-1){
       bufferIndex = 0;
     }else{
       currentSample = testBuffer.getSample(bufferIndex);
@@ -33,9 +33,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
 }
 //======================main loop
 int main() {
-    char* pathToSoundFile = "ding.wav";
-    //testBuffer.loadSoundFile(pathToSoundFile);//breaks here
-    //make an app (a pointer to an app, actually)
+    
     pdlExampleApp* app = pdlInitExampleApp(callback);
     if (!app) {//if app doesn't succesfully allocate
       return 1;//cancel program, return 1
@@ -43,6 +41,11 @@ int main() {
     pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
     pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
     
+
+    const char* pathToSoundFile = "ding.wav";
+    testBuffer.loadSoundFile(pathToSoundFile);//breaks here
+    //make an app (a pointer to an app, actually)
+    //testBuffer.writeSoundFile("temp");//danger!
     // Add your GUI elements here
     //pdlAddSlider(app, 0, "frequency", 0.1f, 40.0f, 3.0f);
     //pdlAddToggle(app, 0, "loud", false);

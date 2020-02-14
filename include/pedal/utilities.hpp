@@ -6,7 +6,8 @@
 #include "pdlSettings.hpp"
 #include "algorithm"
 
-float msToSamples(float time);
+float msToSamples(float timeInMS);
+float secondsToSamples(float timeInSeconds);
 float samplesToMS(float samples);
 float mtof(float midiValue);
 
