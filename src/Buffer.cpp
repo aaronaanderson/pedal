@@ -4,24 +4,27 @@
 //Constructors and deconstructors=====================
 // -----rule of 5 --------------------
 Buffer::Buffer(float initialDuration){
-  setDuration(initialDuration);  
+  numberChannels = 1;
   format.container = drwav_container_riff;// <-- drwav_container_riff = normal WAV files, drwav_container_w64 = Sony Wave64.
   format.format = DR_WAVE_FORMAT_PCM; // <-- Any of the DR_WAVE_FORMAT_* codes.
   format.channels = 1;
   format.sampleRate = pdlSettings::sampleRate;
-  format.bitsPerSample = 32;
+  format.bitsPerSample = 16;
+  setDuration(initialDuration);
 }
 
 Buffer::Buffer(const Buffer& other) {
   duration = other.duration;
   durationInSamples = other.durationInSamples;
-  content = new float[durationInSamples];
+  numberChannels = other.numberChannels;
+  content = new float[durationInSamples * numberChannels];
   std::memcpy(content, other.content, durationInSamples * sizeof(float));
 }
 
 Buffer::Buffer(Buffer&& other) noexcept {
   duration = other.duration;
   durationInSamples = other.durationInSamples;
+  numberChannels = other.numberChannels;
   content = other.content;
   other.content = nullptr;
 }
@@ -29,9 +32,10 @@ Buffer::Buffer(Buffer&& other) noexcept {
 Buffer& Buffer::operator=(const Buffer& other) {
   duration = other.duration;
   durationInSamples = other.durationInSamples;
+  numberChannels = other.numberChannels;
   delete[] content; // delete what we have
-  content = new float[durationInSamples];
-  std::memcpy(content, other.content, durationInSamples * sizeof(float));
+  content = new float[durationInSamples * numberChannels];
+  std::memcpy(content, other.content, durationInSamples * numberChannels * sizeof(float));
   return *this;
 }
 
@@ -39,6 +43,7 @@ Buffer& Buffer::operator=(Buffer&& other) noexcept {
   if (this != &other) { // check self assignment
     duration = other.duration;
     durationInSamples = other.durationInSamples;
+    numberChannels = other.numberChannels;
     delete[] content; // delete what we have
     content = other.content;
     other.content = nullptr;
@@ -51,30 +56,32 @@ Buffer::~Buffer(){
 }
 
 //Core functionality of class=========================
-void Buffer::writeSample(float inputSample, int index){
+void Buffer::writeSample(float inputSample, int index, int channel){
   index = clamp(index, 0, durationInSamples-1);
-  content[index] = inputSample;
+  content[index * numberChannels + channel] = inputSample;
 }
 
-void Buffer::addToSample(float inputSample, int index){
+void Buffer::addToSample(float inputSample, int index, int channel){
   index = clamp(index, 0, durationInSamples-1);
-  content[index] += inputSample;
+  content[index * numberChannels + channel] += inputSample;
 }
 
-float Buffer::getSample(float index){
+float Buffer::getSample(float index, int channel){
   index = clamp(index, 0.0f, durationInSamples-1);//clamp for safety
+  int interleavedIndex = index * numberChannels + channel;
   float retrievedSample = 0.0f;//start with a sample
   //do some linear interpolation
-  float previousSample = content[int(index)];// take the 'floor' 
+  float previousSample = content[int(interleavedIndex)];// take the 'floor' 
   //grab the next sample. wrap for edge cases
-  float nextSample = content[int(index+1.0f)%durationInSamples];// take the 'ceiling'
+  float nextSample = content[int(index+numberChannels) % 
+                             (durationInSamples * numberChannels)];// take the 'ceiling'
   //interpolate between the samples
   retrievedSample = linearInterpolation(index, previousSample, nextSample);
   return retrievedSample;
 }
-float Buffer::getSample(int index){
+float Buffer::getSample(int index, int channel){
   index = clamp(index, 0.0f, durationInSamples-1);//clamp for safety
-  return content[index];
+  return content[index * numberChannels + channel];
 }
 
 void Buffer::loadSoundFile(const char* pathToFile){
@@ -89,6 +96,7 @@ void Buffer::loadSoundFile(const char* pathToFile){
   }else{//if the file successfully loaded
   //TODO adjust for sampling rate differences
     //how many samples long is the buffer?
+    numberChannels = fileChannels;
     durationInSamples = totalFramesInFile/fileChannels;
     setDurationInSamples(durationInSamples);
     content = temporaryPointer; 
@@ -118,7 +126,9 @@ void Buffer::fillSineSweep(float lowFrequency, float highFrequency){
 }
 void Buffer::fillNoise(){
   for(int i = 0; i < durationInSamples; i++){
-    content[i] = rangedRandom(-1.0f, 1.0f);
+    for(int j = 0; j < numberChannels; j++){
+      content[i * numberChannels + j] = rangedRandom(-1.0f, 1.0f);
+    }
   }
 }
 //getters and setters================================
@@ -126,16 +136,16 @@ void Buffer::setDuration(float newDuration){
   duration = newDuration;
   delete[] content;
   durationInSamples = msToSamples(duration);
-  content = new float[durationInSamples];
+  content = new float[durationInSamples * numberChannels];
   for(int i = 0; i < durationInSamples; i++){
     content[i] = 0.0f;
   }
 }
-void Buffer::setDurationInSamples(unsigned long newdurationInSamples){
-    durationInSamples = newdurationInSamples;
+void Buffer::setDurationInSamples(unsigned long newDurationInSamples){
+    durationInSamples = newDurationInSamples;
     duration = samplesToMS(durationInSamples);
     delete[] content;
-    content = new float[durationInSamples];
+    content = new float[durationInSamples * numberChannels];
     for(int i = 0; i < durationInSamples; i++){
       content[i] = 0.0f;
     }

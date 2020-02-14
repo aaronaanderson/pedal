@@ -7,7 +7,6 @@
 //#include <iostream>
 //#include "pedal/DebugTool.hpp"
 
-
 //DebugTool debugger;
 Buffer testBuffer(4000.0f);//Initiate buffer with 10 seconds duration
 //testBuffer.fillSineSweep();//breaks
@@ -17,6 +16,10 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
 
   //testBuffer.fillSineSweep();//fails here, but delayed.
+  bool writeFile = pdlGetTrigger(app, 0);
+  if(writeFile){
+    testBuffer.writeSoundFile("temp");
+  }
   for (unsigned i = 0; i < buffer; i += 1) {//for entire buffer of frames
     //DebugTool::printOncePerBuffer(oscillator.getFrequency(), i);
     float currentSample = 0.0f;
@@ -33,14 +36,12 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
 }
 //======================main loop
 int main() {
-    
     pdlExampleApp* app = pdlInitExampleApp(callback);
     if (!app) {//if app doesn't succesfully allocate
       return 1;//cancel program, return 1
     }
     pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
     pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
-    
 
     const char* pathToSoundFile = "ding.wav";
     testBuffer.loadSoundFile(pathToSoundFile);//breaks here
@@ -49,7 +50,7 @@ int main() {
     // Add your GUI elements here
     //pdlAddSlider(app, 0, "frequency", 0.1f, 40.0f, 3.0f);
     //pdlAddToggle(app, 0, "loud", false);
-    //pdlAddTrigger(app, 0, "trigger");
+    pdlAddTrigger(app, 0, "trigger");
     
     //begin the app--------
     pdlStartExampleApp(app);

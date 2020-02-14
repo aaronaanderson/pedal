@@ -45,19 +45,19 @@ class Buffer{
   // deconstructor
   ~Buffer();
   
-  void writeSample(float inputSample, int index);
-  void addToSample(float inputSample, int index);
+  void writeSample(float inputSample, int index, int channel = 0);
+  void addToSample(float inputSample, int index, int channel = 0);
   
   void loadSoundFile(const char* soundFilePath);
   void writeSoundFile(const char* destinationPath);
 
   void setDuration(float newDuration);
-  void setDurationInSamples(unsigned long newdurationInSamples);
+  void setDurationInSamples(unsigned long newDurationInSamples);
   
   void fillSineSweep(float lowFrequency = 20.0f, float highFrequency = 20000.0f);
   void fillNoise();
-  float getSample(float index);//interleaved retrieval (can request floating point index)
-  float getSample(int index);//non-interleaved retrieval
+  float getSample(float index, int channel = 1);//interleaved retrieval (can request floating point index)
+  float getSample(int index, int channel = 1);//non-interleaved retrieval
   float* getContent();
   float getDuration();
   unsigned long getDurationInSamples();
@@ -71,6 +71,7 @@ class Buffer{
   drwav_uint64 totalFramesInFile;
   //const drwav_allocation_callbacks callBack;//aaron don't forget about this
   long unsigned durationInSamples;
+  long unsigned totalNumberOfSamples;
   float duration;
 
   drwav_data_format format;
