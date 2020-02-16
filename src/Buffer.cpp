@@ -5,11 +5,11 @@
 // -----rule of 5 --------------------
 Buffer::Buffer(float initialDuration){
   numberChannels = 1;
-  format.container = drwav_container_riff;// <-- drwav_container_riff = normal WAV files, drwav_container_w64 = Sony Wave64.
-  format.format = DR_WAVE_FORMAT_PCM; // <-- Any of the DR_WAVE_FORMAT_* codes.
-  format.channels = 1;
-  format.sampleRate = pdlSettings::sampleRate;
-  format.bitsPerSample = 16;
+  outputFormat.container = drwav_container_riff;// <-- drwav_container_riff = normal WAV files, drwav_container_w64 = Sony Wave64.
+  outputFormat.format = DR_WAVE_FORMAT_PCM; // <-- Any of the DR_WAVE_FORMAT_* codes.
+  outputFormat.channels = 1;
+  outputFormat.sampleRate = pdlSettings::sampleRate;
+  outputFormat.bitsPerSample = 16;
   setDuration(initialDuration);
 }
 
