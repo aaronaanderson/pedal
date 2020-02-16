@@ -97,8 +97,8 @@ void Buffer::loadSoundFile(const char* pathToFile){
   //TODO adjust for sampling rate differences
     //how many samples long is the buffer?
     numberChannels = fileChannels;
-    durationInSamples = totalFramesInFile/fileChannels;
-    setDurationInSamples(durationInSamples);
+    durationInSamples = totalFramesInFile;
+    setDurationInSamples(durationInSamples*numberChannels);
     content = temporaryPointer; 
   }
 }
@@ -154,3 +154,4 @@ void Buffer::setDurationInSamples(unsigned long newDurationInSamples){
 float Buffer::getDuration(){return duration;}
 float* Buffer::getContent(){return content;}
 unsigned long Buffer::getDurationInSamples(){return durationInSamples;}
+int Buffer::getNumberChannels(){return numberChannels;}

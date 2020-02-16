@@ -18,20 +18,21 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
   //testBuffer.fillSineSweep();//fails here, but delayed.
   bool writeFile = pdlGetTrigger(app, 0);
   if(writeFile){
-    testBuffer.writeSoundFile("temp");
+ //   testBuffer.writeSoundFile("temp");
   }
   for (unsigned i = 0; i < buffer; i += 1) {//for entire buffer of frames
     //DebugTool::printOncePerBuffer(oscillator.getFrequency(), i);
-    float currentSample = 0.0f;
-    if(bufferIndex > testBuffer.getDurationInSamples()-1){
+    float leftSample = 0.0f;
+    float rightSample = 0.0f;
+    if(bufferIndex > testBuffer.getDurationInSamples()*testBuffer.getNumberChannels()-1){
       bufferIndex = 0;
     }else{
-      currentSample = testBuffer.getSample(bufferIndex);
-      bufferIndex++;
+      leftSample = testBuffer.getSample(bufferIndex, 1);
+      rightSample = testBuffer.getSample(bufferIndex, 2);
+      bufferIndex += 2;
     }
-    for (unsigned j = 0; j < channel; j += 1) {//for every sample in frame
-      out[channel * i + j] = currentSample;
-    }
+    out[channel * i] = leftSample;
+    out[channel * i + 1] = rightSample;
   }
 }
 //======================main loop
@@ -43,7 +44,7 @@ int main() {
     pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
     pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
 
-    const char* pathToSoundFile = "ding.wav";
+    const char* pathToSoundFile = "microbialSurfaces.wav";
     testBuffer.loadSoundFile(pathToSoundFile);//breaks here
     //make an app (a pointer to an app, actually)
     //testBuffer.writeSoundFile("temp");//danger!

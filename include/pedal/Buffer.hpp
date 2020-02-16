@@ -61,7 +61,7 @@ class Buffer{
   float* getContent();
   float getDuration();
   unsigned long getDurationInSamples();
-  
+  int getNumberChannels();
   private:
   float* content = nullptr;//the actual buffer data
   unsigned numberChannels;//number of channels
