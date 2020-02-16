@@ -6,6 +6,7 @@
 #include "pedal/Buffer.hpp"
 //#include <iostream>
 //#include "pedal/DebugTool.hpp"
+#include "external/fft/AudioFFT.h"
 
 //DebugTool debugger;
 Buffer testBuffer(4000.0f);//Initiate buffer with 10 seconds duration

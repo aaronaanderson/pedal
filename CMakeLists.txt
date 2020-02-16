@@ -29,6 +29,7 @@ add_library(pedal STATIC
     src/generators/noise/WhiteNoise.cpp 
     src/generators/noise/PinkNoise.cpp
     src/modifiers/filters/Biquad.cpp
+    external/fft/AudioFFT.cpp
 )
 
 set_target_properties(pedal PROPERTIES
@@ -49,7 +50,7 @@ set_target_properties(pedal PROPERTIES
 
 # Directory to look for header files for `#include`
 # `PUBLIC` means any target that links to this target will also have these items
-target_include_directories(pedal PUBLIC include external)
+target_include_directories(pedal PUBLIC include external external/fft)
 #target_include_directories(pedal PUBLIC external)
 # Libraries to link when building this target
 # target_link_libraries(pedal PUBLIC "")
