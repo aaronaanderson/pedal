@@ -74,7 +74,7 @@ class Buffer{
   long unsigned totalNumberOfSamples;
   float duration;
 
-  drwav_data_format format;
+  drwav_data_format outputFormat;
   drwav wavTemp;
 };
 /*

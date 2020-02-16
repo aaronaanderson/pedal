@@ -97,14 +97,15 @@ void Buffer::loadSoundFile(const char* pathToFile){
   //TODO adjust for sampling rate differences
     //how many samples long is the buffer?
     numberChannels = fileChannels;
+    std::cout << fileSampleRate << std::endl;
     durationInSamples = totalFramesInFile;
-    setDurationInSamples(durationInSamples*numberChannels);
+    setDurationInSamples(durationInSamples);
     content = temporaryPointer; 
   }
 }
 
 void Buffer::writeSoundFile(const char* pathToFile){
-  drwav_init_file_write_sequential_pcm_frames(&wavTemp, "data/recording.wav", &format, durationInSamples, NULL);
+  drwav_init_file_write_sequential_pcm_frames(&wavTemp, "data/recording.wav", &outputFormat, durationInSamples, NULL);
 
   drwav_uint64 framesWritten = drwav_write_pcm_frames(&wavTemp, 
                                                      durationInSamples,//how many frames 

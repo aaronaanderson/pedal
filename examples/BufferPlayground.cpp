@@ -24,12 +24,12 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
     //DebugTool::printOncePerBuffer(oscillator.getFrequency(), i);
     float leftSample = 0.0f;
     float rightSample = 0.0f;
-    if(bufferIndex > testBuffer.getDurationInSamples()*testBuffer.getNumberChannels()-1){
+    if(bufferIndex > testBuffer.getDurationInSamples()-1){
       bufferIndex = 0;
     }else{
       leftSample = testBuffer.getSample(bufferIndex, 1);
       rightSample = testBuffer.getSample(bufferIndex, 2);
-      bufferIndex += 2;
+      bufferIndex++;
     }
     out[channel * i] = leftSample;
     out[channel * i + 1] = rightSample;
