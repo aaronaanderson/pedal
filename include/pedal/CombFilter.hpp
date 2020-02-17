@@ -4,6 +4,7 @@
 #include "CircularBuffer.hpp"
 
 /* Filter Diagram
+
          -->[DELAY1]*a   b*[DELAY2]<--
         /             \ /             \
 input__/_______________+_______________\__output
