@@ -22,6 +22,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
   if(writeFile){
  //   testBuffer.writeSoundFile("temp");
   }
+  player.setPlayMode((PlayMode)pdlGetDropDown(app, 0));
   player.setSpeed(pdlGetSlider(app, 0));
   for (unsigned i = 0; i < buffer; i += 1) {//for entire buffer of frames
     //DebugTool::printOncePerBuffer(oscillator.getFrequency(), i);
@@ -44,15 +45,17 @@ int main() {
     pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
     pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
 
-    const char* pathToSoundFile = "microbialSurfaces.wav";
+    const char* pathToSoundFile = "ding.wav";
     testBuffer.loadSoundFile(pathToSoundFile);//breaks here
     //make an app (a pointer to an app, actually)
     //testBuffer.writeSoundFile("temp");//danger!
     // Add your GUI elements here
     pdlAddSlider(app, 0, "Speed", -2.0f, 16.0f, 1.0f);
-    //pdlAddToggle(app, 0, "loud", false);
+    pdlAddToggle(app, 0, "play", false);
     pdlAddTrigger(app, 0, "trigger");
     
+    char* modeMenuContent[]{"ONE_SHOT", "LOOP", "PING_PONG"};
+    pdlAddDropDown(app, 0, "Mode", modeMenuContent, 3);
     //begin the app--------
     pdlStartExampleApp(app);
     //pdlSettings::sampleRate = app->sampling_rate;

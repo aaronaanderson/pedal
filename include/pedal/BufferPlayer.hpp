@@ -21,8 +21,14 @@ class BufferPlayer{
   BufferPlayer(Buffer* reference = nullptr);
   float update();
   
+  void play();
+  void pause();
+  void stop();
   
+  void reverseDirection();
   void setSpeed(float newSpeed);
+  void setPlayMode(PlayMode newPlayMode);
+
   float getSample(int channel = 0);
   float* getFrame();
 
@@ -35,6 +41,7 @@ class BufferPlayer{
   unsigned totalSampleCount;
   int numberChannels;
   float playSpeed;
+  bool isPlaying;
   Buffer* bufferReference;
 };
 #endif 
