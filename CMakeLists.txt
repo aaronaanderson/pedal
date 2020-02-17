@@ -29,6 +29,7 @@ add_library(pedal STATIC
     src/generators/noise/WhiteNoise.cpp 
     src/generators/noise/PinkNoise.cpp
     src/modifiers/filters/Biquad.cpp
+    src/BufferPlayer.cpp
     external/AudioFFT.cpp
 )
 
