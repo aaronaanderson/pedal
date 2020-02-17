@@ -31,6 +31,7 @@ add_library(pedal STATIC
     src/modifiers/filters/Biquad.cpp
     src/BufferPlayer.cpp
     src/modifiers/filters/CombFilter.cpp
+    src/modifiers/filters/AllPass.cpp
     external/AudioFFT.cpp
 )
 
