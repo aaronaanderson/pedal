@@ -6,9 +6,30 @@
 #include "pedal/Buffer.hpp"
 //#include <iostream>
 //#include "pedal/DebugTool.hpp"
-//#include "AudioFFT.h"
+#include "AudioFFT.h"
 #include "pedal/BufferPlayer.hpp"
+#include <vector>
 
+const size_t fftSize = 512;
+std::vector<float> input(fftSize, 0.0f);
+std::vector<float> re(audiofft::AudioFFT::ComplexSize(fftSize));
+std::vector<float> im(audiofft::AudioFFT::ComplexSize(fftSize));
+std::vector<float> output(fftSize);
+audiofft::AudioFFT fftOne;
+audiofft::AudioFFT fftTwo;
+/*
+const size_t fftSize = 1024; // Needs to be power of 2!
+*
+*   std::vector<float> input(fftSize, 0.0f);
+*   std::vector<float> re(audiofft::AudioFFT::ComplexSize(fftSize));
+*   std::vector<float> im(audiofft::AudioFFT::ComplexSize(fftSize));
+*   std::vector<float> output(fftSize);
+*
+*   audiofft::AudioFFT fft;
+*   fft.init(1024);
+*   fft.fft(input.data(), re.data(), im.data());
+*   fft.ifft(output.data(), re.data(), im.data());
+*/
 //DebugTool debugger;
 Buffer testBuffer(4000.0f);//Initiate buffer with 10 seconds duration
 //testBuffer.fillSineSweep();//breaks
@@ -45,7 +66,10 @@ int main() {
     }
     pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
     pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
-
+    
+    fftOne.init(fftSize);
+    fftTwo.init(fftSize);
+    
     const char* pathToSoundFile = "ding.wav";
     testBuffer.loadSoundFile(pathToSoundFile);//breaks here
     //make an app (a pointer to an app, actually)
