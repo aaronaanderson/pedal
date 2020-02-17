@@ -29,7 +29,7 @@ class BufferPlayer{
   void reverseDirection();
   void setSpeed(float newSpeed);
   void setPlayMode(PlayMode newPlayMode);
-
+  void setInterpolatoinMode(InterpolationMode newMode);
   float getSample(int channel = 0);
   float* getFrame();
 

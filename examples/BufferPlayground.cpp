@@ -23,6 +23,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
  //   testBuffer.writeSoundFile("temp");
   }
   player.setPlayMode((PlayMode)pdlGetDropDown(app, 0));
+  player.setInterpolatoinMode((InterpolationMode)pdlGetDropDown(app, 1));
   player.setSpeed(pdlGetSlider(app, 0));
   for (unsigned i = 0; i < buffer; i += 1) {//for entire buffer of frames
     //DebugTool::printOncePerBuffer(oscillator.getFrequency(), i);
@@ -56,6 +57,9 @@ int main() {
     
     char* modeMenuContent[]{"ONE_SHOT", "LOOP", "PING_PONG"};
     pdlAddDropDown(app, 0, "Mode", modeMenuContent, 3);
+
+    char* interpolationMenuContent[]{"NONE", "LINEAR", "CUBIC"};
+    pdlAddDropDown(app, 1, "Interpolation", interpolationMenuContent, 3);
     //begin the app--------
     pdlStartExampleApp(app);
     //pdlSettings::sampleRate = app->sampling_rate;
