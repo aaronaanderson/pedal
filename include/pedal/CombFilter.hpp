@@ -4,41 +4,29 @@
 #include "CircularBuffer.hpp"//used for delay line
 
 /* Filter Diagram
-
-         -->[DELAY1]*a   b*[DELAY2]<--
-        /             \ /             \
-input__/_______________+_______________\__output
-a = feedForwardGain, b = feedBackGain
-DELAY1 = inputDelayBuffer
-DELAY2 = outputDelayBuffer
-*/
+intput__+___[DELAY]_____output
+         \           /        
+          \__*g_____/
+*/                  
 class CombFilter{
   public:
-  CombFilter();
+  CombFilter(float maxDelay = 1000.0f);
   
-  float filter(float input);
-  
-  float getFeedForwardDelayTime();
+  float process(float input);
   float getFeedBackDelayTime();
   float getFeedBackGain();
   float getFeedForwardGain();
   float getMaxDelayTime();
-  void setFeedForwardDelayTime(float newFFDelayTime);
-  void setFeedBackDelayTime(float newFBDelayTime);
-  void setFFDelayByFrequency(float frequency, bool peak = true);
-  void setFBDelayByFrequency(float frequency, bool peak = true);
+  void setDelayTime(float newFBDelayTime);
+  void setDelayByFrequency(float frequency);
   void setFeedBackGain(float newFBGain);
-  void setFeedForwardGain(float newFFGain);
   void setMaxDelayTime(float newMaxDelay);
+  
   private:
   float currentSample;
-  CircularBuffer inputDelayBuffer;
-  CircularBuffer outputDelayBuffer;
-  float feedForwardDelayTime;
-  float feedBackDelayTime;
+  CircularBuffer delayLine;
   float delayTime;
   float maxDelayTime = 1000.0f;
-  float feedForwardGain;
   float feedBackGain;
 };
 #endif 

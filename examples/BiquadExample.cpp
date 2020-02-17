@@ -27,15 +27,13 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
     //filter.setFrequency(pdlGetSlider(app, 0));
     //filter.setQ(pdlGetSlider(app,1));
     //filter.setGain(pdlGetSlider(app, 2));
-    comb.setFBDelayByFrequency(pdlGetSlider(app, 0));
-    comb.setFFDelayByFrequency(pdlGetSlider(app, 0));
-    comb.setFeedForwardGain(pdlGetSlider(app, 3));
+    comb.setDelayByFrequency(pdlGetSlider(app, 0));
     comb.setFeedBackGain(pdlGetSlider(app, 4));
     allPass.setCoefficient(pdlGetSlider(app, 4));
     allPass.setDelayTime(pdlGetSlider(app, 5));
     for (unsigned i = 0; i < buffer; i += 1) {//for entire buffer of frames
       float currentSample = noise.generateSample();
-      currentSample = allPass.filter(currentSample);
+      currentSample = comb.process(currentSample);
       for (unsigned j = 0; j < channel; j += 1) {//for every sample in frame
         out[channel * i + j] = currentSample * 0.1f;
       }
