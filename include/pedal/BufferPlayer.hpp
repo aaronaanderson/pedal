@@ -45,6 +45,6 @@ class BufferPlayer{
   float playSpeed;//playback speed. Can be negative.
   float direction;//direction storage (used to flip direction)
   bool isPlaying;//condition set by play/pause/stop functions
-  Buffer* bufferReference;
+  Buffer* bufferReference;//a pointer to a buffer class
 };
 #endif 
