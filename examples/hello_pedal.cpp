@@ -20,7 +20,7 @@
 #include "pedal/WhiteNoise.hpp"
 #include "pedal/PinkNoise.hpp"
 #include "pedal/utilities.hpp"
-
+#include "AudioFFT.h"
 HanningWindow window;
 PinkNoise noise;
 SmoothValue<float> frequency;
