@@ -3,13 +3,13 @@
 
 #include "Buffer.hpp"
 
-enum interpolation{
+enum InterpolationMode{
   NONE = 0, 
   LINEAR, 
   CUBIC
 };
 
-enum playMode{
+enum PlayMode{
   ONE_SHOT = 0, 
   LOOP, 
   PING_PONG
@@ -19,7 +19,6 @@ enum playMode{
 class BufferPlayer{
   public:
   BufferPlayer(Buffer* reference = nullptr);
-  
   float update();
   
   
@@ -28,6 +27,8 @@ class BufferPlayer{
   float* getFrame();
 
   private:
+  PlayMode playMode;
+  InterpolationMode interpolationMode;
   float* currentFrame = nullptr;
   void assignDataFromReference(Buffer* reference);
   float index;
