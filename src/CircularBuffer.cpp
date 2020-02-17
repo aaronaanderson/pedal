@@ -13,15 +13,13 @@ void CircularBuffer::inputSample(float inputSample){
 }
 float CircularBuffer::getDelayed(float timeBack){
   timeBack = clamp(timeBack, 0.0f, buffer.getDuration()); // clamp to 0 .. bufferDuration
-  float samplesToLookBack = msToSamples(timeBack); // convert ms to samples
-  float index = writeLocation - samplesToLookBack; // sample index location that could be negative
-  index = fmod(samplesToLookBack + buffer.getDurationInSamples(), // modulo to wrap sample index around
-                           (float)buffer.getDurationInSamples());
-  float previousSample = buffer.getSample(index);
+  float samplesBack = msToSamples(timeBack); // convert ms to samples
+  float index = writeLocation - samplesBack; // sample index location that could be negative
+  float previousSample = buffer.getSample((int)index);
   //increment and wrap index
   index = ((int)index+1) % buffer.getDurationInSamples();
   float nextSample = buffer.getSample(index);
-  float interpolatedResult = linearInterpolation(samplesToLookBack, previousSample, nextSample);
+  float interpolatedResult = linearInterpolation(samplesBack, previousSample, nextSample);
   return interpolatedResult;//buffer automatically interpolates
 }
 void CircularBuffer::inputBlock(float* inputBlock){

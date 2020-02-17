@@ -43,7 +43,8 @@ void CombFilter::setFeedForwardGain(float newFFGain){
 }
 void CombFilter::setFBDelayByFrequency(float frequency, bool peak){
   //convert from frequency to period, then multiply by sampling rate
-  feedBackDelayTime = (pdlSettings::sampleRate*0.5f)/(frequency * M_PI);
+  //TODO revisit this with a fresh brain
+  feedBackDelayTime = (pdlSettings::sampleRate)/(frequency*M_PI_2);//delayTime in MS
   std::cout << feedBackDelayTime << std::endl;
   if(!peak){//if the user isn't setting this as a peak frequency
     if(feedBackGain > 0.0f){//if feedbackgain is > 0 (associates peak)
@@ -53,7 +54,7 @@ void CombFilter::setFBDelayByFrequency(float frequency, bool peak){
 }
 void CombFilter::setFFDelayByFrequency(float frequency, bool peak){
   //convert from frequency to period, then multiply by sampling rate
-  feedForwardDelayTime = (pdlSettings::sampleRate*0.5f)/(frequency * M_PI);
+  feedForwardDelayTime = pdlSettings::sampleRate/(frequency*M_PI);
   if(!peak){//if the user isn't setting this as a peak frequency
     if(feedForwardGain > 0.0f){//if feedbackgain is > 0 (associates peak)
       feedForwardGain *= -1.0f;//make it negative (resulting in trough at frequency)

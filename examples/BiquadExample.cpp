@@ -47,7 +47,7 @@ int main() {
     pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
 
     // Add your GUI elements here
-    pdlAddSlider(app, 0, "frequency", 10.0f, 20000.0f, 200.0f);
+    pdlAddSlider(app, 0, "frequency", 10.0f, 24000.0f, 200.0f);
     pdlAddSlider(app, 1, "Q", 0.5f, 20.0f, 2.0f);
     pdlAddSlider(app, 2, "Gain", -60.0f, 30.0f,0.8f);
     pdlAddSlider(app, 3, "ffGain", -1.0f, 1.0f, 0.5f);
