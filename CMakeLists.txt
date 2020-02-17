@@ -30,6 +30,7 @@ add_library(pedal STATIC
     src/generators/noise/PinkNoise.cpp
     src/modifiers/filters/Biquad.cpp
     src/BufferPlayer.cpp
+    src/modifiers/filters/CombFilter.cpp
     external/AudioFFT.cpp
 )
 
