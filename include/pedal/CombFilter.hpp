@@ -1,7 +1,7 @@
 #ifndef CombFilter_hpp
 #define CombFilter_hpp
 
-#include "CircularBuffer.hpp"
+#include "CircularBuffer.hpp"//used for delay line
 
 /* Filter Diagram
 
@@ -22,11 +22,14 @@ class CombFilter{
   float getFeedBackDelayTime();
   float getFeedBackGain();
   float getFeedForwardGain();
+  float getMaxDelayTime();
   void setFeedForwardDelayTime(float newFFDelayTime);
   void setFeedBackDelayTime(float newFBDelayTime);
+  void setFFDelayByFrequency(float frequency, bool peak = true);
+  void setFBDelayByFrequency(float frequency, bool peak = true);
   void setFeedBackGain(float newFBGain);
   void setFeedForwardGain(float newFFGain);
-
+  void setMaxDelayTime(float newMaxDelay);
   private:
   float currentSample;
   CircularBuffer inputDelayBuffer;
