@@ -2,6 +2,7 @@
 #define BufferPlayer_hpp
 
 #include "Buffer.hpp"
+#include "utilities.hpp"
 
 enum InterpolationMode{
   NONE = 0, 
@@ -37,6 +38,7 @@ class BufferPlayer{
   InterpolationMode interpolationMode;
   float* currentFrame = nullptr;
   void assignDataFromReference(Buffer* reference);
+  int wrapIndex(int inputIndex);
   float index;
   unsigned totalSampleCount;
   int numberChannels;
