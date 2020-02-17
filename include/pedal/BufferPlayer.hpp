@@ -25,7 +25,6 @@ class BufferPlayer{
   void play();//make 'isPlaying' true
   void pause();//make 'isPlaying' false
   void stop();//make 'isPlaying' false, return to beginning
-  
   void reverseDirection();//move from forwards->backwards, or vice versa
   void setSpeed(float newSpeed);//change speed (1.0f is normal playback)
   void setPlayMode(PlayMode newPlayMode);//change mode
