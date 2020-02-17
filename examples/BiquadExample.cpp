@@ -6,10 +6,13 @@
 #include "pedal/Biquad.hpp"
 #include "pedal/TSaw.hpp"
 #include "pedal/CombFilter.hpp"
+#include "pedal/AllPass.hpp"
+
 Biquad filter;
 //WhiteNoise noise;
 WhiteNoise noise;
 CombFilter comb;
+AllPass allPass;
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
@@ -28,9 +31,11 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
     comb.setFFDelayByFrequency(pdlGetSlider(app, 0));
     comb.setFeedForwardGain(pdlGetSlider(app, 3));
     comb.setFeedBackGain(pdlGetSlider(app, 4));
+    allPass.setCoefficient(pdlGetSlider(app, 4));
+    allPass.setDelayTime(pdlGetSlider(app, 5));
     for (unsigned i = 0; i < buffer; i += 1) {//for entire buffer of frames
       float currentSample = noise.generateSample();
-      currentSample = comb.filter(currentSample);
+      currentSample = allPass.filter(currentSample);
       for (unsigned j = 0; j < channel; j += 1) {//for every sample in frame
         out[channel * i + j] = currentSample * 0.1f;
       }
@@ -52,7 +57,7 @@ int main() {
     pdlAddSlider(app, 2, "Gain", -60.0f, 30.0f,0.8f);
     pdlAddSlider(app, 3, "ffGain", -1.0f, 1.0f, 0.5f);
     pdlAddSlider(app, 4, "fbGain", -1.0f, 1.0f, 0.0f);
-
+    pdlAddSlider(app, 5, "allpasstime", 0.001, 100.0f, 4.0f);
     char* modeMenuContent[]{"LowPass", "HighPass", "BandPass", "BandReject","Peak", "LowShelf", "HighShelf"};
     pdlAddDropDown(app, 0, "Mode", modeMenuContent, 7);
     
