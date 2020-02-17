@@ -43,6 +43,7 @@ class BufferPlayer{
   unsigned totalSampleCount;
   int numberChannels;
   float playSpeed;
+  float direction;
   bool isPlaying;
   Buffer* bufferReference;
 };
