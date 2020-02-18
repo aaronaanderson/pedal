@@ -32,6 +32,7 @@ add_library(pedal STATIC
     src/BufferPlayer.cpp
     src/modifiers/filters/CombFilter.cpp
     src/modifiers/filters/AllPass.cpp
+    src/modifiers/filters/LowPassCombFilter.cpp
     external/AudioFFT.cpp
 )
 
