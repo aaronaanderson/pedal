@@ -7,12 +7,14 @@
 #include "pedal/TSaw.hpp"
 #include "pedal/CombFilter.hpp"
 #include "pedal/AllPass.hpp"
+#include "pedal/LowPass.hpp"
 
 Biquad filter;
 //WhiteNoise noise;
 WhiteNoise noise;
 CombFilter comb;
 AllPass allPass;
+LowPass lowPass;
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
