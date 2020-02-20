@@ -19,7 +19,7 @@ class AllPass{
   float getMaxDelay();
   float getCoefficient();
   void setDelayTime(float newDelayTime);
-  void setMaxDelay(float newMaxDelay);
+  void setMaxDelayTime(float newMaxDelay);
   void setCoefficient(float newCoefficient);
   
   private:

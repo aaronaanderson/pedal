@@ -19,7 +19,7 @@ void AllPass::setDelayTime(float newDelayTime){
     delayTime = newDelayTime;
   }
 }
-void AllPass::setMaxDelay(float newMaxDelay){
+void AllPass::setMaxDelayTime(float newMaxDelay){
   if(newMaxDelay > 0.0f){
     delayLine.setDuration(newMaxDelay);
   }
