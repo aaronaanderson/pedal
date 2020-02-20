@@ -9,10 +9,11 @@ LowPass::LowPass(float frequency){
 //because it is inlined
 
 void LowPass::setFrequency(float newFrequency){
+  //These coefficient calculations are from Will Pirkle's
+  //Designing Audio Effect Plug-ins in C++, pg 165
   float theta = (M_PI_2 * newFrequency)/pdlSettings::sampleRate;
   float gamma = 2.0f - cos(theta);
   b = sqrt((gamma * gamma) -1.0f) - gamma;
   a = 1.0f + b;
-  std::cout << b << " " << a << std::endl;
 }
 float LowPass::getSample(){return currentSample;}
