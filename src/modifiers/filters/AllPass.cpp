@@ -5,14 +5,12 @@ AllPass::AllPass(){
   coefficient = 0.7f;
   delayTime = 10.0f;
 }
-
 float AllPass::process(float input){
   float delayedSample = delayLine.getDelayed(delayTime);
   currentSample = input + (delayedSample * coefficient);
   delayLine.inputSample(currentSample);//feed the modified input
   currentSample -= delayedSample * coefficient;
 }
-
 float AllPass::getDelayTime(){return delayTime;}
 float AllPass::getMaxDelay(){return maxDelay;}
 float AllPass::getCoefficient(){return coefficient;}

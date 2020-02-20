@@ -11,19 +11,16 @@ class TPhasor{//Pedal Trivial Sine Oscillator
   ~TPhasor();//deconstructor (may be needed to free memory)
   float generateSample();//calculate and return next sample
   float* generateBlock();//calculate and return next block of samples
-
-    //"setters"
+    //set
     void setFrequency(float newFrequency);
     void setPhase(float newPhase);
     void setAmplitude(float newAmplitude);
-
-    //"getters"
+    //get
     float getFrequency();
     float getPhase();
     float getAmplitude();
     float getSample();
     float* getBlock();
-    
     //=======================================================
     private://best practice to leave inner workings private
     float frequency, phase, amplitude;//standard oscillator variables
