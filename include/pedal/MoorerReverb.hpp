@@ -6,7 +6,7 @@
 #include "pedal/CircularBuffer.hpp"
 #include "pedal/utilities.hpp"
 #define NUM_COMBS 6
-#define NUM_TAPS 16
+#define NUM_TAPS 18
 
 class MoorerReverb{
   public:

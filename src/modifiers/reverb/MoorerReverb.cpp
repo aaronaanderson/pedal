@@ -1,4 +1,4 @@
-#include "MoorerReverb.hpp"
+#include "pedal/MoorerReverb.hpp"
 MoorerReverb::MoorerReverb(){
   //set Low Pass Comb Filters
   for(int i = 0; i < NUM_COMBS; i++){
@@ -9,7 +9,9 @@ MoorerReverb::MoorerReverb(){
   //set All Pass filter
   allPass.setMaxDelayTime(10.0f);//save memory by setting this as low as possible(but as high as needed)
   allPass.setDelayTime(6.0f);
-
+  allPass.setCoefficient(0.7f);
+  //set dryWet (0.0 is no reverb)
+  dryWetMix = 1.0f;
 }
 
 //============================================

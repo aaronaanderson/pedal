@@ -8,11 +8,13 @@
 //#include "pedal/DebugTool.hpp"
 //#include "AudioFFT.h"
 #include "pedal/BufferPlayer.hpp"
+#include "pedal/MoorerReverb.hpp"
 
 //DebugTool debugger;
 Buffer testBuffer(4000.0f);//Initiate buffer with 10 seconds duration
 //testBuffer.fillSineSweep();//breaks
 BufferPlayer player(&testBuffer);
+MoorerReverb reverb;
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
@@ -32,9 +34,10 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
     player.update();
     leftSample = player.getSample(0);
     rightSample = player.getSample(1);
-  
-    out[channel * i] = leftSample;
-    out[channel * i + 1] = rightSample;
+    float monoSum = leftSample + rightSample;
+    monoSum = reverb.process(monoSum);
+    out[channel * i] = monoSum * 0.1;
+    out[channel * i + 1] = //rightSample * 0.1;
   }
 }
 //======================main loop
