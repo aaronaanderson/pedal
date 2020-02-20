@@ -23,5 +23,6 @@ void AllPass::setMaxDelay(float newMaxDelay){
   if(newMaxDelay > 0.0f){
     delayLine.setDuration(newMaxDelay);
   }
+  maxDelay = newMaxDelay;
 }
 void AllPass::setCoefficient(float newCoefficient){coefficient = newCoefficient;}
