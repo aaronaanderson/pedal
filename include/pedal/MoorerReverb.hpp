@@ -43,4 +43,9 @@ class MoorerReverb{
 
     
 };
+
+/*
+comb filter settings and delay times/gains were sourced from 
+https://christianfloisand.wordpress.com/2012/10/18/algorithmic-reverbs-the-moorer-design/
+*/
 #endif

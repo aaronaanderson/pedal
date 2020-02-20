@@ -1,10 +1,15 @@
 #include "MoorerReverb.hpp"
 MoorerReverb::MoorerReverb(){
-  //initiate Low Pass Comb Filters
+  //set Low Pass Comb Filters
   for(int i = 0; i < NUM_COMBS; i++){
+    filterBank[i].setMaxDelayTime(100.0f);
     filterBank[i].setDelayTime(combDelayTimess[i]);
     filterBank[i].setFilterFrequency(combFilterFrequencies[i]);
   }
+  //set All Pass filter
+  allPass.setMaxDelayTime(10.0f);//save memory by setting this as low as possible(but as high as needed)
+  allPass.setDelayTime(6.0f);
+
 }
 
 //============================================
