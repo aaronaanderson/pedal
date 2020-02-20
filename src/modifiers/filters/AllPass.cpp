@@ -6,7 +6,7 @@ AllPass::AllPass(){
   delayTime = 10.0f;
 }
 
-float AllPass::filter(float input){
+float AllPass::process(float input){
   float delayedSample = delayLine.getDelayed(delayTime);
   currentSample = input + (delayedSample * coefficient);
   delayLine.inputSample(currentSample);//feed the modified input
