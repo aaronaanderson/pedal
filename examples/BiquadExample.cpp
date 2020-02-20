@@ -8,13 +8,14 @@
 #include "pedal/CombFilter.hpp"
 #include "pedal/AllPass.hpp"
 #include "pedal/LowPass.hpp"
-
+#include "pedal/LowPassCombFilter.hpp"
 Biquad filter;
 //WhiteNoise noise;
 WhiteNoise noise;
 CombFilter comb;
 AllPass allPass;
 LowPass lowPass;
+LowPassCombFilter lpcf;
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
@@ -29,14 +30,14 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
     //filter.setFrequency(pdlGetSlider(app, 0));
     //filter.setQ(pdlGetSlider(app,1));
     //filter.setGain(pdlGetSlider(app, 2));
-    lowPass.setFrequency(pdlGetSlider(app, 0));
-    comb.setFeedBackGain(pdlGetSlider(app, 4));
+    lpcf.setFilterFrequency(pdlGetSlider(app, 0));
+    lpcf.setFeedBackGain(pdlGetSlider(app, 4));
     allPass.setCoefficient(pdlGetSlider(app, 4));
-    allPass.setDelayTime(pdlGetSlider(app, 5));
+    lpcf.setDelayTime(pdlGetSlider(app, 5));
 
     for (unsigned i = 0; i < buffer; i += 1) {//for entire buffer of frames
       float currentSample = noise.generateSample();
-      currentSample = lowPass.process(currentSample);
+      currentSample = lpcf.process(currentSample);
       for (unsigned j = 0; j < channel; j += 1) {//for every sample in frame
         out[channel * i + j] = currentSample * 0.1f;
       }
