@@ -11,7 +11,7 @@ LowPass::LowPass(float frequency){
 void LowPass::setFrequency(float newFrequency){
   //These coefficient calculations are from Will Pirkle's
   //Designing Audio Effect Plug-ins in C++, pg 165
-  float theta = (M_2_PI * newFrequency)/pdlSettings::sampleRate;
+  float theta = (M_PI * 2.0f * newFrequency)/pdlSettings::sampleRate;
   float gamma = 2.0f - cos(theta);
   b = sqrt((gamma * gamma) -1.0f) - gamma;
   a = 1.0f + b;

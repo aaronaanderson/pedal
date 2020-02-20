@@ -11,10 +11,10 @@ HighPass::HighPass(float frequency){
 void HighPass::setFrequency(float newFrequency){
   //These coefficient calculations are from Will Pirkle's
   //Designing Audio Effect Plug-ins in C++, pg 165
-  float theta = (M_2_PI * newFrequency)/pdlSettings::sampleRate;
+  float theta = (M_PI * 2.0f * newFrequency)/pdlSettings::sampleRate;
   float gamma = 2.0f + cos(theta);
   b = gamma - sqrt((gamma * gamma) - 1.0f);
   a = 1.0f - b;
-  std::cout << M_2_PI << "/" << pdlSettings::sampleRate << " " << a << " " << b << std::endl;
+  std::cout << M_PI << "/" << pdlSettings::sampleRate << " " << a << " " << b << std::endl;
 }
 float HighPass::getSample(){return currentSample;}
