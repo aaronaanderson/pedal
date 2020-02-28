@@ -12,6 +12,7 @@ MoorerReverb::MoorerReverb(){
   allPass.setCoefficient(0.7f);
   //set dryWet (0.0 is no reverb)
   dryWetMix = 1.0f;
+  delayLine.setDuration(100.0f);
 }
 
 //============================================
@@ -30,6 +31,9 @@ float MoorerReverb::process(float input){
   }
   //next is allpass
   currentSample = allPass.process(filterBankSum);
+  //currentSample += input;
   currentSample = (currentSample * dryWetMix) + (input * (1.0f-dryWetMix));
   return currentSample;
 }
+
+void MoorerReverb::setDryWetMix(float newDryWetMix){dryWetMix = newDryWetMix;}

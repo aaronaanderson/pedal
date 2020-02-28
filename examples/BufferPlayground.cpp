@@ -36,8 +36,8 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
     rightSample = player.getSample(1);
     float monoSum = leftSample + rightSample;
     monoSum = reverb.process(monoSum);
-    out[channel * i] = monoSum * 0.1;
-    out[channel * i + 1] = //rightSample * 0.1;
+    out[channel * i] = monoSum * 0.1f;
+    out[channel * i + 1] = monoSum * 0.1f;
   }
 }
 //======================main loop

@@ -1,5 +1,5 @@
 #include "pedal/CircularBuffer.hpp"
-
+#include "pedal/DebugTool.hpp"
 CircularBuffer::CircularBuffer(float initialDuration){
   buffer.setDuration(initialDuration);//request space in ram
   writeLocation = 0;//start the write index at the beginning
@@ -15,6 +15,7 @@ float CircularBuffer::getDelayed(float timeBack){
   timeBack = clamp(timeBack, 0.0f, buffer.getDuration()); // clamp to 0 .. bufferDuration
   float samplesBack = msToSamples(timeBack); // convert ms to samples
   float index = writeLocation - samplesBack; // sample index location that could be negative
+  if(index < 0.0f){index += buffer.getDurationInSamples();}
   float previousSample = buffer.getSample((int)index);
   //increment and wrap index
   index = ((int)index+1) % buffer.getDurationInSamples();

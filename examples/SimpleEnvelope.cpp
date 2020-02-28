@@ -2,19 +2,20 @@
 #include "example_app.hpp"
 
 //include class if using
-#include "pedal/TSine.hpp"
-#include "pedal/TSaw.hpp"
-#include "pedal/TSquare.hpp"
-#include "pedal/TTriangle.hpp"
-#include "pedal/TSaw.hpp"
+#include "pedal/WTSine.hpp"
+#include "pedal/WTSaw.hpp"
+#include "pedal/WTSquare.hpp"
+#include "pedal/WTTriangle.hpp"
+#include "pedal/WTSaw.hpp"
 #include "pedal/CTEnvelope.hpp"
+#include "pedal/MoorerReverb.hpp"
 
 float currentSample;
-TTriangle triangle;
-TSine sine;
-TSquare square;
-TSaw saw;
-
+WTTriangle triangle;
+WTSine sine;
+WTSquare square;
+WTSaw saw;
+MoorerReverb reverb;
 CTEnvelope sustainedEnvelope;
 CTEnvelope percussiveEnvelope;
 //========================Audio Callback
@@ -26,8 +27,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
     square.setFrequency(pdlGetSlider(app, 9));//set frequecy by slider
     saw.setFrequency(pdlGetSlider(app, 9));//set frequecy by slider
     
-    square.setDutyCycle(pdlGetSlider(app, 4));
-    
+    reverb.setDryWetMix(pdlGetSlider(app, 10));
     //envelopes are ADSR by default
     sustainedEnvelope.setAttack(pdlGetSlider(app, 5));
     sustainedEnvelope.setDecay(pdlGetSlider(app, 6));
@@ -68,7 +68,10 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
       resultTwo *= envelopeTwo;
 
       for (unsigned j = 0; j < channel; j += 1) {//for every sample in frame
-        out[channel * i + j] = resultOne + resultTwo;
+        float currentSample = resultOne + resultTwo;
+        currentSample *= 0.1f;
+        currentSample = reverb.process(currentSample);
+        out[channel * i + j] = currentSample;
       }
     }
 }
@@ -93,7 +96,8 @@ int main() {
     pdlAddSlider(app, 7, "Sustain", 0.00f, 1.0f, 0.7f);
     pdlAddSlider(app, 8, "Release", 5.0f, 1000.0f, 200.0f);
     pdlAddSlider(app, 9, "Frequency", 1.0, 2000.0f, 100.0f);
-
+    
+    pdlAddSlider(app, 10, "dryWetMix", 0.0f, 1.0f, 0.8);
 
     pdlAddToggle(app, 0, "loud", false);
     pdlAddTrigger(app, 0, "trigger");

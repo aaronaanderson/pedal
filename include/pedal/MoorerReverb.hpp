@@ -15,7 +15,7 @@ class MoorerReverb{
   float process(float input);
   float getSample();
   float setReverbTime(float newReverbTime);//not safe for audio thread
-  float setDryWet(float newDryWet);
+  void setDryWetMix(float newDryWet);
 
   private:
   float currentSample;
@@ -39,13 +39,11 @@ class MoorerReverb{
   const float combFilterFrequencies[NUM_COMBS] = {1942.0f, 1363.0f, 
                                                  1312.0f, 1574.0f, 
                                                  981.0f, 1036.0f};
-  //TODO Make this a AoS instead of SoA
-
-    
+  //TODO Make this a AoS instead of SoA 
 };
 
 /*
-comb filter settings and delay times/gains were sourced from 
-https://christianfloisand.wordpress.com/2012/10/18/algorithmic-reverbs-the-moorer-design/
+James Moorer "About this Reverberation Business"
+
 */
 #endif
