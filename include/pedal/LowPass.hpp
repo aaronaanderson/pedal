@@ -9,8 +9,10 @@ class LowPass{//One pole low pass filter
   public:
   LowPass(float frequency = 1000.0f);//default constructor
   inline float process(float input);//per sample function
+  
   float getSample();//simple retrieval w/o processing
   void setFrequency(float newFrequency);//calculates new coefficients
+  
   private:
   float currentSample;//storage for retrieval, and previous sample
   float frequency;//cutoff frequency

@@ -4,7 +4,7 @@
 LowPassCombFilter::LowPassCombFilter(float maxDelay, float initialFrequency){
   delayLine.setDuration(maxDelay);
   filter.setFrequency(initialFrequency);
-  feedBackGain = 0.7f;
+  feedBackGain = 0.95f;
   delayTime = 100.0f;
 }
 //Core functionality of class=========================
@@ -38,4 +38,9 @@ void LowPassCombFilter::setMaxDelayTime(float newMaxDelay){//maximum available d
 }
 void LowPassCombFilter::setFilterFrequency(float newFrequency){
   filter.setFrequency(newFrequency);
+}
+void LowPassCombFilter::setFeedBackDelayGainToMax(){
+  //set's feedback in the delay line to maximum
+  //stable value, which is 1.0f - the feedback of the LPF
+  feedBackGain = 1.0f - filter.getB();
 }

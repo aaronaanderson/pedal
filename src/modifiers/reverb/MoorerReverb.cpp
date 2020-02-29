@@ -5,6 +5,7 @@ MoorerReverb::MoorerReverb(){
     filterBank[i].setMaxDelayTime(100.0f);
     filterBank[i].setDelayTime(combDelayTimess[i]);
     filterBank[i].setFilterFrequency(combFilterFrequencies[i]);
+    //filterBank[i].setFeedBackDelayGainToMax();//set's comb feed back to (1.0f - LPFCoeff)
   }
   //set All Pass filter
   allPass.setMaxDelayTime(10.0f);//save memory by setting this as low as possible(but as high as needed)
