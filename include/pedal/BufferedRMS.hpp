@@ -1,13 +1,13 @@
-#ifndef RMS_HPP
-#define RMS_HPP
+#ifndef BufferedRMS_HPP
+#define BufferedRMS_HPP
 
 #include <algorithm>
 #include "utilities.hpp"
 #include "Buffer.hpp"
 //Root Mean Squared
-class RMS{
+class bufferedRMS{
   public:
-  RMS(int samplePeriod = 64);
+  bufferedRMS(int samplePeriod = 16);
   inline float process(float input);
   void setSamplePeriod(int newSamplePeriod);//how many samples to average
   int getSamplePeriod();
@@ -23,7 +23,7 @@ class RMS{
   float runningTotal;
 };
 
-inline float RMS::process(float input){
+inline float bufferedRMS::process(float input){
   sampleCounter%samplesToAverage;//wrap the index
   //subtract what WAS in the buffer first
   runningTotal -= sampleBuffer.getSample(writeIndex);

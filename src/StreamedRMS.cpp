@@ -1,0 +1,1 @@
+#include "pedal/StreamedRMS.hpp"

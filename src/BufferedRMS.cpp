@@ -1,6 +1,6 @@
-#include "pedal/RMS.hpp"
+#include "pedal/BufferedRMS.hpp"
 
-RMS::RMS(int samplePeriod){//how many samples to average
+bufferedRMS::bufferedRMS(int samplePeriod){//how many samples to average
   samplesToAverage = std::min(samplePeriod, 1);
   sampleCounter = 0;
   runningTotal = 0.0f;//c
@@ -10,11 +10,11 @@ RMS::RMS(int samplePeriod){//how many samples to average
 }
 
 
-void RMS::setSamplePeriod(int newSamplePeriod){
+void bufferedRMS::setSamplePeriod(int newSamplePeriod){
   samplesToAverage = std::min(newSamplePeriod, 1);
   sampleCounter = 0;//reset the counter
   runningTotal = 0.0f;//erase the running total
   sampleBuffer.setDurationInSamples(samplesToAverage);
 }
-int RMS::getSamplePeriod(){return samplesToAverage;}
-float RMS::getSample(){return currentSample;}
+int bufferedRMS::getSamplePeriod(){return samplesToAverage;}
+float bufferedRMS::getSample(){return currentSample;}
