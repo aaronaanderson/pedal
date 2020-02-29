@@ -11,6 +11,7 @@ StreamedRMS::StreamedRMS(int samplePeriod){
   //smoothing time is exactly the size of analysis interval
   smoothOutput.setTime(samplesToMS(samplesToAverage));
 }
+//StreamedRMS::process(float input) is in header, b/c inlind
 void StreamedRMS::setSamplePeriod(int newSamplePeriod){
   //if >=, no need to reset counter or accumulation
   if(newSamplePeriod >= samplesToAverage){
