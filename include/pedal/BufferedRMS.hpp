@@ -25,11 +25,16 @@ class BufferedRMS{
 };
 
 inline float BufferedRMS::process(float input){
-  sampleCounter = sampleCounter%samplesToAverage;//wrap the index
+  /*
+
+  broken
+  TODO find bug
+  */
+  writeIndex = writeIndex%samplesToAverage;//wrap the index
   //subtract what WAS in the buffer first
   runningTotal -= sampleBuffer.getSample(writeIndex);
   //add its replacement to the total, then to buffer
-  input = fabs(input);//we want distance from 0
+  input = std::fabs(input);//we want distance from 0
   runningTotal += input;//add the input
   sampleBuffer.writeSample(input, writeIndex);
   writeIndex++;

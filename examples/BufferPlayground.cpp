@@ -9,12 +9,16 @@
 //#include "AudioFFT.h"
 #include "pedal/BufferPlayer.hpp"
 #include "pedal/MoorerReverb.hpp"
+#include "pedal/BufferedRMS.hpp"
+#include "pedal/StreamedRMS.hpp"
 
 //DebugTool debugger;
 Buffer testBuffer(4000.0f);//Initiate buffer with 10 seconds duration
 //testBuffer.fillSineSweep();//breaks
 BufferPlayer player(&testBuffer);
 MoorerReverb reverb;
+//StreamedRMS rms;
+BufferedRMS rms;
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
@@ -24,6 +28,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
   if(writeFile){
  //   testBuffer.writeSoundFile("temp");
   }
+  std::cout << rms.getSample() << std::endl;
   player.setPlayMode((PlayMode)pdlGetDropDown(app, 0));
   player.setInterpolatoinMode((InterpolationMode)pdlGetDropDown(app, 1));
   player.setSpeed(pdlGetSlider(app, 0));
@@ -35,7 +40,9 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
     leftSample = player.getSample(0);
     rightSample = player.getSample(1);
     float monoSum = leftSample + rightSample;
-    monoSum = reverb.process(monoSum);
+    monoSum *= 0.5;
+    //monoSum = reverb.process(monoSum);
+    rms.process(monoSum);
     out[channel * i] = monoSum * 0.1f;
     out[channel * i + 1] = monoSum * 0.1f;
   }

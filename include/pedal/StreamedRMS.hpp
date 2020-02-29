@@ -6,7 +6,7 @@
 
 class StreamedRMS{
   public:
-  StreamedRMS(int samplePeriod = 128);
+  StreamedRMS(int samplePeriod = 32);
   inline float process(float input);
   void setSamplePeriod(int newSamplePeriod);//how many samples to average
   int getSamplePeriod();
@@ -31,6 +31,7 @@ inline float StreamedRMS::process(float input){
   //add the abs(input). We're concerned with distance from 0.0f only
   runningTotal += std::fabs(input);
   sampleCounter++;
+  smoothOutput.process();
   currentSample = smoothOutput.getCurrentValue();
   return currentSample;
 }
