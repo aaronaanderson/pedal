@@ -5,9 +5,9 @@
 #include "utilities.hpp"
 #include "Buffer.hpp"
 //Root Mean Squared
-class bufferedRMS{
+class BufferedRMS{
   public:
-  bufferedRMS(int samplePeriod = 16);
+  BufferedRMS(int samplePeriod = 16);
   inline float process(float input);
   void setSamplePeriod(int newSamplePeriod);//how many samples to average
   int getSamplePeriod();
@@ -23,7 +23,7 @@ class bufferedRMS{
   float runningTotal;
 };
 
-inline float bufferedRMS::process(float input){
+inline float BufferedRMS::process(float input){
   sampleCounter%samplesToAverage;//wrap the index
   //subtract what WAS in the buffer first
   runningTotal -= sampleBuffer.getSample(writeIndex);
