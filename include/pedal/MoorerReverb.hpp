@@ -45,7 +45,6 @@ class MoorerReverberationUnit{//Fig. 5 in paper
   float g1, g2;//naming convention same as paper
 };
 
-
 //store these together, since used together
 struct Tap{
   float time;
@@ -77,7 +76,7 @@ class MoorerReverb{
   float dryWetMix;//useful if using this in a synth, not in original design
   AllPass allPass;//Moorer argues that only one allpass is useful
   CircularBuffer delayLine;//buffer for multi-tap delay (early reflections)
-  //18 delay times and amplitudes for early reflections, taken from paper
+  //18 delay times and amplitudes for early reflections, taken from paper {time(ms), amplitude}
   const Tap taps[NUM_TAPS] = {{4.3f, 0.841}, {21.5f, 0.504f},
                               {22.5f, 0.491f}, {26.8f, 0.379f},
                               {27.0f, 0.380f}, {29.8f, 0.346f},
@@ -91,7 +90,7 @@ class MoorerReverb{
   //we'll use the paper's suggestion and use their g1 values at sample rates
   //25k and 50k to interpolate/extrapolate gain values for our
   //sample rate. This is taken from the data in Table 2
-  const float gainArray[NUM_COMBS] = {
+  const float gainArray[NUM_COMBS] = {//This is how the cutoff frequency of internal lpf in combs is set, by g1
     linearInterpolation(pdlSettings::sampleRate, 25000.0f, 0.24f, 50000.0f, 0.46f), 
     linearInterpolation(pdlSettings::sampleRate, 25000.0f, 0.26f, 50000.0f, 0.48f),
     linearInterpolation(pdlSettings::sampleRate, 25000.0f, 0.28f, 50000.0f, 0.50f),
