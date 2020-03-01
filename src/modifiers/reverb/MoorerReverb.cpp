@@ -37,7 +37,7 @@ float MoorerReverb::process(float input){
     earlyReflections += delayLine.getDelayed(taps[i].time) * //check array for time
                      taps[i].amplitude;//scale buffer read by gain
   }
-  lagBuffer.inputSample(earlyReflections);
+  lagBuffer.inputSample(earlyReflections + input);//see Fig. 12, essentially pre-delay
   //feed every comb filter the same input (because parallel)
   float filterBankSum = 0.0f;//save cpu cycles by collecting this as we feed the filters
   for(int i = 0; i < NUM_COMBS; i++){//for every comb filter
