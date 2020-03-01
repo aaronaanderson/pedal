@@ -39,8 +39,3 @@ void LowPassCombFilter::setMaxDelayTime(float newMaxDelay){//maximum available d
 void LowPassCombFilter::setFilterFrequency(float newFrequency){
   filter.setFrequency(newFrequency);
 }
-void LowPassCombFilter::setFeedBackDelayGainToMax(){
-  //set's feedback in the delay line to maximum
-  //stable value, which is 1.0f - the feedback of the LPF
-  feedBackGain = 1.0f - filter.getB();
-}

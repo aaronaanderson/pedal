@@ -17,8 +17,8 @@ Buffer testBuffer(4000.0f);//Initiate buffer with 10 seconds duration
 //testBuffer.fillSineSweep();//breaks
 BufferPlayer player(&testBuffer);
 MoorerReverb reverb;
-//StreamedRMS rms;
-BufferedRMS rms;
+StreamedRMS rms;
+//BufferedRMS rms;
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
@@ -28,10 +28,13 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
   if(writeFile){
  //   testBuffer.writeSoundFile("temp");
   }
-  std::cout << rms.getSample() << std::endl;
+  //std::cout << rms.getSample() << std::endl;
   player.setPlayMode((PlayMode)pdlGetDropDown(app, 0));
   player.setInterpolatoinMode((InterpolationMode)pdlGetDropDown(app, 1));
   player.setSpeed(pdlGetSlider(app, 0));
+
+  reverb.setReverbTime(pdlGetSlider(app, 1));
+  reverb.setDryWetMix(pdlGetSlider(app,2));
   for (unsigned i = 0; i < buffer; i += 1) {//for entire buffer of frames
     //DebugTool::printOncePerBuffer(oscillator.getFrequency(), i);
     float leftSample = 0.0f;
@@ -62,6 +65,8 @@ int main() {
     //testBuffer.writeSoundFile("temp");//danger!
     // Add your GUI elements here
     pdlAddSlider(app, 0, "Speed", -2.0f, 16.0f, 1.0f);
+    pdlAddSlider(app, 1, "reverbTime", 20.0f, 60000.0f, 3000.0f);
+    pdlAddSlider(app, 2, "dryWetMix", 0.0f, 1.0f, 1.0f);
     pdlAddToggle(app, 0, "play", false);
     pdlAddTrigger(app, 0, "trigger");
     

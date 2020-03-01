@@ -17,5 +17,3 @@ void LowPass::setFrequency(float newFrequency){
   a = 1.0f + b;
 }
 float LowPass::getSample(){return currentSample;}
-float LowPass::getA(){return a;}
-float LowPass::getB(){return b;}

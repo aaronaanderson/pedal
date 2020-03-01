@@ -29,4 +29,4 @@ class CircularBuffer{
   Buffer buffer;//buffer in which to store audio
   int writeLocation;//location within the buffer
 };
-#endif              
+#endif

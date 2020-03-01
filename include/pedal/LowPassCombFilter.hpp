@@ -24,7 +24,6 @@ class LowPassCombFilter{
   void setDelayByFrequency(float frequency);
   void setFeedBackGain(float newFBGain);
   void setMaxDelayTime(float newMaxDelay);
-  void setFeedBackDelayGainToMax();//set to 1.0f - b of LPF
   private:
   float currentSample;
   CircularBuffer delayLine;
