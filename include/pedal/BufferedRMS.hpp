@@ -23,11 +23,12 @@ class BufferedRMS{
   int sampleCounter;//to keep track of how many we've added
   float runningTotal;
 };
-
+#include "pedal/DebugTool.hpp"
 inline float BufferedRMS::process(float input){
   writeIndex = writeIndex%samplesToAverage;//wrap the index
   //subtract what WAS in the buffer first
   runningTotal -= 0;// sampleBuffer.getSample(writeIndex);
+  
   //add its replacement to the total, then to buffer
   float squaredInput = input * input;//square the input
   runningTotal += squaredInput;//add squared input to running total
