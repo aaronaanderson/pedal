@@ -66,25 +66,6 @@ void Buffer::addToSample(float inputSample, int index, int channel){
   index = clamp(index, 0, durationInSamples-1);
   content[index * numberChannels + channel] += inputSample;
 }
-
-float Buffer::getSample(float index, int channel){
-  index = clamp(index, 0.0f, durationInSamples-1);//clamp for safety
-  int interleavedIndex = index * numberChannels + channel;
-  float retrievedSample = 0.0f;//start with a sample
-  //do some linear interpolation
-  float previousSample = content[int(interleavedIndex)];// take the 'floor' 
-  //grab the next sample. wrap for edge cases
-  float nextSample = content[int(index+numberChannels) % 
-                             (durationInSamples * numberChannels)];// take the 'ceiling'
-  //interpolate between the samples
-  retrievedSample = linearInterpolation(index, previousSample, nextSample);
-  return retrievedSample;
-}
-float Buffer::getSample(int index, int channel){
-  index = clamp(index, 0.0f, durationInSamples-1);//clamp for safety
-  return content[index * numberChannels + channel];
-}
-
 void Buffer::loadSoundFile(const char* pathToFile){
     float* temporaryPointer;
     temporaryPointer = drwav_open_file_and_read_pcm_frames_f32(pathToFile,
@@ -104,7 +85,6 @@ void Buffer::loadSoundFile(const char* pathToFile){
     content = temporaryPointer; 
   }
 }
-
 void Buffer::writeSoundFile(const char* pathToFile){
   drwav_init_file_write_sequential_pcm_frames(&wavTemp, "data/recording.wav", &outputFormat, durationInSamples, NULL);
 
@@ -157,3 +137,20 @@ float Buffer::getDuration(){return duration;}
 float* Buffer::getContent(){return content;}
 unsigned long Buffer::getDurationInSamples(){return durationInSamples;}
 int Buffer::getNumberChannels(){return numberChannels;}
+float Buffer::getSample(float index, int channel){
+  index = clamp(index, 0.0f, durationInSamples-1);//clamp for safety
+  int interleavedIndex = index * numberChannels + channel;
+  float retrievedSample = 0.0f;//start with a sample
+  //do some linear interpolation
+  float previousSample = content[int(interleavedIndex)];// take the 'floor' 
+  //grab the next sample. wrap for edge cases
+  float nextSample = content[int(index+numberChannels) % 
+                             (durationInSamples * numberChannels)];// take the 'ceiling'
+  //interpolate between the samples
+  retrievedSample = linearInterpolation(index, previousSample, nextSample);
+  return retrievedSample;
+}
+float Buffer::getSample(int index, int channel){
+  index = clamp(index, 0.0f, durationInSamples-1);//clamp for safety
+  return content[index * numberChannels + channel];
+}
