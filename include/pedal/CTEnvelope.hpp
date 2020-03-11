@@ -5,6 +5,11 @@
 #include "pdlSettings.hpp"//so we can access sampleRate and bufferSize
 #include "utilities.hpp"// for clamp 
 
+enum modes {
+  ADSR=0, 
+  ASR, 
+  AR
+};//3 envelope types
 class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   public:
   CTEnvelope();//default constructor
@@ -16,7 +21,7 @@ class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   float generateSample();//calculate and return next sample
   float* generateBlock();//calculate and return next block of samples
   
-  enum modes {ADSR=0, ASR, AR};//3 envelope types
+  
   
   //"getters"
   float getAttack();

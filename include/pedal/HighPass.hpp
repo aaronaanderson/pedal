@@ -22,5 +22,6 @@ inline float HighPass::process(float input){
   //of this expression is leftover from last call
   //It is effectively 'previousSample'
   currentSample = (a*input) - (b*currentSample);
+  return currentSample;
 }
 #endif
