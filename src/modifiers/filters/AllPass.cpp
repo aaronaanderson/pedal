@@ -10,6 +10,7 @@ float AllPass::process(float input){
   currentSample = input + (delayedSample * coefficient);
   delayLine.inputSample(currentSample);//feed the modified input
   currentSample -= delayedSample * coefficient;
+  return currentSample;
 }
 float AllPass::getDelayTime(){return delayTime;}
 float AllPass::getMaxDelay(){return maxDelay;}

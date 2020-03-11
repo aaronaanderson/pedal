@@ -13,6 +13,7 @@ WhiteNoise::~WhiteNoise(){
 //=========================================================
 float WhiteNoise::generateSample(){//generate a single sample
   currentSample = rangedRandom(-1.0f, 1.0f);//very basic random....could be more random
+  return currentSample;
 }
 float* WhiteNoise::generateBlock(){//generate a block of samples
   if(currentBlock != nullptr){//if we don't have a local currentBlock yet, 

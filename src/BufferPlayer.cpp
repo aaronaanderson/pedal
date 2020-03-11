@@ -75,6 +75,7 @@ float BufferPlayer::update(){//function called per-sample
       }//end of playmode switch statement
     }//end of 'isPlaying' condition
   }//end of nullptr reference check
+  return currentFrame[0];
 }//end of fucntion
 void BufferPlayer::assignDataFromReference(Buffer* reference){
   numberChannels = reference->getNumberChannels();

@@ -41,6 +41,7 @@ float* ImpulseGenerator::generateBlock(){
   for(int i = 0; i < pdlSettings::bufferSize; i++){
     currentBlock[i] = generateSample();
   }
+  return currentBlock;
 }
 //Getters and Setters======================
 void ImpulseGenerator::setFrequency(float newFrequency){
