@@ -31,6 +31,15 @@ float secondsToSamples(float timeInSeconds){
 float samplesToMS(float samples){
   return (samples*1000.0f)/pdlSettings::sampleRate;
 }
+//pan input from left to right, position range -1 to 1
+void panStereo(float input, float position, float* outputFrame){
+  //convert to radians
+  float theta = clamp(position, -1.0f, 1.0f) * M_PI * 0.25f * -1.0f;
+  float cosTheta = std::cos(theta);
+  float sinTheta = std::sin(theta);
+  outputFrame[0] = M_SQRT1_2 * (sinTheta - cosTheta) * input;
+  outputFrame[1] = M_SQRT1_2 * (sinTheta + cosTheta) * input;
+}
 /* //function unnecessary, will be moved to buffer class
 void normalizeBuffer(float* inputBuffer, int bufferSize, bool correctDC = true){
   float highestValue;

@@ -2,15 +2,18 @@
 #define utilities_hpp
 
 #include "stdlib.h"
-#include "math.h"
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include "pdlSettings.hpp"
 #include "algorithm"
 
+#define sqrt2o2 = 
 float msToSamples(float timeInMS);
 float secondsToSamples(float timeInSeconds);
 float samplesToMS(float samples);
 float mtof(float midiValue);
-
+//temporary stereo panner until spatialization system is added
+void panStereo(float input, float position, float* outputFrame);
 //void normalize(float* inputBuffer, int bufferSize, float min, float max);//normalize data in place
 float rangedRandom(float minimum, float maximum);
 

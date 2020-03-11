@@ -11,6 +11,7 @@
 #include "pedal/MoorerReverb.hpp"
 #include "pedal/BufferedRMS.hpp"
 #include "pedal/StreamedRMS.hpp"
+#include "pedal/utilities.hpp"
 
 //DebugTool debugger;
 Buffer testBuffer(4000.0f);//Initiate buffer with 10 seconds duration
@@ -19,6 +20,7 @@ BufferPlayer player(&testBuffer);
 MoorerReverb reverb;
 //StreamedRMS rms;
 BufferedRMS rms;
+float panPosition;
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
@@ -35,6 +37,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
 
   reverb.setReverbTime(pdlGetSlider(app, 1));
   reverb.setDryWetMix(pdlGetSlider(app,2));
+  panPosition = pdlGetSlider(app, 3);
   for (unsigned i = 0; i < buffer; i += 1) {//for entire buffer of frames
     //DebugTool::printOncePerBuffer(oscillator.getFrequency(), i);
     float leftSample = 0.0f;
@@ -43,11 +46,13 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
     leftSample = player.getSample(0);
     rightSample = player.getSample(1);
     float monoSum = leftSample + rightSample;
-    monoSum *= 0.5;
+    monoSum *= 0.1;
     monoSum = reverb.process(monoSum);
+    float stereoFrame[2] = {0.0f, 0.0f};
+    panStereo(monoSum, panPosition, stereoFrame);
     rms.process(monoSum);
-    out[channel * i] = monoSum * 0.1f;
-    out[channel * i + 1] = monoSum * 0.1f;
+    out[channel * i] = stereoFrame[0];
+    out[channel * i + 1] = stereoFrame[1];
   }
 }
 //======================main loop
@@ -67,6 +72,7 @@ int main() {
     pdlAddSlider(app, 0, "Speed", -2.0f, 16.0f, 1.0f);
     pdlAddSlider(app, 1, "reverbTime", 20.0f, 60000.0f, 3000.0f);
     pdlAddSlider(app, 2, "dryWetMix", 0.0f, 1.0f, 1.0f);
+    pdlAddSlider(app, 3, "pan", -1.0f, 1.0f, 0.0f);
     pdlAddToggle(app, 0, "play", false);
     pdlAddTrigger(app, 0, "trigger");
     
