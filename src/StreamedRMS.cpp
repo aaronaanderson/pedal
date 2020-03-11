@@ -24,8 +24,7 @@ void StreamedRMS::setSamplePeriod(int newSamplePeriod){
     sampleCounter = 0;
     runningTotal = 0.0f;
     periodReciprocal = 1.0f / (float)samplesToAverage;
-  }
-  
+  }  
 }
 int StreamedRMS::getSamplePeriod(){return samplesToAverage;}
 float StreamedRMS::getSample(){return smoothOutput.getCurrentValue();}

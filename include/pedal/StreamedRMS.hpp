@@ -25,14 +25,17 @@ inline float StreamedRMS::process(float input){
   sampleCounter = sampleCounter % samplesToAverage;
   if(sampleCounter == 0){//if the sampleCounter reached max
     //calculate the average value over those N samples
-    smoothOutput.setTarget(runningTotal * periodReciprocal);
+    if(runningTotal>0.0f){
+      float dB = 20.0f * std::log10(sqrt(runningTotal*periodReciprocal));
+      smoothOutput.setTarget(dB);
+    }else{
+      smoothOutput.setTarget(0.0f);
+    }
     runningTotal = 0.0f;
   }
-  //add the abs(input). We're concerned with distance from 0.0f only
-  runningTotal += std::fabs(input);
+  runningTotal += input * input;//square and accumulate the input for averaging
   sampleCounter++;
-  smoothOutput.process();
-  currentSample = smoothOutput.getCurrentValue();
+  currentSample = smoothOutput.process();;
   return currentSample;
 }
 #endif

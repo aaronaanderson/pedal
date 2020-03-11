@@ -25,20 +25,16 @@ class BufferedRMS{
 };
 
 inline float BufferedRMS::process(float input){
-  /*
-
-  broken
-  TODO find bug
-  */
   writeIndex = writeIndex%samplesToAverage;//wrap the index
   //subtract what WAS in the buffer first
-  runningTotal -= sampleBuffer.getSample(writeIndex);
+  runningTotal -= 0;// sampleBuffer.getSample(writeIndex);
   //add its replacement to the total, then to buffer
-  input = std::fabs(input);//we want distance from 0
-  runningTotal += input;//add the input
-  sampleBuffer.writeSample(input, writeIndex);
-  writeIndex++;
-  currentSample = runningTotal * periodReciprocal;
-  return currentSample;//return smoothed value
+  float squaredInput = input * input;//square the input
+  runningTotal += squaredInput;//add squared input to running total
+  sampleBuffer.writeSample(squaredInput, writeIndex);//add the squared input to the buffer
+  writeIndex++;//increment the index for next round
+  //record the sqrt of the current average
+  currentSample = sqrt(runningTotal * periodReciprocal);
+  return currentSample;//return value
 }
 #endif

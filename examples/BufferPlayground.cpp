@@ -17,8 +17,8 @@ Buffer testBuffer(4000.0f);//Initiate buffer with 10 seconds duration
 //testBuffer.fillSineSweep();//breaks
 BufferPlayer player(&testBuffer);
 MoorerReverb reverb;
-StreamedRMS rms;
-//BufferedRMS rms;
+//StreamedRMS rms;
+BufferedRMS rms;
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
@@ -28,7 +28,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
   if(writeFile){
  //   testBuffer.writeSoundFile("temp");
   }
-  //std::cout << rms.getSample() << std::endl;
+  std::cout << rms.getSample() << std::endl;
   player.setPlayMode((PlayMode)pdlGetDropDown(app, 0));
   player.setInterpolatoinMode((InterpolationMode)pdlGetDropDown(app, 1));
   player.setSpeed(pdlGetSlider(app, 0));
@@ -77,7 +77,6 @@ int main() {
     pdlAddDropDown(app, 1, "Interpolation", interpolationMenuContent, 3);
     //begin the app--------
     pdlStartExampleApp(app);
-    //pdlSettings::sampleRate = app->sampling_rate;
     while (pdlRunExampleApp(app)) {//run forever
         pdlUpdateExampleApp(app);//run the application
     }
