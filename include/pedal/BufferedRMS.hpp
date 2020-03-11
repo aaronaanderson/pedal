@@ -4,6 +4,8 @@
 #include <algorithm>
 #include "utilities.hpp"
 #include "Buffer.hpp"
+#include "pedal/DebugTool.hpp"
+
 //Root Mean Squared
 //average adjusted accurately per sample
 class BufferedRMS{
@@ -22,8 +24,9 @@ class BufferedRMS{
   int samplesToAverage;//how many samples in an average?
   int sampleCounter;//to keep track of how many we've added
   float runningTotal;
+  DebugTool debugTool;
+
 };
-#include "pedal/DebugTool.hpp"
 inline float BufferedRMS::process(float input){
   writeIndex = writeIndex%samplesToAverage;//wrap the index
   //subtract what WAS in the buffer first
