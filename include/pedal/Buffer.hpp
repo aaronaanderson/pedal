@@ -56,8 +56,8 @@ class Buffer{
   
   void fillSineSweep(float lowFrequency = 20.0f, float highFrequency = 20000.0f);
   void fillNoise();
-  float getSample(float index, int channel = 1);//interleaved retrieval (can request floating point index)
-  float getSample(int index, int channel = 1);//non-interleaved retrieval
+  float getSample(float index, int channel = 0);//interleaved retrieval (can request floating point index)
+  float getSample(int index, int channel = 0);//non-interleaved retrieval
   float* getContent();
   float getDuration();
   unsigned long getDurationInSamples();

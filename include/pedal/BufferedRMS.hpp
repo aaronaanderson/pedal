@@ -30,8 +30,8 @@ class BufferedRMS{
 inline float BufferedRMS::process(float input){
   writeIndex = writeIndex%samplesToAverage;//wrap the index
   //subtract what WAS in the buffer first
-  runningTotal -= 0;// sampleBuffer.getSample(writeIndex);
-  debugTool.printOncePerBuffer(writeIndex);
+  runningTotal -= sampleBuffer.getSample(writeIndex);
+  //debugTool.printOncePerBuffer(writeIndex);
   //add its replacement to the total, then to buffer
   float squaredInput = input * input;//square the input
   runningTotal += squaredInput;//add squared input to running total

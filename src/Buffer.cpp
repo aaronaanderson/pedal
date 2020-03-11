@@ -57,7 +57,8 @@ Buffer::~Buffer(){
 
 //Core functionality of class=========================
 void Buffer::writeSample(float inputSample, int index, int channel){
-  index = clamp(index, 0, durationInSamples-1);
+  index = clamp(index, 0, durationInSamples-1);//make the index in bounds
+  //place the sample into the correct space (channel is 0 by default)
   content[index * numberChannels + channel] = inputSample;
 }
 
