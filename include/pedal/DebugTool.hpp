@@ -20,11 +20,11 @@ class DebugTool{
     }
   }
   template <class T>
-  static void printOncePerBuffer(T whatToPrint){
+  void printOncePerBuffer(T whatToPrint){
     frameCount = frameCount % pdlSettings::bufferSize;
     if(frameCount == 0){
       std::cout << whatToPrint << std::endl;
-    })
+    }
   }
   //print every Nth buffer
   //void logBuffer(int buffersToSkip)
