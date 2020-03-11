@@ -7,7 +7,6 @@
 #include "pdlSettings.hpp"
 #include "algorithm"
 
-#define sqrt2o2 = 
 float msToSamples(float timeInMS);
 float secondsToSamples(float timeInSeconds);
 float samplesToMS(float samples);
