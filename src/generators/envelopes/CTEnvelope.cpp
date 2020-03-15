@@ -25,7 +25,7 @@ void CTEnvelope::setup(float newAttack, float newDecay, float newSustain, float 
   setRelease(newRelease);
   currentSample = 0.0;
   currentState = states::OFF;
-  currentMode = modes::ADSR;
+  currentMode = EnvelopeModes::ADSR;
 }
 
 float CTEnvelope::generateSample(){//generate a single sample
@@ -172,7 +172,7 @@ bool CTEnvelope::isBusy(){
   return false;//for windows compiler, should never happen
 }
 
-void CTEnvelope::setMode(modes newMode){currentMode = newMode;}
+void CTEnvelope::setMode(EnvelopeModes newMode){currentMode = newMode;}
 void CTEnvelope::setAttack(float newAttack){//any positive value
   attack = newAttack;
   calculateIncrement(ATTACK);//changing value requires recalculating increment

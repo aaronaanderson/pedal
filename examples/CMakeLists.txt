@@ -66,6 +66,7 @@ set(example_list
     WindChimes
     BufferPlayground
     BiquadExample
+    DynamicsExample
 )
 
 # loop through example targets

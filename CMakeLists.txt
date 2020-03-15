@@ -38,6 +38,7 @@ add_library(pedal STATIC
     src/modifiers/reverb/MoorerReverb.cpp
     src/BufferedRMS.cpp
     src/StreamedRMS.cpp
+    src/modifiers/dynamic/Compressor.cpp
     external/AudioFFT.cpp
 )
 

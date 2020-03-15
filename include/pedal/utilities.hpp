@@ -60,7 +60,7 @@ class SmoothValue{
   T getCurrentValue(){return z;}
   T getTargetValue(){return targetValue;}
   float getTime(){return arrivalTime;}
-  
+
   private:
   void calculateCoefficients(){//called only when 'setTime' is called (and in constructor)
     a = std::exp(-(M_PI * 2) / (arrivalTime * 0.001f * pdlSettings::sampleRate));//rearranged lpf coeff calculations
@@ -73,14 +73,14 @@ class SmoothValue{
   T z;//storage for previous value
 };
 
-template <class t>
+template <class T>
 class DirectionalSmoothValue{
 public:
   DirectionalSmoothValue(float initialTimeUp = 50.0f, float initialTimeDown = 50.0f){//how much time, in ms, does it take to arrive (or approach target value)
     arrivalTimeUp = initialTimeUp;//store the input value (default to 50ms)
     calculateUpCoefficients();//calculate aUp and bUp
     arrivalTimeDown = initialTimeDown;//store input value (default 50ms)
-    claculateDownCoefficients();//calculate aDown and bDown
+    calculateDownCoefficients();//calculate aDown and bDown
     z = 0.0f;//zero the 'previous' sample
     up = true;//set a default value, will be overwritten on first target value if needed
   }
@@ -99,14 +99,14 @@ public:
     calculateUpCoefficients();//calculate aUp and bUp
   }
   void setTimeDown(float newTimeDown){//set time down (in ms)
-    arivalTimeDown = newTimeDown;//store the new value
+    arrivalTimeDown = newTimeDown;//store the new value
     calculateDownCoefficients();//calculate aDown and bDown
   }
   void setTarget(T newTarget){//set a target value
     if(newTarget > z){//if target is greater than current value
       up = true;//then direction is up
     }else{//if target is <= current value
-      down = true;//direction is down
+      up = false;//direction is down
     }
     targetValue = newTarget;//store new target
   }
@@ -117,7 +117,7 @@ public:
 
   private:
   void calculateUpCoefficients(){//called only when 'setTimeUp' is called (and in constructor)
-    aUp = std::exp(-(M_PI * 2) / (arrivalTimeUp * 0.001f * pdlSettings::sampleRate));//rearranged lpf coeff calculations
+    aUp = std::exp(-(M_PI * 2.0f) / (arrivalTimeUp * 0.001f * pdlSettings::sampleRate));//rearranged lpf coeff calculations
     bUp = 1.0f - aUp;
   }
   void calculateDownCoefficients(){//called only when 'setTimeUp' is called (and in constructor)

@@ -2,6 +2,7 @@
 #include "example_app.hpp"
 
 //include class if using
+#include "pedal/pdlSettings.hpp"
 #include "pedal/TSine.hpp"
 //#include "pedal/TSaw.hpp"
 //#include "pedal/TSquare.hpp"

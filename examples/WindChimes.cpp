@@ -78,7 +78,7 @@ int main() {
       return 1;//cancel program, return 1
     }
     for(int i = 0; i < NUM_CHIMES; i++){
-      chimes[i].envelope.setMode(CTEnvelope::AR);
+      chimes[i].envelope.setMode(EnvelopeModes::AR);
     }
     pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
     pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);

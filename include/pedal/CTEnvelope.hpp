@@ -5,7 +5,7 @@
 #include "pdlSettings.hpp"//so we can access sampleRate and bufferSize
 #include "utilities.hpp"// for clamp 
 
-enum modes {
+enum EnvelopeModes {
   ADSR=0, 
   ASR, 
   AR
@@ -36,7 +36,7 @@ class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   bool isBusy();
   
   //"setters"
-  void setMode(modes newMode);
+  void setMode(EnvelopeModes newMode);
   void setAttack(float newAttack);
   void setDecay(float newDecay);
   void setSustain(float newSustain);

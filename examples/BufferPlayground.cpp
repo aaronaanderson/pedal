@@ -12,15 +12,16 @@
 #include "pedal/BufferedRMS.hpp"
 #include "pedal/StreamedRMS.hpp"
 #include "pedal/utilities.hpp"
-
+#include "pedal/Compressor.hpp"
 //DebugTool debugger;
 Buffer testBuffer(4000.0f);//Initiate buffer with 10 seconds duration
 //testBuffer.fillSineSweep();//breaks
 BufferPlayer player(&testBuffer);
-MoorerReverb reverb;
+//MoorerReverb reverb;
 //StreamedRMS rms;
 BufferedRMS rms;
 float panPosition;
+Compressor compressor;
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
@@ -30,13 +31,9 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
   if(writeFile){
  //   testBuffer.writeSoundFile("temp");
   }
-  std::cout << rms.getSample() << std::endl;
-  player.setPlayMode((PlayMode)pdlGetDropDown(app, 0));
-  player.setInterpolatoinMode((InterpolationMode)pdlGetDropDown(app, 1));
+  //std::cout << rms.getSample() << std::endl;
   player.setSpeed(pdlGetSlider(app, 0));
 
-  reverb.setReverbTime(pdlGetSlider(app, 1));
-  reverb.setDryWetMix(pdlGetSlider(app,2));
   panPosition = pdlGetSlider(app, 3);
   for (unsigned i = 0; i < buffer; i += 1) {//for entire buffer of frames
     //DebugTool::printOncePerBuffer(oscillator.getFrequency(), i);
@@ -44,13 +41,13 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
     float rightSample = 0.0f;
     player.update();
     leftSample = player.getSample(0);
-    rightSample = player.getSample(1);
-    float monoSum = leftSample + rightSample;
-    monoSum *= 0.1;
-    monoSum = reverb.process(monoSum);
+    float monoSum = leftSample;
+    monoSum *= 0.701;
+    monoSum = compressor.process(monoSum);
     float stereoFrame[2] = {0.0f, 0.0f};
     panStereo(monoSum, panPosition, stereoFrame);
     rms.process(monoSum);
+    
     out[channel * i] = stereoFrame[0];
     out[channel * i + 1] = stereoFrame[1];
   }
@@ -76,11 +73,9 @@ int main() {
     pdlAddToggle(app, 0, "play", false);
     pdlAddTrigger(app, 0, "trigger");
     
-    char* modeMenuContent[]{"ONE_SHOT", "LOOP", "PING_PONG"};
-    pdlAddDropDown(app, 0, "Mode", modeMenuContent, 3);
+    player.setPlayMode(PlayMode::LOOP);
+    player.setInterpolatoinMode(InterpolationMode::LINEAR);
 
-    char* interpolationMenuContent[]{"NONE", "LINEAR", "CUBIC"};
-    pdlAddDropDown(app, 1, "Interpolation", interpolationMenuContent, 3);
     //begin the app--------
     pdlStartExampleApp(app);
     while (pdlRunExampleApp(app)) {//run forever
