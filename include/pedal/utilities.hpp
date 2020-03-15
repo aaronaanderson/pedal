@@ -59,7 +59,8 @@ class SmoothValue{
   void setTarget(T newTarget){targetValue = newTarget;}
   T getCurrentValue(){return z;}
   T getTargetValue(){return targetValue;}
-
+  float getTime(){return arrivalTime;}
+  
   private:
   void calculateCoefficients(){//called only when 'setTime' is called (and in constructor)
     a = std::exp(-(M_PI * 2) / (arrivalTime * 0.001f * pdlSettings::sampleRate));//rearranged lpf coeff calculations
@@ -110,7 +111,9 @@ public:
     targetValue = newTarget;//store new target
   }
   T getCurrentValue(){return z;}
-  T getTargetValue(){return targetValue;}
+  T getTargetValue(){return targetValue;} 
+  float getTimeUp(){return arrivalTimeUp;}
+  float getTimeDown(){return arrivalTimeDown;}
 
   private:
   void calculateUpCoefficients(){//called only when 'setTimeUp' is called (and in constructor)
