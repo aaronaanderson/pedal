@@ -31,6 +31,12 @@ float secondsToSamples(float timeInSeconds){
 float samplesToMS(float samples){
   return (samples*1000.0f)/pdlSettings::sampleRate;
 }
+float amplitudeToDB(float amplitude){
+  return 20.0f * std::log10(amplitude);
+}
+float dBToAmplitude(float dB){
+  return std::pow(10.0f, dB/20.0f);
+}
 //pan input from left to right, position range -1 to 1
 void panStereo(float input, float position, float* outputFrame){
   //convert to radians

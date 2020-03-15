@@ -11,6 +11,8 @@ float msToSamples(float timeInMS);
 float secondsToSamples(float timeInSeconds);
 float samplesToMS(float samples);
 float mtof(float midiValue);
+float amplitudeToDB(float amplitude);
+float dBToAmplitude(float dB);
 //temporary stereo panner until spatialization system is added
 void panStereo(float input, float position, float* outputFrame);
 //void normalize(float* inputBuffer, int bufferSize, float min, float max);//normalize data in place
