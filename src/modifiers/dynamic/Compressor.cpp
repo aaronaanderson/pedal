@@ -41,6 +41,7 @@ float Compressor::process(float input){
   return currentSample;//return the result
 }
 void Compressor::setRatio(float newRatio){ratio = std::fmax(newRatio, 1.0);}
+void Compressor::setInputGainDB(float newInputGainDB){linearInputGain = dBToAmplitude(newInputGainDB);}
 void Compressor::setAttackTime(float newAttackTime){
   linearGain.setTimeUp(newAttackTime);
   attackTimeInSamples = msToSamples(newAttackTime);//adjust the attack phase counter
@@ -53,6 +54,6 @@ void Compressor::setAnalysisTime(float newAnalysisTime){
 float Compressor::getSample(){return currentSample;}
 float Compressor::getThresholdDB(){return amplitudeToDB(threshold);}
 float Compressor::getRatio(){return ratio;}
-float Compressor::getInputGainDB(){return }
+float Compressor::getInputGainDB(){return amplitudeToDB(linearInputGain);}
 float Compressor::getAttackTime(){return linearGain.getTimeUp();}
 float Compressor::getReleaseTime(){return linearGain.getTimeDown();}

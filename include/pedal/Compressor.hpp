@@ -45,5 +45,6 @@ class Compressor{
   int attackTimeInSamples;//cheaper to store int location
   float analysisTime;//how long does signalEstimator take?
   float lookAhead;//push analysis further ahead of 
+  DebugTool debug;
 };
 #endif 
