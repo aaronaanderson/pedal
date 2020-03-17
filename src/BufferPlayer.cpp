@@ -116,7 +116,7 @@ void BufferPlayer::setPlayMode(PlayMode newPlayMode){
   direction = 1.0f;//start forward, always. (this is only needed because of ping_pong mode)  
 }
 void BufferPlayer::setReference(Buffer* newReference){bufferReference = newReference;}
-void BufferPlayer::setInterpolatoinMode(InterpolationMode newMode){interpolationMode = newMode;}
+void BufferPlayer::setInterpolationMode(InterpolationMode newMode){interpolationMode = newMode;}
 
 //=============further explenation
 /*

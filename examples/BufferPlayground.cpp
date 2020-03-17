@@ -74,7 +74,7 @@ int main() {
     pdlAddTrigger(app, 0, "trigger");
     
     player.setPlayMode(PlayMode::LOOP);
-    player.setInterpolatoinMode(InterpolationMode::LINEAR);
+    player.setInterpolationMode(InterpolationMode::LINEAR);
 
     //begin the app--------
     pdlStartExampleApp(app);

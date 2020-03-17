@@ -29,7 +29,7 @@ class BufferPlayer{
   void setSpeed(float newSpeed);//change speed (1.0f is normal playback)
   void setPlayMode(PlayMode newPlayMode);//change mode
   void setReference(Buffer* newReference);//assign new buffer
-  void setInterpolatoinMode(InterpolationMode newMode);//set interpolation mode
+  void setInterpolationMode(InterpolationMode newMode);//set interpolation mode
   float getSample(int channel = 0);//get a single sample
   float* getFrame();//get pointer to frame of samples
 

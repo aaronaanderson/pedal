@@ -11,8 +11,14 @@ float msToSamples(float timeInMS);
 float secondsToSamples(float timeInSeconds);
 float samplesToMS(float samples);
 float mtof(float midiValue);
-float amplitudeToDB(float amplitude);
-float dBToAmplitude(float dB);
+template<class T>
+T amplitudeToDB(T amplitude){
+  return 20.0 * std::log10(amplitude);
+}
+template<class T>
+T dBToAmplitude(T dB){
+  return std::pow(10.0, dB/20.0);
+}
 //temporary stereo panner until spatialization system is added
 void panStereo(float input, float position, float* outputFrame);
 //void normalize(float* inputBuffer, int bufferSize, float min, float max);//normalize data in place
@@ -87,11 +93,10 @@ public:
   inline T process(){//this function will be called per-sample on the data
     if(up){
       //when evaluated, z is the 'previous z' (it is leftover from last execution)
-      z = (targetValue * bUp) + (z * bUp);
+      z = (targetValue * bUp) + (z * aUp);
     }else{//if going down/decending
       z = (targetValue * bDown) + (z * aDown);
     }
-    
     return z;//return the new z value (the output sample)
   }
   void setTimeUp(float newTimeUp){//set time Up (in ms)
@@ -117,12 +122,22 @@ public:
 
   private:
   void calculateUpCoefficients(){//called only when 'setTimeUp' is called (and in constructor)
-    aUp = std::exp(-(M_PI * 2.0f) / (arrivalTimeUp * 0.001f * pdlSettings::sampleRate));//rearranged lpf coeff calculations
-    bUp = 1.0f - aUp;
+    if(arrivalTimeUp > 0.0f){//avoid / 0
+      aUp = std::exp(-(M_PI * 2.0f) / (arrivalTimeUp * 0.001f * pdlSettings::sampleRate));//rearranged lpf coeff calculations
+      bUp = 1.0f - aUp;
+    }else{
+      aUp = 0.0f;
+      bUp = 1.0f;
+    }
   }
   void calculateDownCoefficients(){//called only when 'setTimeUp' is called (and in constructor)
-    aDown = std::exp((M_PI * 2.0f) / (arrivalTimeDown * 0.001f * pdlSettings::sampleRate));
-    bDown = 1.0f - aDown;
+    if(arrivalTimeDown > 0.0f){//avoid / 0
+      aDown = std::exp(-(M_PI * 2.0f) / (arrivalTimeDown * 0.001f * pdlSettings::sampleRate));
+      bDown = 1.0f - aDown;
+    }else{
+      aDown = 0.0f;
+      bDown = 1.0f;
+    }
   }
   T targetValue;//what is the destination (of type T, determind by implementation)
   float arrivalTimeUp;//how long to take
