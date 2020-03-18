@@ -9,7 +9,7 @@ Gate::Gate(){
   setAttackTime(5.0f);//how long to reach full attenuation (in ms)
   setHoldTime(2.0f);//how long to hold attenuation before releasing
   setReleaseTime(20.0f);//how long to reach no attenuation
-  setAnalysisTime(samplesToMS(64));//analysis window size. lower values are more sensitive to input transients.
+  setAnalysisTime(samplesToMS(64));//analysis window size. 
   linearGain.setTarget(1.0f);
 }
 float Gate::process(float input){

@@ -40,6 +40,7 @@ add_library(pedal STATIC
     src/StreamedRMS.cpp
     src/modifiers/dynamic/Compressor.cpp
     src/modifiers/dynamic/Gate.cpp
+    src/spectral/STFT.cpp
     external/AudioFFT.cpp
 )
 
