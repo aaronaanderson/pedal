@@ -1,14 +1,14 @@
 #include "pedal/Gate.hpp"
 
 Gate::Gate(){
-  delayLine.setDuration(100.0f);//won't need much
-  setThresholdDB(-50.0f);//at what intensity should the compressor start compressing?
-  setRangeDB(0.0f);
-  setRatio(20.0f);//if over threshold by 'ratio' decibels, scale down until it's only 1/ratio decibels over threshold
+  delayLine.setDuration(100.0f);//100ms max pre-delay
+  setThresholdDB(-50.0f);//at what intensity should the gate start attenuating
+  setRangeDB(0.0f);//how much reduction if below threshold (in addition to any reduction brought on by ratio/threshold)
+  setRatio(20.0f);//if below threshold by N decibels, reduce furth to N*ratio decibels
   setInputGainDB(0.0f);//Raising input gain is effectively the same as lowering threshold
-  setAttackTime(5.0f);//experiment with very low values (0.01ms to 10ms)
-  setHoldTime(2.0f);
-  setReleaseTime(20.0f);//generall longer than attack (10 to 100ms)
+  setAttackTime(5.0f);//how long to reach full attenuation (in ms)
+  setHoldTime(2.0f);//how long to hold attenuation before releasing
+  setReleaseTime(20.0f);//how long to reach no attenuation
   setAnalysisTime(samplesToMS(64));//analysis window size. lower values are more sensitive to input transients.
   linearGain.setTarget(1.0f);
 }
@@ -36,27 +36,23 @@ void Gate::updateGain(float input){
   float currentEstimate = signalEstimator.process(input);//store the estimate
   //debug.printOncePerBuffer(currentEstimate);
   if(currentEstimate < linearThreshold){//if tested signal is more quite than input
-    
     //This next portion is particularily expensive as it must call both
     //amplitudeToDB and dBToAmplitude. Fortunately, this is only called
     //every time a higher currentEstimate is reached.
-    
     if(currentEstimate < lowestAttackPhaseTarget){//should only occur if exceeds previous target
       lowestAttackPhaseTarget = currentEstimate;//record it as the highest
       attackFlag = true;//make sure compressor is in attack phase if it wasn't already
       attackPhaseInSamples = 0;//restart the attack phase
       //how many dB below the threshold was it? How many dB under?
-      if(currentEstimate > 0.0f){
+      if(currentEstimate > 0.0f){//can't take amplitudeToDB of 0.0 (-inf)
         float differenceInDB = amplitudeToDB(currentEstimate) - threshold;
         //how much should the signal be scaled by?
         reductionTargetDB = (differenceInDB * (ratio)) - differenceInDB;
-        std::cout << currentEstimate << " : " << std::log10(currentEstimate) << std::endl;
         reductionTargetDB -= rangeDB;//subtract rangeDB value 
         linearGain.setTarget(dBToAmplitude(reductionTargetDB));//ramp to target amplitue scalar
-      }else{
-        linearGain.setTarget(0.0f);
+      }else{//if estimate was 0.0f, resulting in differenceInDB being -inf
+        linearGain.setTarget(0.0f);//no need to do math, just set 
       }
-      
     }
   }
   if(attackFlag){//if in attack phase
@@ -69,7 +65,7 @@ void Gate::updateGain(float input){
       attackFlag = false;//change to release state
     }
   }
-  linearGain.process();
+  linearGain.process();//update linear gain based on current target
 }
 void Gate::setThresholdDB(float thresholdDB){
   lowestAttackPhaseTarget = 1000.0;//previous value may no longer be relavant

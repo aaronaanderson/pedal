@@ -18,12 +18,12 @@ class Gate{
   float process(float input);
   float process(float input, float sideChain);
 
-  void setThresholdDB(float newThresholdDB);//At what intensity does attenuation begin?
+  void setThresholdDB(float newThresholdDB);//signal below threshold triggers attenuation
   void setRatio(float newRatio);//set attenuation ratio
-  void setRangeDB(float newRangeDB);
+  void setRangeDB(float newRangeDB);//if below signal, reduce by this amount in addition
   void setInputGainDB(float inputGainDB);//set input gain in dB
   void setInputGainLinear(float inputGainLinear);//set by scalar
-  void setMakeUpGainDB(float newMakeUpGainDB);
+  void setMakeUpGainDB(float newMakeUpGainDB);//amount to scale output by
   void setAttackTime(float newAttackTime);//set attack time (ms)
   void setHoldTime(float newHoldTime);//how long to wait after attack and before release
   void setReleaseTime(float newDecayTime);//set release time (ms)
