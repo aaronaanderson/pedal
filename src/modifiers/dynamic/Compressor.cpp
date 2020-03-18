@@ -9,8 +9,8 @@ Compressor::Compressor(){
   setReleaseTime(20.0f);//generall longer than attack (10 to 100ms)
   setAnalysisTime(samplesToMS(16));//analysis window size. lower values are more sensitive to input transients.
   highestAttackPhaseTarget = 0.0f;//keep track of highest target; only update if new target is higher
+  linearGain.setTarget(1.0f);
 }
-
 float Compressor::process(float input){
   delayLine.inputSample(input);//feed the delay line //no input gain on delayLine sample
   //apply the input gain
@@ -18,7 +18,7 @@ float Compressor::process(float input){
   updateGain(input);
   //the output is the delayed input scaled by this smoothed linearGain, then multiplied by makeup gain
   currentSample = delayLine.getDelayed(analysisTime + lookAhead) * 
-                  linearGain.process() * linearMakeUpGain;
+                  linearGain.getCurrentValue() * linearMakeUpGain;
   return currentSample;//return the result
 }
 float Compressor::process(float input, float sideChain){//overload for sidechain input
@@ -58,6 +58,12 @@ void Compressor::updateGain(float input){
       attackFlag = false;//change to release state
     }
   }
+  linearGain.process();//update linear gain
+}
+void Compressor::setThresholdDB(float thresholdDB){
+  highestAttackPhaseTarget = 0;//previous value may no longer be relavant
+  threshold = thresholdDB;//threshold is stored in decibels
+  linearThreshold = dBToAmplitude(thresholdDB);//efficient to store this, since used often
 }
 void Compressor::setRatio(float newRatio){//for every newRatio the input is above the output, reduce output to 1/newRatio over threshold
   ratio = std::fmax(newRatio, 1.0f);//assign the value, don't allow values below 1.0f
@@ -72,11 +78,6 @@ void Compressor::setAttackTime(float newAttackTime){
   attackTimeInSamples = msToSamples(newAttackTime);//adjust the attack phase counter
 }
 void Compressor::setReleaseTime(float newReleaseTime){linearGain.setTimeUp(newReleaseTime);}
-void Compressor::setThresholdDB(float thresholdDB){
-  highestAttackPhaseTarget = 0;//previous value may no longer be relavant
-  threshold = thresholdDB;//threshold is stored in decibels
-  linearThreshold = dBToAmplitude(thresholdDB);//efficient to store this, since used often
-}
 void Compressor::setLookAheadTime(float newLookAheadTime){
   lookAhead = std::fmax(newLookAheadTime, 0.0f);
 }
@@ -85,7 +86,10 @@ void Compressor::setAnalysisTime(float newAnalysisTime){//defaults to 16 samples
   signalEstimator.setSamplePeriod(samplesToMS(newAnalysisTime));
 }
 float Compressor::getSample(){return currentSample;}
-float Compressor::getLinearScalar(){return linearGain.getCurrentValue();}
+//getLinearScalar() may be used to compress external signals
+float Compressor::getLinearScalar(){
+  return linearGain.getCurrentValue();
+}
 float Compressor::getThresholdDB(){return threshold;}
 float Compressor::getRatio(){return ratio;}
 float Compressor::getInputGainDB(){return amplitudeToDB(linearInputGain);}
