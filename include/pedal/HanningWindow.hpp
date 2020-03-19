@@ -2,18 +2,18 @@
 #define HanningWindow_hpp
 
 #include "pdlSettings.hpp"
-#include "math.h"
+#define _USE_MATH_DEFINES
+#include "utilities.hpp"
+#include <cmath>
 
 class HanningWindow{
   public:
   HanningWindow();
   HanningWindow(float initialDuration);
-  ~HanningWindow();
 
   float generateSample();
-  float* generateBlock();
-  inline float sampleFromPhase(float inputPhase){
-    return 0.5f * (1.0f - cos((2.0f * 3.1415926 * inputPhase)/1.0f));
+  static inline float sampleFromPhase(float inputPhase){
+    return 0.5f * (1.0f - std::cos((2.0f * M_PI * inputPhase)/1.0f));
   }
   void setTrigger(bool newTrigger);
   void setDuration(float newDuration);
@@ -30,6 +30,5 @@ class HanningWindow{
   float duration;
   float phase, phaseIncrement;
   float currentSample;
-  float* currentBlock = nullptr;
 };
 #endif

@@ -9,9 +9,7 @@ HanningWindow::HanningWindow(float initialDuration){
   setDuration(initialDuration);
   trigger = false;
 }
-HanningWindow::~HanningWindow(){
-  delete[] currentBlock;
-}
+
 //Core functionality===========================
 float HanningWindow::generateSample(){
   if(active){
@@ -23,15 +21,6 @@ float HanningWindow::generateSample(){
     }
   } 
   return currentSample;
-}
-float* HanningWindow::generateBlock(){
-  if(currentBlock == nullptr){
-    currentBlock = new float[pdlSettings::bufferSize];
-  }
-  for(int i = 0; i < pdlSettings::bufferSize; i++){
-    currentBlock[i] = generateSample();
-  }
-  return currentBlock;
 }
 
 //Getters and Setters===============================
