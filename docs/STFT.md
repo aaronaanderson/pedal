@@ -17,7 +17,37 @@ float windowedInput[overlap][fftSize];
 ```
 Other than this pitfall, it is fairly straight forward. For each input sample, independantly scale that input sample by the correct window value, then store it in the correct place in the 2D array.
 
+```cpp
+int fftSize = 512;
+int overlap = 4;
+float windowedInput[overlap][fftSize]
+float window[fftSize]
+
+float processInput(float inputSample){
+  for(int i = 0; i < overlap; i++){
+    int index = overlap * hopSize;
+    windowedInput[i][index] = inputSample * window[index];
+  }
+}
+```
+
+However, we should expect this to perform poorly due to sequential scattered memory reads and writes. 'index' jumps in each itteration by hopSize. This jump causes scattered read by calling window[index], and a scattered memory write by calling windowedInput[i][index] =. There are two ways to mitigate this issue. The window could be rearranged for better memory access. 
+```cpp
+void calculateWindow(){
+  for(int i = 0; i < fftSize; i += overlap){//for every 'overlap' samples in FFT
+    //calculate each overlap's hanning segment in order
+    for(int j = 0; j < overlap; j++){
+      float phase = (i + (hopSize * j))/(float)fftSize;//phase in window 0 to 1
+      window[i + j] = hanning::getSampleFromPhase(phase);
+    }
+
+  }
+}
+```
+This is an odd way to store a window, but it would make for better accessing. Also, this does nothing to fix the scattered memory writes on the same line. I propose the following:
+
 #### Segmenting Input for Memory Alignment
+One could collect a series of input samples and perform this calculate at once on a series of samples for better memmory access/storage.
 
 
 ```cpp
@@ -43,5 +73,33 @@ float processInput(float inputSample){
   }
 }
 ```
+It will be interesting to see the performance results of varying segment sizes.
 
 ### Storing Before Windowing
+
+Alternatively, the input stream can be stored without windowing. This leaves the windowing calculations to a single sample call. In addition, this call occurs on the same sample as the FFT. However, if the FFT size is equal to or less than the audioCallback bufer size, the work load of each callback will be constant and this is a non-issue. However, if the FFT size is greater than the audioCallback, the workload may be in one buffer call but not the other. If large windows are desired, and constant callback workloads is desired, the higher memory option may be desireable. 
+
+How much memory is needed for the input? Clearly we no longer need to store a copy of the input for each overlap. The analysis must occure every 'hopSize' samples. At this time, STFT must have the previous 'fftSize' samples. Inconveniently, it is crucial that these samples be in order, so a circular buffer is out of the question.
+
+Consider the case of overlap=4 and fftSize=512
+         |-------|
+overlap 0:[   ][ |][   ][   ][   ][   ][   ][   ]
+overlap 1:][   ][| ][   ][   ][   ][   ][   ][   ]
+overlap 2: ][   ][   ][   ][   ][   ][   ][   ][   ]
+overlap 3:  ][   ][   ][   ][   ][   ][   ][   ][   ]
+
+The input stream buffer should minimally be (fftSize) + (hopSize * (overlap - 1)). However, using fftSize * 2 removes a condition check so I deem it worth of the additional 'hopSize' memory.
+
+The input buffer is now a one dimensional array
+```cpp
+float inputBuffer[fftSize * 2];
+```
+However, this method does cause the need of a 'fftSize' array to store the windowed FFT input.
+```cpp
+float windowedInputSegment[fftSize];
+```
+
+Taking care not to overwrite data that is needed for the FFT analysis, an input sample can be added to the array.
+```cpp
+
+```
