@@ -9,8 +9,13 @@ This class should feature a single-sample input, a method of modifying bins if a
 
 There seems to exist to differening methods to efficiently handle the input stream. The input can be windowed then stored, or the windowing can occur all at once just before analysis. Windowing before storing is a bit more straightforward to look at, but is memory bound (requires overlap * fftSize floats just for the inputStream). Handling the windowing just before analysis and only storing unaltered input releaves this memory burden, and does not scale exponentially with (fftSize * overlap).
 
-### Winowing Before Storing
+### Windowing Before Storing
 
+This method requires storing a full FFT size array for each overlap
+```cpp
+float windowedInput[overlap][fftSize];
+```
+Other than this pitfall, it is fairly straight forward. For each input sample, independantly scale that input sample by the correct window value, then store it in the correct place in the 2D array.
 
 #### Segmenting Input for Memory Alignment
 
