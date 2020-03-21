@@ -1,6 +1,6 @@
 
-#segmented input
-'''cpp
+# segmented input
+```cpp
 int segmentSize = 8;
 int segmentIndex= 0;
 int overlap = 4;
@@ -23,4 +23,4 @@ float processInput(float inputSample){
     }
   }
 }
-'''
+```
