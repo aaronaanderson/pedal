@@ -107,5 +107,37 @@ float windowedInputSegment[fftSize];
 
 Taking care not to overwrite data that is needed for the FFT analysis, an input sample can be added to the array.
 ```cpp
+int fftSize = 512;
+int overlap = 4;
+int hopSize = fftSize/overlap;
+int inputBufferSize = fftSize * 2;
+float inputBuffer[inputBufferSize]
+float windowedInputSegment[fftSize];
+float window[fftSize];//pretend it is filled
+int whichSegment = 0;
+bool readyFlag = false;//return true if bins are safe to manipulate
 
+bool processInput(float inputSample){
+  writeIndex = writeIndex % fftSize;
+  inputBuffer[writeIndex] = input;
+  //place another input fftSize in the past 
+  //this is the same as adding fftSize and wrapping in this case
+  int redundantIndex = (writeIndex + fftSize) % inputBufferSize;
+  inputBuffer[redundantIndex] = input;
+
+  if(writeIndex % hopSize == 0){//If there are enough input samples for analysis
+    //fill the windowedInputSegment with the right segment of the input
+    int initialIndex = hopSize * whichSegment;
+    for(int i = 0; i < fftSize; i++){
+      windowedInputSegment[i] = inputBuffer[initialIndex + i] * window[i];
+    }
+    fft.process(windowedInputSegment);//analyse the windowed input
+    readyFlag = true;
+  }else{
+    readyFlag = false;
+  }
+  return readyFlag;
+}
 ```
+
+This method reduces the amount of memory needed by windowing the entire analysis segment at once. The memory required for this method is fftSize * 3 compared to the other methods' fftSize * overlap + fftSize. I have chosen this to be the default method, but after benchmarking may make the window before store option available. 
