@@ -5,11 +5,11 @@ The STFT (Short-Time Fourier Transform) is a common audio tool used to convert a
 
 This class should feature a single-sample input, a method of modifying bins if analysis is ready, and a single-sample output. After the input, samples are multiplied by a window value. FFTs with high overlap have more to calculate. Care should be taken when handling the input and output stream to avoid scattered memory reads and writes.
 
-##Handling the Input Stream
+## Handling the Input Stream
 
 There seems to exist to differening methods to efficiently handle the input stream. The input can be windowed then stored, or the windowing can occur all at once just before analysis. Windowing before storing is a bit more straightforward to look at, but is memory bound (requires overlap * fftSize floats just for the inputStream). Handling the windowing just before analysis and only storing unaltered input releaves this memory burden, and does not scale exponentially with (fftSize * overlap).
 
-###Winowing Before Storing
+### Winowing Before Storing
 
 
 #### Segmenting Input for Memory Alignment
@@ -39,4 +39,4 @@ float processInput(float inputSample){
 }
 ```
 
-###Storing Before Windowing
+### Storing Before Windowing
