@@ -1,5 +1,17 @@
 
-# segmented input
+# Making STFT
+
+Test 
+
+Test again
+
+And another. 
+
+### Segmenting Input for Memory Alignment
+
+Test text 
+
+more test.
 ```cpp
 int segmentSize = 8;
 int segmentIndex= 0;
