@@ -82,7 +82,7 @@ Alternatively, the input stream can be stored without windowing. This leaves the
 How much memory is needed for the input? Clearly we no longer need to store a copy of the input for each overlap. The analysis must occure every 'hopSize' samples. At this time, STFT must have the previous 'fftSize' samples. Inconveniently, it is crucial that these samples be in order, so a circular buffer is out of the question.
 
 Consider the case of overlap=4 and fftSize=512
-
+```cpp
          |-------|
 
 overlap 0:[   ][ |][   ][   ][   ][   ][   ][   ]
@@ -93,7 +93,7 @@ overlap 2: ][   ][   ][   ][   ][   ][   ][   ][   ]
 
 overlap 3:  ][   ][   ][   ][   ][   ][   ][   ][   ]
 
-
+```
 The input stream buffer should minimally be (fftSize) + (hopSize * (overlap - 1)). However, using fftSize * 2 removes a condition check so I deem it worth of the additional 'hopSize' memory.
 
 The input buffer is now a one dimensional array
