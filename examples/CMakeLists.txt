@@ -67,6 +67,7 @@ set(example_list
     BufferPlayground
     BiquadExample
     DynamicsExample
+    ConvolutionExample
 )
 
 # loop through example targets
