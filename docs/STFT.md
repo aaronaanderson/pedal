@@ -1,17 +1,20 @@
 
 # Making STFT
 
-Test 
+The STFT (Short-Time Fourier Transform) is a common audio tool used to convert a time domain input signal into a frequency domain signal. For efficiency, this analysis uses a Fast Fourier Transform which requires that the analysis window be a size in samples exponent of 2. Window sizes 64,128,256,512,1024,2048,4096 are common. A higher window size provies higher spectral resolution at the cost of accuracy in high frequency (smearing); This signal, once converted to the frequency domain, may be modified by modifying 'bin' values. Only the bottom half of the bins are useful; there are 'windowSize/2' useful bins. 
 
-Test again
+This class should feature a single-sample input, a method of modifying bins if analysis is ready, and a single-sample output. After the input, samples are multiplied by a window value. FFTs with high overlap have more to calculate. Care should be taken when handling the input and output stream to avoid scattered memory reads and writes.
 
-And another. 
+##Handling the Input Stream
 
-### Segmenting Input for Memory Alignment
+There seems to exist to differening methods to efficiently handle the input stream. The input can be windowed then stored, or the windowing can occur all at once just before analysis. Windowing before storing is a bit more straightforward to look at, but is memory bound (requires overlap * fftSize floats just for the inputStream). Handling the windowing just before analysis and only storing unaltered input releaves this memory burden, and does not scale exponentially with (fftSize * overlap).
 
-Test text 
+###Winowing Before Storing
 
-more test.
+
+#### Segmenting Input for Memory Alignment
+
+
 ```cpp
 int segmentSize = 8;
 int segmentIndex= 0;
@@ -29,10 +32,11 @@ float processInput(float inputSample){
     for(int i = 0; i < overlap; i++){
       int initialIndex = i * hopSize;
       for(int j = 0; j < segmentSize; j++){
-        windowedInput[i][initialIndex + j] = 
-            inputSegment[j] * window[initialIndex + j];
+        windowedInput[i][initialIndex + j] =  inputSegment[j] * window[initialIndex + j];
       }
     }
   }
 }
 ```
+
+###Storing Before Windowing
