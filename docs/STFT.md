@@ -141,3 +141,80 @@ bool processInput(float inputSample){
 ```
 
 This method reduces the amount of memory needed by windowing the entire analysis segment at once. The memory required for this method is fftSize * 3 compared to the other methods' fftSize * overlap + fftSize. I have chosen this to be the default method, but after benchmarking may make the window before store option available. 
+
+## Handling the Output Stream
+
+For the output stream, each overlap output is added to a global sum, then returned. The windowed result of each fft output must be stored until it is ready to be replaced once more with new information. Therefore, we are stuck with a fftSize*overlap array for the output stream. Methods of reducing this are left for future exploration. 
+
+Reversing the input segmentation from above, we can improve memory performance by doing the reverse to the output. 
+
+#### Segmented Overlap Add output
+```cpp
+int fftSize = 512;
+int overlap = 4;
+int hopSize = fftSize/overlap;
+int currentOutputIndex = 0;
+int whichLayer = 0;//which overlap layer
+float outputBuffer[overlap][fftSize];
+int segmentSize = 8;
+int segmentIndex = 0;
+float outputSegment[segmentSize];//process 8 output samples at a time
+
+float updateOutput(){
+  if(readyFlag){//Ready for iFFT 
+    iFFt.process(outputBuffer[whichLayer]);
+    //window this result in place, then add to output
+    for(int i = 0; i < fftSize; i++){
+      fftOutput[whichLayer][i] *= window[i];
+    }
+    whichLayer++;
+    whichLayer = whichLayer % overlap;
+  }
+  float output = 0.0f;
+  if(currentOutputIndex % segmentSize == 0){
+    for(int i = 0; i < overlap; i++){//for every overlap
+      for(int j = 0; j < segmentSize; j++){//overlap add the next 'segmentSize' samples
+        outputSegment[j] += outputBuffer[i][currentOutputIndex + j];
+      }
+    }
+    output = outputSegment[0];//return the newly calculated first sample
+  }else{//the values are ready for output
+    output = outputSegment[currentOutputIndex % segmentSize];
+  }
+  currentOutputIndex = currentOutputIndex % fftSize;
+  return output;
+}
+
+```
+
+## Expected Use
+
+To show expected behavior, I have written a small real-time convolution app below
+
+```cpp
+Buffer soundOne;//soundfile
+BufferPlayer playerOne(&soundOne);//soundfile player
+STFT stftOne;//stft
+
+Buffer soundTwo;
+BufferPlayer playerTwo(&soundTwo);
+STFT stftTwo;
+
+void audioCallback(float buffer, int bufferSize, int nChannels){
+  for(int i = 0; i < bufferSize; i++){
+    //get the sample player output
+    float sampleOne = playerOne.update();
+    float sampleTwo = playerTwo.update();
+    //instert sample player to stft
+    stftOne.updateInput(sampleOne);
+    stftTwo.updateInput(sampleTwo);
+    if(stftOne.isReady() && stftTwo.isReady()){//if both are ready
+      for(int j = 0; j < stftOne.getNumberOfBins(); j++){//for each bin
+        stftOne.setBin(stftOne.getBin(i) * stftTwo.getBin(i));//Multiply bins together and assign to first stft.
+      }
+    }
+    float output = stftOne.updateOutput();//do processing for output
+    buffer[i * nChannels + 0] = output;
+    buffer[i * nChannels + 1] = output;
+  }
+}
