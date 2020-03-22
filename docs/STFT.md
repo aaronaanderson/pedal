@@ -7,7 +7,7 @@ This class should feature a single-sample input, a method of modifying bins if a
 
 ## Handling the Input Stream
 
-There seems to exist to differening methods to efficiently handle the input stream. The input can be windowed then stored, or the windowing can occur all at once just before analysis. Windowing before storing is a bit more straightforward to look at, but is memory bound (requires overlap * fftSize floats just for the inputStream). Handling the windowing just before analysis and only storing unaltered input releaves this memory burden, and does not scale exponentially with (fftSize * overlap).
+I can think of two methods to efficiently handle the input stream. The input can be windowed then stored, or the windowing can occur all at once just before analysis. Windowing before storing is a bit more straightforward to look at, but is memory bound (requires overlap * fftSize floats just for the inputStream). Handling the windowing just before analysis and only storing unaltered input releaves this memory burden, and does not scale exponentially with (fftSize * overlap).
 
 ### Windowing Before Storing
 
@@ -31,7 +31,7 @@ float processInput(float inputSample){
 }
 ```
 
-However, we should expect this to perform poorly due to sequential scattered memory reads and writes. 'index' jumps in each itteration by hopSize. This jump causes scattered read by calling window[index], and a scattered memory write by calling windowedInput[i][index] =. There are two ways to mitigate this issue. The window could be rearranged for better memory access. 
+However, we should expect this to perform poorly due to sequential scattered memory reads and writes. 'index' jumps in each itteration by hopSize. This jump causes scattered read by calling window[index], and a scattered memory write by calling windowedInput[i][index] =. There are two ways to mitigate this issue. The window could be rearranged for better memory access. This puts the hopSize skipping in the data itself, allowing for incremental access in the previous function.
 ```cpp
 void calculateWindow(){
   for(int i = 0; i < fftSize; i += overlap){//for every 'overlap' samples in FFT
@@ -40,7 +40,6 @@ void calculateWindow(){
       float phase = (i + (hopSize * j))/(float)fftSize;//phase in window 0 to 1
       window[i + j] = hanning::getSampleFromPhase(phase);
     }
-
   }
 }
 ```
@@ -79,7 +78,7 @@ It will be interesting to see the performance results of varying segment sizes.
 
 Alternatively, the input stream can be stored without windowing. This leaves the windowing calculations to a single sample call. In addition, this call occurs on the same sample as the FFT. However, if the FFT size is equal to or less than the audioCallback bufer size, the work load of each callback will be constant and this is a non-issue. However, if the FFT size is greater than the audioCallback, the workload may be in one buffer call but not the other. If large windows are desired, and constant callback workloads is desired, the higher memory option may be desireable. 
 
-How much memory is needed for the input? Clearly we no longer need to store a copy of the input for each overlap. The analysis must occure every 'hopSize' samples. At this time, STFT must have the previous 'fftSize' samples. Inconveniently, it is crucial that these samples be in order, so a circular buffer is out of the question.
+How much memory is needed for the input? Clearly we no longer need to store a copy of the input for each overlap. The analysis must occur every 'hopSize' samples. At this time, STFT must have the previous 'fftSize' samples. Inconveniently, it is crucial that these samples be in order for the analysis to be accurate, so a circular buffer is out of the question.
 
 Consider the case of overlap=4 and fftSize=512
 ```cpp
@@ -144,7 +143,7 @@ This method reduces the amount of memory needed by windowing the entire analysis
 
 ## Handling the Output Stream
 
-For the output stream, each overlap output is added to a global sum, then returned. The windowed result of each fft output must be stored until it is ready to be replaced once more with new information. Therefore, we are stuck with a fftSize*overlap array for the output stream. Methods of reducing this are left for future exploration. 
+For the output stream, each overlap output is added to a global sum, then returned. The windowed result of each fft output must be stored until it is ready to be replaced once more with new data. Therefore, we are stuck with a fftSize*overlap array size for the output stream. Methods of reducing this are left for future exploration. 
 
 Reversing the input segmentation from above, we can improve memory performance by doing the reverse to the output. 
 
