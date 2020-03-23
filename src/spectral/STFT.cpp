@@ -1,63 +1,137 @@
 #include "pedal/STFT.hpp"
 
-STFT::STFT(int initialWindowSize){
+STFT::STFT(int initialWindowSize, int initialOverlap){
+  overlap = initialOverlap;
   setWindowType(WindowTypes::HANNING);
   setWindowSize(initialWindowSize);
-  
-
   fft.init(windowSize);
-  // std::cout << "c" << std::endl;
-  overlap = 8;
   hopSize = windowSize / overlap;
   fftReadyFlag = false;
   inputWritePosition = 0;
-  whichInputSegment = 0;//keep track of which segment to use ('overlap' total segments)
-  whichOutputSegment = 0;//same for output writing (system is slightly different, however)
+  inputWriteRedundantPosition = inputWritePosition + windowSize;
   currentOutputIndex = 0;
   currentSample = 0.0f;//not used unless inversing
-  
 }
-
 bool STFT::updateInput(float input){
   inputBuffer[inputWritePosition] = input;
   //redundant write for clean array access later
   inputBuffer[inputWriteRedundantPosition] = input;
   inputWritePosition++;//increment write position
-  inputWritePosition = inputWritePosition % windowSize;//wrap at window size
+  inputWritePosition = inputWritePosition % inputBuffer.size();//wrap at window size
   //the redundant write is 'windowSize' samples ago, wrapped around the inputBuffer size
   inputWriteRedundantPosition = (inputWritePosition + windowSize) % inputBuffer.size();
+  //check if there is enough new data for analysis
   if(inputWritePosition % hopSize == 0){//if an input segment has been filled
-    const int offset = hopSize * whichInputSegment;
+    const int offset = inputWritePosition % windowSize;//safe because of if check
     calculateWindowedInput(offset);//scale input segment by window, assign to windowedInputSegment
-    //this is the expensive line
     //realBuffer and imaginaryBuffer are updated in place, ready for use after this call
     fft.fft(windowedInputSegment.data(), realBuffer.data(), imaginaryBuffer.data());
-    //ff
-    fftReadyFlag = true;
+    fftReadyFlag = true;//allow bin manipulation, and tell output resynthesis is ready
     //increment and wrap which input segment is being pointed to
-    whichInputSegment++;
-    whichInputSegment = whichInputSegment % overlap;
   }else{
-    fftReadyFlag = false;
+    fftReadyFlag = false;//still need more samples for analysis
   }
   return fftReadyFlag;
 }
+bool STFT::isFFTReady(){
+  return fftReadyFlag;
+}
 float STFT::updateOutput(){//MUST be called per sample if at all
-  if(fftReadyFlag){//segment is ready to be ifftd and added
-    
-    //zero the previous 'hopSize' samples
-    
-    fft.ifft(outputBuffer.data(), realBuffer.data(), imaginaryBuffer.data());
-    const int offset = hopSize * whichOutputSegment;
-    calculateWindowedOutput(offset);//window results, then overlap and add
-    whichOutputSegment++;//increment to the next segment
-    whichOutputSegment = whichOutputSegment % overlap;//wrap if over
-  }
   currentOutputIndex = currentOutputIndex % windowSize;//wrap output index
-  currentSample = overlapAddOutput[currentOutputIndex];//grab from precalculated value
+  if(fftReadyFlag){//segment is ready to be ifftd and windowed
+    whichOutputLayer = currentOutputIndex / hopSize;
+    //deliver resynthesis to windowedOutput[whichOutputLayer]    
+    fft.ifft(windowedOutput[whichOutputLayer].data(), realBuffer.data(), imaginaryBuffer.data());
+    //window those samples in place
+    for(int i = 0; i < windowSize; i++){
+      windowedOutput[whichOutputLayer][i] *= window[i];
+    }
+  }
+  currentSample = 0.0f;//reset currentSample from last round
+  for(int i = 0; i < overlap; i++){//for every overlap layer
+    //for each itteration, look back an additional 'hopSize' samples
+    int index = (currentOutputIndex - (hopSize * i) + windowSize) % windowSize;//add
+    currentSample += windowedOutput[i][index];
+  }
   currentOutputIndex++;//increment output buffer index
   return currentSample;//return single sample
 }
+//------------------------------Set/Get
+void STFT::setWindowType(WindowTypes newWindowType){
+  if(newWindowType != windowType){
+    windowType = newWindowType;
+    calculateWindow();
+  }
+}
+void STFT::setOverlap(int newOverlap){
+  if(newOverlap > overlap){//if adding layers
+    //determine how many layers to add
+    int numberOfNewLayers = newOverlap - overlap;
+    //make an vector of size windowSize filled with 0.0f
+    std::vector<float> temp(windowSize, 0.0f);
+    //for each new layer
+    for(int i = 0; i < numberOfNewLayers; i++){
+      //add the new layer
+      windowedOutput.push_back(temp);
+    }
+  }else if(newOverlap < overlap){//if removing layers
+    //determine how many layers to remove
+    int numberToRemove = overlap - newOverlap;
+    //for each layer to remove
+    for(int i = 0; i < numberToRemove; i++){
+      //remove a layer
+      windowedOutput.pop_back();
+    }
+  }
+  overlap = newOverlap;//assign the new overlap value
+}
+void STFT::setWindowSize(int powerOfTwoSize){
+  //round up to nearest power of 2
+  //from stack overflow:https://stackoverflow.com/questions/466204/rounding-up-to-next-power-of-2
+  windowSize = std::pow(2, std::ceil(std::log(powerOfTwoSize)/
+                                     std::log(2.0f)));
+  inputBuffer.resize(windowSize * 2, 0.0f);//*see notes at bottom
+  windowedInputSegment.resize(windowSize);
+  realBuffer.resize(windowSize);
+  imaginaryBuffer.resize(windowSize);
+  window.resize(windowSize);
+  windowedOutput.resize(overlap);
+  windowedOutput.clear();
+  std::vector<float> temp(windowSize, 0.0f);
+  for(int i = 0; i < overlap; i++){
+    windowedOutput.push_back(temp);
+  }
+  calculateWindow();                        
+}
+//---------------------------------------------------
+//user is responsible for not asking for a bin that doesn't exist(which bin shouldn't be > windowSize-1)
+void STFT::setBin(int whichBin, std::complex<float> complexInput){
+  realBuffer[whichBin] = complexInput.real();
+  imaginaryBuffer[whichBin] = complexInput.real();
+}
+void STFT::setBinMagnitude(int whichBin, float newMagnitude){
+  std::complex<float> bin = {realBuffer[whichBin], imaginaryBuffer[whichBin]};
+  float magnitude = newMagnitude;
+  float phase = std::arg(bin);
+  bin = std::polar(magnitude, phase);
+  realBuffer[whichBin] = bin.real();
+  imaginaryBuffer[whichBin] = bin.imag();
+}
+void STFT::setBinPhase(int whichBin, float newPhase){
+  std::complex<float> bin = {realBuffer[whichBin], imaginaryBuffer[whichBin]};
+  float magnitude = std::abs(bin);
+  float phase = newPhase;
+  bin = std::polar(magnitude, phase);
+  realBuffer[whichBin] = bin.real();
+  imaginaryBuffer[whichBin] = bin.imag();
+}
+ 
+float STFT::getCurrentSample(){return currentSample;}
+WindowTypes STFT::getWindowType(){return windowType;}
+int STFT::getWindowSize(){return windowSize;}
+int STFT::getOverlap(){return overlap;}
+int STFT::getHopSize(){return hopSize;}
+int STFT::getNumberOfBins(){return windowSize/2;}
 std::complex<float> STFT::getBin(int whichBin){//git bin's real and imaginary components
   std::complex<float> bin;//temporary bin 
   //assign from calculated fft
@@ -65,40 +139,55 @@ std::complex<float> STFT::getBin(int whichBin){//git bin's real and imaginary co
   bin.imag(imaginaryBuffer[whichBin]);
   return bin;
 }
-//user is responsible for not asking for a bin that doesn't exist(which bin shouldn't be > windowSize-1)
-void STFT::setBin(int whichBin, std::complex<float> complexInput){
-  realBuffer[whichBin] = std::real(complexInput);
-  imaginaryBuffer[whichBin] = std::imag(complexInput);
+float STFT::getBinMagnitude(int whichBin){
+  std::complex<float> bin = {realBuffer[whichBin], imaginaryBuffer[whichBin]};
+  return std::abs(bin);
 }
-void STFT::setWindowType(WindowTypes newWindowType){
-  if(newWindowType != windowType){
-    windowType = newWindowType;
-    calculateWindow();
-  }
+float STFT::getBinPhase(int whichBin){
+  std::complex<float> bin = {realBuffer[whichBin], imaginaryBuffer[whichBin]};
+  return std::arg(bin);
 }
-void STFT::setWindowSize(int powerOfTwoSize){
-  //round up to nearest power of 2
-  //from stack overflow:https://stackoverflow.com/questions/466204/rounding-up-to-next-power-of-2
-  windowSize = std::pow(2, std::ceil(std::log(powerOfTwoSize)/
-                                     std::log(2.0f)));
-  inputBuffer.resize(windowSize + (hopSize * (overlap - 1)));//*see notes at bottom
-  windowedInputSegment.resize(windowSize);
-  realBuffer.resize(windowSize);
-  imaginaryBuffer.resize(windowSize);
-  outputBuffer.resize(windowSize);
-  window.resize(windowSize);
-  overlapAddOutput.clear();//clear to ensure all values will be 0 in next line 
-  overlapAddOutput.resize(windowSize, 0.0f);//resize and fill with 0.0f
-  calculateWindow();                        
+float STFT::getBinFrequency(int whichBin){
+  float binBandwidth = pdlSettings::sampleRate / static_cast<float>(windowSize);
+  float halfBandwidth = binBandwidth * 0.5f;
+  return binBandwidth * whichBin + halfBandwidth;
 }
-
+float* STFT::getRealBufferPointer(){
+  return realBuffer.data();
+}
+float* STFT::getImaginaryBufferPointer(){
+  return imaginaryBuffer.data();
+}
+//------------------------Private functions
 void STFT::calculateWindow(){
+  //calculate once since used 'windowSize' times
   float phaseReciprocal = 1.0f/static_cast<float>(windowSize);
-  for(int i = 0; i < windowSize; i++){
-    float phase = i * phaseReciprocal;
-    window[i] = HanningWindow::sampleFromPhase(phase);
-    std::cout << window[i] << std::endl;
+  switch(windowType){//fill 'window' vector based on window type
+    case HANNING:
+      for(int i = 0; i < windowSize; i++){
+        float phase = i * phaseReciprocal;
+        window[i] = HanningWindow::sampleFromPhase(phase);
+      }
+    break;
+    case HAMMING:
+
+    break;
+    case COSINE:
+    
+    break;
+    case TRIANGULAR:
+
+    break;
+    case GAUSSIAN:
+
+    break;
+    case BLACKMAN_HARRIS:
+
+    break;
+
+    case BLACKMAN_NUTALL:
+
+    break;
   }
 }
-bool STFT::isFFTReady(){return fftReadyFlag;}
-int STFT::getNumberOfBins(){return windowSize/2;}
+// calculateWindowedInput() is in header b/c inlined

@@ -13,7 +13,7 @@ class HanningWindow{
 
   float generateSample();
   static inline float sampleFromPhase(float inputPhase){
-    return 0.5f * (1.0f - std::cos((2.0f * M_PI * inputPhase)/1.0f));
+    return 0.5f * (1.0f - std::cos(2.0f * M_PI * inputPhase));
   }
   void setTrigger(bool newTrigger);
   void setDuration(float newDuration);
