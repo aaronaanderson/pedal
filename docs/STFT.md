@@ -172,14 +172,17 @@ float updateOutput(){
   float output = 0.0f;
   if(currentOutputIndex % segmentSize == 0){
     for(int i = 0; i < overlap; i++){//for every overlap
+      //look back 'hopSize*i' samples
+      int overlapOffsetIndex = (currentOutputIndex - (hopSize * i) + windowSize) % windowSize;
       for(int j = 0; j < segmentSize; j++){//overlap add the next 'segmentSize' samples
-        outputSegment[j] += outputBuffer[i][currentOutputIndex + j];
+        outputSegment[j] += outputBuffer[i][overlapOffset + j];
       }
     }
     output = outputSegment[0];//return the newly calculated first sample
   }else{//the values are ready for output
     output = outputSegment[currentOutputIndex % segmentSize];
   }
+  currentOutputIndex++;
   currentOutputIndex = currentOutputIndex % fftSize;
   return output;
 }

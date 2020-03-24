@@ -9,8 +9,8 @@
 PinkNoise pinkNoise;
 TSine sineOsc;
 SmoothValue<float> smoothFrequency;
-STFT stftOne(2048, 8);
-STFT stftTwo(2048, 8);
+STFT stftOne(1024, 4);
+STFT stftTwo(1024, 4);
 
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,

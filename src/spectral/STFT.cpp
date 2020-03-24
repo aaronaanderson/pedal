@@ -92,8 +92,9 @@ void STFT::setWindowSize(int powerOfTwoSize){
                                      std::log(2.0f)));
   inputBuffer.resize(windowSize * 2, 0.0f);//*see notes at bottom
   windowedInputSegment.resize(windowSize);
-  realBuffer.resize(windowSize);
-  imaginaryBuffer.resize(windowSize);
+  int complexSize = (windowSize/2) + 1;//real and imaginary buffer need half windowsize + 1
+  realBuffer.resize(complexSize);
+  imaginaryBuffer.resize(complexSize);
   window.resize(windowSize);
   windowedOutput.resize(overlap);
   windowedOutput.clear();
