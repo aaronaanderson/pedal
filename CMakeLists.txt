@@ -41,6 +41,7 @@ add_library(pedal STATIC
     src/modifiers/dynamic/Compressor.cpp
     src/modifiers/dynamic/Gate.cpp
     src/spectral/STFT.cpp
+    src/generators/envelopes/CREnvelope.cpp
     external/AudioFFT.cpp
 )
 
