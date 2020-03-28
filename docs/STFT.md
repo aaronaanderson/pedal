@@ -212,7 +212,8 @@ void audioCallback(float buffer, int bufferSize, int nChannels){
     stftTwo.updateInput(sampleTwo);
     if(stftOne.isReady() && stftTwo.isReady()){//if both are ready
       for(int j = 0; j < stftOne.getNumberOfBins(); j++){//for each bin
-        stftOne.setBin(stftOne.getBin(i) * stftTwo.getBin(i));//Multiply bins together and assign to first stft.
+        float newMagnitude = stftOne.getMagnitude() * stftTwo.getMagnitude();
+        stftOne.setMagnitude(magnitude);
       }
     }
     float output = stftOne.updateOutput();//do processing for output
