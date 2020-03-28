@@ -192,4 +192,8 @@ void CTEnvelope::setRelease(float newRelease){//any positive value
   release = newRelease;
   calculateIncrement(RELEASE);//changing vale requires recalculating increment
 }
-void CTEnvelope::setTrigger(bool newTrigger){trigger = newTrigger;}
+void CTEnvelope::setTrigger(bool newTrigger){
+  if(newTrigger == true && trigger == false){currentState = ATTACK;}
+  if(newTrigger == false && trigger == true){currentState = RELEASE;}
+  trigger = newTrigger;
+}
