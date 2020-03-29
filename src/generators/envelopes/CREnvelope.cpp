@@ -13,18 +13,18 @@ CREnvelope::CREnvelope(){
                                 decay.curveOvershoot);
   release.curveOvershoot = decay.curveOvershoot;
   release.curveOffset = decay.curveOffset;
-  setMode(CREnvelopeModes::AHR);
+  setMode(modes::ADSR);
   setAttackTime(5000.0f);
   setDecayTime(5000.0f);
   setSustainLevel(0.7f);
   setReleaseTime(20000.0f);
-  setHoldTime(5000.0f);
+  setHoldTime(50.0f);
   trigger = false;
   holdSampleCount = 0;
 }
 float CREnvelope::generateSample(){
   switch(currentMode){
-    case CREnvelopeModes::ADSR://Attack, Decay, Sustain, Release
+    case modes::ADSR://Attack, Decay, Sustain, Release
       switch(currentState){
         case OFF:
         //do nothing
@@ -34,26 +34,27 @@ float CREnvelope::generateSample(){
           if(currentSample >= 1.0f || attack.timeInSamples == 0.0f){
             currentState = DECAY;
           }
-      break;
-      case DECAY:
-        currentSample = currentSample * decay.curveCoefficient + decay.offset;
-        if(currentSample <= sustainLevel || decay.timeInSamples == 0.0f){
-          currentSample = sustainLevel;//adjust if needed
-          currentState = SUSTAIN;
-        }
-      break;
-      case SUSTAIN:
-        currentSample = sustainLevel;
-      break;
-      case RELEASE:
-        currentSample = currentSample * release.curveCoefficient + release.offset;
-        if(currentSample <= 0.0f || release.timeInSamples == 0.0f){
-          currentSample = 0.0f;
-          currentState = OFF;
-        }
-      break;
+        break;
+        case DECAY:
+          currentSample = currentSample * decay.curveCoefficient + decay.offset;
+          if(currentSample <= sustainLevel || decay.timeInSamples == 0.0f){
+            currentSample = sustainLevel;//adjust if needed
+            currentState = SUSTAIN;
+          }
+        break;
+        case SUSTAIN:
+          currentSample = sustainLevel;
+        break;
+        case RELEASE:
+          currentSample = currentSample * release.curveCoefficient + release.offset;
+          if(currentSample <= 0.0f || release.timeInSamples == 0.0f){
+            currentSample = 0.0f;
+            currentState = OFF;
+          }
+        break;
       }
-    case CREnvelopeModes::AHDSR://Attack, Hold, Decay, Sustain, Release
+    break;
+    case modes::AHDSR://Attack, Hold, Decay, Sustain, Release
       switch(currentState){
         case OFF:
         //do nothing
@@ -63,81 +64,81 @@ float CREnvelope::generateSample(){
           if(currentSample >= 1.0f || attack.timeInSamples == 0.0f){
             currentState = HOLD;
           }
-      break;
-      case HOLD:
-        if(holdSampleCount > holdTimeInSamples){
-          currentState = DECAY;
-          holdSampleCount = 0;//reset hold for next round
-        }else{
-          holdSampleCount++;
-        }
-      break;
-      case DECAY:
-        currentSample = currentSample * decay.curveCoefficient + decay.offset;
-        if(currentSample <= sustainLevel || decay.timeInSamples == 0.0f){
-          currentSample = sustainLevel;//adjust if needed
-          currentState = SUSTAIN;
-        }
-      break;
-      case SUSTAIN:
-        currentSample = sustainLevel;
-      break;
-      case RELEASE:
-        currentSample = currentSample * release.curveCoefficient + release.offset;
-        if(currentSample <= 0.0f || release.timeInSamples == 0.0f){
-          currentSample = 0.0f;
-          currentState = OFF;
-        }
-      break;
+        break;
+        case HOLD:
+          if(holdSampleCount > holdTimeInSamples){
+            currentState = DECAY;
+            holdSampleCount = 0;//reset hold for next round
+          }else{
+            holdSampleCount++;
+          }
+        break;
+        case DECAY:
+          currentSample = currentSample * decay.curveCoefficient + decay.offset;
+          if(currentSample <= sustainLevel || decay.timeInSamples == 0.0f){
+            currentSample = sustainLevel;//adjust if needed
+            currentState = SUSTAIN;
+          }
+        break;
+        case SUSTAIN:
+          currentSample = sustainLevel;
+        break;
+        case RELEASE:
+          currentSample = currentSample * release.curveCoefficient + release.offset;
+          if(currentSample <= 0.0f || release.timeInSamples == 0.0f){
+            currentSample = 0.0f;
+            currentState = OFF;
+          }
+        break;
       }
     break;
-    case CREnvelopeModes::AHR://Attack, Hold, Release
+    case modes::AHR://Attack, Hold, Release
       switch(currentState){
-      case OFF:
-      //do nothing
-      break;
-      case ATTACK:
-        currentSample = currentSample * attack.curveCoefficient + attack.offset;
-        if(currentSample >= 1.0f || attack.timeInSamples == 0.0f){
-          currentState = HOLD;
-        }
-      break;
-      case HOLD:
-        if(holdSampleCount > holdTimeInSamples){
-          currentState = RELEASE;
-          holdSampleCount = 0;//reset hold for next round
-        }else{
-          holdSampleCount++;
-        }
-      break;
-      case RELEASE:
-        currentSample = currentSample * release.curveCoefficient + release.offset;
-        if(currentSample <= 0.0f || release.timeInSamples == 0.0f){
-          currentSample = 0.0f;
-          currentState = OFF;
-        }
-      break;//end of currentState switch
-    }
+        case OFF:
+        //do nothing
+        break;
+        case ATTACK:
+          currentSample = currentSample * attack.curveCoefficient + attack.offset;
+          if(currentSample >= 1.0f || attack.timeInSamples == 0.0f){
+            currentState = HOLD;
+          }
+        break;
+        case HOLD:
+          if(holdSampleCount > holdTimeInSamples){
+            currentState = RELEASE;
+            holdSampleCount = 0;//reset hold for next round
+          }else{
+            holdSampleCount++;
+          }
+        break;
+        case RELEASE:
+          currentSample = currentSample * release.curveCoefficient + release.offset;
+          if(currentSample <= 0.0f || release.timeInSamples == 0.0f){
+            currentSample = 0.0f;
+            currentState = OFF;
+          }
+        break;//end of currentState switch
+      }
     break;
-    case CREnvelopeModes::AR://Attack, Release
-    switch(currentState){
-      case OFF:
-      //do nothing
-      break;
-      case ATTACK:
-        currentSample = currentSample * attack.curveCoefficient + attack.offset;
-        if(currentSample >= 1.0f || attack.timeInSamples == 0.0f){
-          currentState = RELEASE;
-        }
-      break;
-      case RELEASE:
-        currentSample = currentSample * release.curveCoefficient + release.offset;
-        if(currentSample <= 0.0f || release.timeInSamples == 0.0f){
-          currentSample = 0.0f;
-          currentState = OFF;
-        }
-      break;//end of currentState switch
-    }
+    case modes::AR://Attack, Release
+      switch(currentState){
+        case OFF:
+        //do nothing
+        break;
+        case ATTACK:
+          currentSample = currentSample * attack.curveCoefficient + attack.offset;
+          if(currentSample >= 1.0f || attack.timeInSamples == 0.0f){
+            currentState = RELEASE;
+          }
+        break;
+        case RELEASE:
+          currentSample = currentSample * release.curveCoefficient + release.offset;
+          if(currentSample <= 0.0f || release.timeInSamples == 0.0f){
+            currentSample = 0.0f;
+            currentState = OFF;
+          }
+        break;//end of currentState switch
+      }
     break;//end of currentMode switch
   }
   return currentSample;
@@ -149,13 +150,13 @@ void CREnvelope::setTrigger(bool newTrigger){
     holdSampleCount = 0;
   }
   //for envelopes with sustain, set to release state if new trigger is false but previous trigger was true
-  if(currentMode == CREnvelopeModes::ADSR || currentMode == CREnvelopeModes::AHDSR){
+  if(currentMode == modes::ADSR || currentMode == modes::AHDSR){
     if(newTrigger == false && trigger == true){currentState = RELEASE;}
   }
   //assign the new trigger for next call
   trigger = newTrigger;
 }
-void CREnvelope::setMode(CREnvelopeModes newMode){currentMode = newMode;}
+void CREnvelope::setMode(modes newMode){currentMode = newMode;}
 void CREnvelope::setAttackTime(float newAttackTime){
   attack.timeInMS = std::max(newAttackTime, 0.0f);
   calculateAttackCurve(attack.timeInMS);
@@ -178,7 +179,7 @@ void CREnvelope::setHoldTime(float newHoldTime){
 }
 
 float CREnvelope::getSample(){return currentState;}
-CREnvelopeModes CREnvelope::getCurrentMode(){return currentMode;}
+CREnvelope::modes CREnvelope::getCurrentMode(){return currentMode;}
 float CREnvelope::getAttackTime(){return attack.timeInMS;}
 float CREnvelope::getDecayTime(){return decay.timeInMS;}
 float CREnvelope::getSustainLevel(){return sustainLevel;}

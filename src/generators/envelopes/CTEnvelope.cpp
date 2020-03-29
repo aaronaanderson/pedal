@@ -25,12 +25,12 @@ void CTEnvelope::setup(float newAttack, float newDecay, float newSustain, float 
   setRelease(newRelease);
   currentSample = 0.0;
   currentState = states::OFF;
-  currentMode = EnvelopeModes::ADSR;
+  currentMode = modes::ADSR;
 }
 
 float CTEnvelope::generateSample(){//generate a single sample
   switch(currentMode){//which mode (ADSR, ASR, or AR)
-    case ADSR://Attack, Decay, Sustain, Release (default)
+    case modes::ADSR://Attack, Decay, Sustain, Release (default)
       switch(currentState){//envelope behaves differently based on which state it is in
         case OFF:
           if(trigger){
@@ -65,7 +65,7 @@ float CTEnvelope::generateSample(){//generate a single sample
         break;
       }
     break;
-    case ASR://Attack, Sustain, Release
+    case modes::ASR://Attack, Sustain, Release
       switch(currentState){
         case OFF:
           if(trigger){
@@ -93,7 +93,7 @@ float CTEnvelope::generateSample(){//generate a single sample
         break;
       }
     break;
-    case AR://Attack, Release (useful for percusive envelopes)
+    case modes::AR://Attack, Release (useful for percusive envelopes)
       switch(currentState){
         case OFF:
           if(trigger){
@@ -161,7 +161,7 @@ float CTEnvelope::getRelease(){return release;}
 float CTEnvelope::getSample(){return currentSample;}
 float* CTEnvelope::getBlock(){return currentBlock;}
 int CTEnvelope::getCurrentState(){return currentState;}
-int CTEnvelope::getCurrentMode(){return currentMode;}
+CTEnvelope::modes CTEnvelope::getCurrentMode(){return currentMode;}
 bool CTEnvelope::getTrigger(){return trigger;}
 bool CTEnvelope::isBusy(){
   if(currentState == OFF){
@@ -172,7 +172,7 @@ bool CTEnvelope::isBusy(){
   return false;//for windows compiler, should never happen
 }
 
-void CTEnvelope::setMode(EnvelopeModes newMode){currentMode = newMode;}
+void CTEnvelope::setMode(modes newMode){currentMode = newMode;}
 void CTEnvelope::setAttack(float newAttack){//any positive value
   attack = newAttack;
   calculateIncrement(ATTACK);//changing value requires recalculating increment
@@ -183,7 +183,7 @@ void CTEnvelope::setDecay(float newDecay){//any positive value
 }
 void CTEnvelope::setSustain(float newSustain){//amplitude from 0.0 to 1.0
   sustain = newSustain;
-  if(currentMode == ADSR || currentMode == ASR){//protect a AR user from themselves
+  if(currentMode == modes::ADSR || currentMode == modes::ASR){//protect a AR user from themselves
     calculateIncrement(DECAY);//New sustain value will change this value
     calculateIncrement(RELEASE);//New sustain value will changes this value
   }

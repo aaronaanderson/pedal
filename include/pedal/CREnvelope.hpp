@@ -6,12 +6,6 @@
 #include "pedal/utilities.hpp"
 
 #include "pedal/DebugTool.hpp"
-enum class CREnvelopeModes{
-  ADSR,
-  AHDSR, 
-  AR, 
-  AHR, 
-};
 
 //Make a container for segments
 struct CurvedSegment{
@@ -28,8 +22,15 @@ class CREnvelope{
   CREnvelope();
   float generateSample();
   
+  enum class modes{
+    ADSR, 
+    AHDSR, 
+    AR, 
+    AHR
+  };
+
   void setTrigger(bool newTrigger);
-  void setMode(CREnvelopeModes newMode);
+  void setMode(modes newMode);
   void setAttackTime(float newAttackTime);
   void setDecayTime(float newDecayTime);
   void setSustainLevel(float newSustainLevel);
@@ -37,7 +38,7 @@ class CREnvelope{
   void setHoldTime(float newHoldTime);//applicable to AHDSR and AHR modes
   void setLegato(float newLegato);//
   float getSample();
-  CREnvelopeModes getCurrentMode();
+  modes getCurrentMode();
   float getAttackTime();
   float getDecayTime();
   float getSustainLevel();
@@ -52,7 +53,7 @@ class CREnvelope{
   inline void calculateDecayCurve(float newDecayTime);
   inline void calculateReleaseCurve(float newReleaseTime);
   int currentState;
-  CREnvelopeModes currentMode;
+  modes currentMode;
   bool trigger;
   CurvedSegment attack;
   CurvedSegment decay;

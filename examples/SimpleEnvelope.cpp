@@ -35,7 +35,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
     sustainedEnvelope.setSustain(pdlGetSlider(app, 7));
     sustainedEnvelope.setRelease(pdlGetSlider(app, 8));
     
-    percussiveEnvelope.setMode(EnvelopeModes::AR);//set to attack-release
+    percussiveEnvelope.setMode(CTEnvelope::modes::AR);//set to attack-release
     percussiveEnvelope.setAttack(pdlGetSlider(app, 5));
     percussiveEnvelope.setRelease(pdlGetSlider(app, 8));
     

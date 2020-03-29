@@ -5,11 +5,6 @@
 #include "pdlSettings.hpp"//so we can access sampleRate and bufferSize
 #include "utilities.hpp"// for clamp 
 
-enum EnvelopeModes {
-  ADSR=0, 
-  ASR, 
-  AR
-};//3 envelope types
 class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   public:
   CTEnvelope();//default constructor
@@ -17,6 +12,11 @@ class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   CTEnvelope(float initialAttack, float initialDecay, float initialSustain, float initialRelease);
   ~CTEnvelope();//deconstructor, used to clear memory if allocated
   
+  enum class modes {
+    ADSR=0, 
+    ASR, 
+    AR
+  };//3 envelope types
   void setup(float newAttack, float newDecay, float newSustain, float newRelease);
   float generateSample();//calculate and return next sample
   float* generateBlock();//calculate and return next block of samples
@@ -28,11 +28,11 @@ class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   float getSample();
   float* getBlock();
   int getCurrentState();
-  int getCurrentMode();
+  modes getCurrentMode();
   bool getTrigger();
   bool isBusy();
   
-  void setMode(EnvelopeModes newMode);
+  void setMode(modes newMode);
   void setAttack(float newAttack);
   void setDecay(float newDecay);
   void setSustain(float newSustain);
@@ -44,7 +44,7 @@ class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   void calculateIncrement(states whichIncrement);//nead a 'state' variable
 
   int currentState;//which phase, off-a-d-s-r, is the envelope in
-  int currentMode;//which type of envelope is it, adsr,asr, or ar
+  modes currentMode;//which type of envelope is it, adsr,asr, or ar
   bool trigger;//on or off
   float attack, decay, sustain, release;//internal values for these variables
   float attackIncrement, decayIncrement, releaseIncrement;//necessary to calculate next sample
