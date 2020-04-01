@@ -17,7 +17,6 @@ add_library(pedal STATIC
     src/generators/oscillators/WTSquare.cpp
     src/generators/ImpulseGenerator.cpp
     src/generators/envelopes/CTEnvelope.cpp
-    src/generators/Windows/HanningWindow.cpp
     src/Buffer.cpp
     src/CircularBuffer.cpp
     src/modifiers/delay/Delay.cpp

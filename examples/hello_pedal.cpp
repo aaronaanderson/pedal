@@ -13,7 +13,6 @@
 #include "pedal/WTSaw.hpp"
 #include "pedal/WTSquare.hpp"
 #include "pedal/WTTriangle.hpp"
-#include "pedal/HanningWindow.hpp"
 #include "pedal/ImpulseGenerator.hpp"
 #include <iostream>
 #include "pedal/Delay.hpp"
@@ -22,7 +21,6 @@
 #include "pedal/PinkNoise.hpp"
 #include "pedal/utilities.hpp"
 #include "AudioFFT.h"
-HanningWindow window;
 PinkNoise noise;
 SmoothValue<float> frequency;
 TSine oscillator;
