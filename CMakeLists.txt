@@ -43,6 +43,7 @@ add_library(pedal STATIC
     src/spectral/STFT.cpp
     src/generators/envelopes/CREnvelope.cpp
     src/generators/oscillators/BLIT.cpp
+    src/generators/Window.cpp
     external/AudioFFT.cpp
 )
 
