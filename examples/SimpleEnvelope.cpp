@@ -10,6 +10,8 @@
 #include "pedal/CTEnvelope.hpp"
 #include "pedal/MoorerReverb.hpp"
 #include "pedal/CREnvelope.hpp"
+#include "pedal/BLIT.hpp"
+
 float currentSample;
 WTTriangle triangle;
 WTSine sine;
@@ -19,6 +21,8 @@ MoorerReverb reverb;
 CTEnvelope sustainedEnvelope;
 CTEnvelope percussiveEnvelope;
 CREnvelope fancyEnvelope;
+
+BLIT blit;
 //========================Audio Callback
 void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
@@ -27,7 +31,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
     triangle.setFrequency(pdlGetSlider(app, 9));//set frequecy by slider
     square.setFrequency(pdlGetSlider(app, 9));//set frequecy by slider
     saw.setFrequency(pdlGetSlider(app, 9));//set frequecy by slider
-    
+    blit.setFrequency(pdlGetSlider(app, 9));
     reverb.setDryWetMix(pdlGetSlider(app, 10));
     //envelopes are ADSR by default
     sustainedEnvelope.setAttack(pdlGetSlider(app, 5));
@@ -43,7 +47,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
     fancyEnvelope.setDecayTime(pdlGetSlider(app, 6));
     fancyEnvelope.setSustainLevel(pdlGetSlider(app, 7));
     fancyEnvelope.setReleaseTime(pdlGetSlider(app, 8));
-
+    
     bool trigger = pdlGetToggle(app, 0);//trigger envelope with toggle
     //bool trigger = pdlGetTrigger(app, 0);
     sustainedEnvelope.setTrigger(trigger);//set trigger to up or down, on or off, etc
@@ -60,7 +64,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
       //generate the envelope samples
       float envelopeOne = sustainedEnvelope.generateSample();
       float envelopeTwo = percussiveEnvelope.generateSample();
-
+       
       float resultOne = 0.0f;//create a float for envelope one
       //add together the result of all oscillators with slider values
       resultOne += sine.generateSample() * pdlGetSlider(app, 0);
@@ -84,7 +88,7 @@ void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
       resultThree *= fancyEnvelope.generateSample();
       for (unsigned j = 0; j < channel; j += 1) {//for every sample in frame
         float currentSample = resultOne + resultTwo + resultThree;
-        currentSample *= 0.1f;
+        currentSample += blit.generateSample();
         //currentSample = reverb.process(currentSample);
         out[channel * i + j] = currentSample;
       }
