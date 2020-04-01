@@ -9,17 +9,8 @@ windowed overlap+add FFT
 #include <vector>//for dynamic arrays
 #include <cmath>
 
-#include "pedal/HanningWindow.hpp"
-//additional windows will be added here as ready
-enum WindowTypes{//not added yet
-  HANNING = 0, 
-  HAMMING, 
-  COSINE, 
-  TRIANGULAR,
-  GAUSSIAN,
-  BLACKMAN_HARRIS,
-  BLACKMAN_NUTALL
-};
+#include "pedal/Window.hpp"
+
 /*
 STFT, or Short-Time Fourier Transform, converts
 an incoming signal from time domain to frequency
@@ -32,14 +23,14 @@ class STFT{
   bool isFFTReady();//are bins ready for manipulation?
   float updateOutput();//update system
   
-  void setWindowType(WindowTypes newWindowType);//not safe to call during analysis
+  void setWindowType(Window::Mode newWindowType);//not safe to call during analysis
   void setOverlap(int newOverlap);
   void setWindowSize(int powOfTwoFFTSize);//must be a power of two(will be adjusted if not)
   void setBin(int whichBin, std::complex<float> complexInput);
   void setBinMagnitude(int whichBin, float newMagnitude);
   void setBinPhase(int whichBin, float newPhase);
   float getCurrentSample();//get output without udpating
-  WindowTypes getWindowType();
+  Window::Mode getWindowType();
   int getWindowSize();
   int getOverlap();
   int getHopSize();//windowSize / overlap
@@ -58,7 +49,7 @@ class STFT{
   int hopSize;//how many new samples before next analysis?
   int overlap;//how many analyses in the span of one window
   int windowSize;//FFT analysis size (and size of many other data)
-  WindowTypes windowType;//store current window type
+  Window::Mode windowType;//store current window type
   int whichInputSegment;//used to offset write position
   int whichOutputLayer;//used to offset write position
   bool fftReadyFlag;//bins may be updated if so. iFFT is called next sample
@@ -74,7 +65,7 @@ class STFT{
   audiofft::AudioFFT fft;//fast fourier transform (from external audioFFT library)
 };
 inline void STFT::calculateWindowedInput(const int inputOffset){
-  for(int i = 0; i < windowSize; i ++){//unroll 4 at a time for cache/memory optimization
+  for(int i = 0; i < windowSize; i ++){
     windowedInputSegment[i] = inputBuffer[i + inputOffset] * window[i];
   }
 }

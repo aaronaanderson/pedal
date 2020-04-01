@@ -2,7 +2,7 @@
 
 STFT::STFT(int initialWindowSize, int initialOverlap){
   overlap = initialOverlap;
-  setWindowType(WindowTypes::HANNING);
+  setWindowType(Window::Mode::HANNING);
   setWindowSize(initialWindowSize);
   fft.init(windowSize);
   hopSize = windowSize / overlap;
@@ -57,7 +57,7 @@ float STFT::updateOutput(){//MUST be called per sample if at all
   return currentSample;//return single sample
 }
 //------------------------------Set/Get
-void STFT::setWindowType(WindowTypes newWindowType){
+void STFT::setWindowType(Window::Mode newWindowType){
   if(newWindowType != windowType){
     windowType = newWindowType;
     calculateWindow();
@@ -128,7 +128,7 @@ void STFT::setBinPhase(int whichBin, float newPhase){
 }
  
 float STFT::getCurrentSample(){return currentSample;}
-WindowTypes STFT::getWindowType(){return windowType;}
+Window::Mode STFT::getWindowType(){return windowType;}
 int STFT::getWindowSize(){return windowSize;}
 int STFT::getOverlap(){return overlap;}
 int STFT::getHopSize(){return hopSize;}
@@ -162,32 +162,43 @@ float* STFT::getImaginaryBufferPointer(){
 //------------------------Private functions
 void STFT::calculateWindow(){
   //calculate once since used 'windowSize' times
-  float phaseReciprocal = 1.0f/static_cast<float>(windowSize);
+  float phaseReciprocal = 1.0f/static_cast<float>(windowSize - 1);
   switch(windowType){//fill 'window' vector based on window type
-    case HANNING:
+    case Window::Mode::HANNING:
       for(int i = 0; i < windowSize; i++){
         float phase = i * phaseReciprocal;
-        window[i] = HanningWindow::sampleFromPhase(phase);
+        window[i] = Window::hanningFromPhase(phase);
       }
     break;
-    case HAMMING:
-
+    case Window::Mode::HAMMING:
+      for(int i = 0; i < windowSize; i++){
+        float phase = i * phaseReciprocal;
+        window[i] = Window::hammingFromPhase(phase);
+      }
     break;
-    case COSINE:
-    
+    case Window::Mode::COSINE:
+      for(int i = 0; i < windowSize; i++){
+        float phase = i * phaseReciprocal;
+        window[i] = Window::cosineFromPhase(phase);
+      }
     break;
-    case TRIANGULAR:
-
+    case Window::Mode::TRIANGULAR:
+      for(int i = 0; i < windowSize; i++){
+        float phase = i * phaseReciprocal;
+        window[i] = Window::triangularFromPhase(phase);
+      }
     break;
-    case GAUSSIAN:
-
+    case Window::Mode::BLACKMAN_NUTALL:
+      for(int i = 0; i < windowSize; i++){
+        float phase = i * phaseReciprocal;
+        window[i] = Window::blackmanNutallFromPhase(phase);
+      }
     break;
-    case BLACKMAN_HARRIS:
-
-    break;
-
-    case BLACKMAN_NUTALL:
-
+    case Window::Mode::GAUSSIAN:
+      for(int i = 0; i < windowSize; i++){
+        float phase = i * phaseReciprocal;
+        window[i] = Window::gaussianFromPhase(phase);
+      }
     break;
   }
 }
