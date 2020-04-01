@@ -3,7 +3,6 @@
 float mtof(float midiValue){//midi to frequency
   return 440.0f * (pow(2, (midiValue-69)/12.0f));
 }
-
 /*
 template <class T, class U, class Z> 
 T clamp(T input, U lowerBound, Z upperBound){

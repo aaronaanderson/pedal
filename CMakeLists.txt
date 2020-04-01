@@ -21,10 +21,10 @@ add_library(pedal STATIC
     src/CircularBuffer.cpp
     src/modifiers/delay/Delay.cpp
     src/modifiers/delay/BufferTap.cpp
-    src/Interpolation.cpp
-    src/utilities.cpp
+    src/utilities/Interpolation.cpp
+    src/utilities/utilities.cpp
     src/pdlSettings.cpp
-    src/DebugTool.cpp
+    src/utilities/DebugTool.cpp
     src/generators/noise/WhiteNoise.cpp 
     src/generators/noise/PinkNoise.cpp
     src/modifiers/filters/Biquad.cpp
@@ -43,6 +43,7 @@ add_library(pedal STATIC
     src/generators/envelopes/CREnvelope.cpp
     src/generators/oscillators/BLIT.cpp
     src/generators/Window.cpp
+    src/utilities/MicroBenchmark.cpp
     external/AudioFFT.cpp
 )
 

@@ -1,7 +1,7 @@
 #include "pedal/BLIT.hpp"
 
 BLIT::BLIT(){
-  setFrequency(0.1f);
+  setFrequency(1.0f);
   setPhase(0.0f);
   setSyncHarmonicsToFrequency(true);//only generate non-aliasing harmonics
   phase = 0.0f;
@@ -28,7 +28,7 @@ void BLIT::setNumberOfHarmonics(float newNumberOfHarmonics){
 }
 void BLIT::setFrequency(float newFrequency){
   frequency = newFrequency;
-  phaseIncrement = (M_PI * frequency) / pdlSettings::sampleRate;
+  phaseIncrement = (0.5f *M_PI * frequency) / pdlSettings::sampleRate;
   if(syncHarmonicsWithFrequency){
     setNumberOfHarmonics(20000.0f/frequency);
     std::cout << numberOfHarmonics << " : " << numberOfHarmonics * frequency << std::endl;
