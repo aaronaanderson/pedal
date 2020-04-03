@@ -18,7 +18,7 @@ class MicroBenchmark{
   void pauseTimer();//pause timer mid-event
   void resumeTimer();//resume timer mid-event
   void printAllResults();
-  void saveResultsToFile(std::string filePath);
+  //void saveResultsToFile(std::string filePath);
   void printHighlites();
   bool getCompleteFlag();
 
