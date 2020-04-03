@@ -18,7 +18,9 @@ Programming audio in C++ can open a tremendous amount of opportunities; I hope P
  cmake -G ${GENERATOR} -A ${PLATFORM} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -S ${PEDAL_DIR} -B ${BUILD_DIR}
 
 For options, check https://cmake.org/cmake/help/latest/manual/cmake.1.html#options
+
 For generators, check https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html
+
 Examples
    Assumes running command from Pedal root directory with build folder named 'build' inside the root directory
 
