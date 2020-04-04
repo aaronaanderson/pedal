@@ -10,7 +10,7 @@ windowed overlap+add FFT
 #include <cmath>
 
 #include "pedal/Window.hpp"
-
+#include "pedal/MicroBenchmark.hpp"
 /*
 STFT, or Short-Time Fourier Transform, converts
 an incoming signal from time domain to frequency
@@ -63,7 +63,9 @@ class STFT{
   std::vector<std::vector<float>> windowedOutput;//updated every 'hopSize' samples
   int currentOutputIndex;//which sample in the overlapAddOutput buffer
   audiofft::AudioFFT fft;//fast fourier transform (from external audioFFT library)
+  MicroBenchmark mB;
 };
+
 inline void STFT::calculateWindowedInput(const int inputOffset){
   for(int i = 0; i < windowSize; i ++){
     windowedInputSegment[i] = inputBuffer[i + inputOffset] * window[i];

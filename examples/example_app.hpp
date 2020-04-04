@@ -2,7 +2,7 @@
 #define PDL_EX_APP
 
 struct pdlExampleApp;
-using pdlExampleCallback = void (*)(float* out, unsigned bufferSize,
+using pdlExampleCallback = void (*)(float* out, float* in, unsigned bufferSize,
                                     unsigned samplingRate, unsigned numChannels,
                                     double streamTime, pdlExampleApp* app);
 
@@ -11,7 +11,6 @@ void pdlStartExampleApp(pdlExampleApp* app);
 bool pdlRunExampleApp(pdlExampleApp* app);
 void pdlUpdateExampleApp(pdlExampleApp* app);
 void pdlDeleteExampleApp(pdlExampleApp* app);
-
 unsigned pdlExampleAppGetSamplingRate(pdlExampleApp* app);
 unsigned pdlExampleAppGetBufferSize(pdlExampleApp* app);
 

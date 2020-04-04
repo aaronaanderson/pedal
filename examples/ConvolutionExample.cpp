@@ -13,7 +13,7 @@ STFT stftOne(512, 16);
 STFT stftTwo(512, 16);
 
 //========================Audio Callback
-void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
+void callback(float* out, float* in, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
     float mx, my; pdlGetCursorPos(app, &mx, &my);//obtain mouse x and y coordinates
     bool trigger = pdlGetToggle(app, 0);//trigger envelope with toggl

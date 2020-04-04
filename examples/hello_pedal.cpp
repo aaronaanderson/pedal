@@ -25,7 +25,7 @@ PinkNoise noise;
 SmoothValue<float> frequency;
 TSine oscillator;
 //========================Audio Callback
-void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
+void callback(float* out,float* in, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
     float mx, my; pdlGetCursorPos(app, &mx, &my);//obtain mouse x and y coordinates
     oscillator.setFrequency(pdlGetSlider(app, 0));//set frequecy by slider

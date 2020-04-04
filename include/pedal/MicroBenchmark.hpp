@@ -7,6 +7,7 @@
 #include <vector>
 #include <algorithm> 
 #include <cmath> 
+#include <limits>
 
 class MicroBenchmark{
   public:
@@ -24,10 +25,9 @@ class MicroBenchmark{
 
   private:
   void calculateResults();
-  double calculateAverage();//in microseconds
-  double findMedian();
-  double findFastestInstance();
-  double findSlowestInstance();
+  void calculateAverage();//in microseconds
+  void findFastestInstance();
+  void findSlowestInstance();
   double average;
   double slowest;
   double fastest;
@@ -35,10 +35,10 @@ class MicroBenchmark{
   std::chrono::time_point<std::chrono::high_resolution_clock> startTime;
   std::chrono::time_point<std::chrono::high_resolution_clock> endTime;
   std::chrono::time_point<std::chrono::high_resolution_clock> pauseStartTime;
-  long long   pauseTime;//in microseconds
+  long long pauseTime;//in microseconds
   std::vector<long long> timerResults;
-  long  numberOfIterations;
-  long  currentIteration;
+  long numberOfIterations;
+  long currentIteration;
   std::string timerName;
   bool completeFlag;
   bool foundStopCall;

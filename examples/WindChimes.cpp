@@ -24,7 +24,7 @@ Chime chimes[NUM_CHIMES];
 CircularBuffer circularBuffer(10000.0f);
 Delay delay;
 //========================Audio Callback
-void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
+void callback(float* out,float* in, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
     
     trigger.setFrequency(pdlGetSlider(app, 0));

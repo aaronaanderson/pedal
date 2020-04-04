@@ -42,12 +42,6 @@ void MicroBenchmark::resumeTimer(){
   pauseTime += std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now()).time_since_epoch().count() -
                pauseStartTime.time_since_epoch().count();
 }
-void MicroBenchmark::calculateResults(){
-  average = calculateAverage();
-  slowest = findSlowestInstance();
-  fastest = findFastestInstance();
-  range = fastest - slowest;
-}
 void MicroBenchmark::printHighlites(){
   std::string report = timerName;
   report += ": Number Of Iterations ";
@@ -77,4 +71,35 @@ void MicroBenchmark::printAllResults(){
     }
     std::cout << result << std::endl;
   }
+}
+//private functions
+void MicroBenchmark::calculateAverage(){
+  double reciprocal = 1.0/static_cast<double>(numberOfIterations);
+  double runningTotal = 0.0f;
+  for(int i = 0; i < numberOfIterations; i++){
+    runningTotal += timerResults[i] * reciprocal;
+  }
+  average = runningTotal;
+}
+void MicroBenchmark::findFastestInstance(){
+  fastest = std::numeric_limits<double>::max();
+  for(int i = 0; i < numberOfIterations; i++){
+    if(timerResults[i] < fastest){
+      fastest = timerResults[i];
+    }
+  }
+}
+void MicroBenchmark::findSlowestInstance(){
+  slowest = 0.0;
+  for(int i = 0; i < numberOfIterations; i++){
+    if(timerResults[i] > slowest){
+      slowest = timerResults[i];
+    }
+  }
+}
+void MicroBenchmark::calculateResults(){
+  calculateAverage();
+  findFastestInstance();
+  findSlowestInstance();
+  range = fastest - slowest;
 }

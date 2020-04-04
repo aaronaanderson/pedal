@@ -68,6 +68,7 @@ set(example_list
     BiquadExample
     DynamicsExample
     ConvolutionExample
+    LiveInputFeedbackDelay
 )
 
 # loop through example targets

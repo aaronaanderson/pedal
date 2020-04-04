@@ -51,6 +51,7 @@ struct pdlExampleApp {
     RtAudio audio;
     std::string device_name;
     unsigned device_id;
+    unsigned input_channels;
     unsigned output_channels;
     unsigned sampling_rate;
     unsigned buffer_size;
@@ -67,12 +68,13 @@ static int audioCallback(void *outputBuffer, void *inputBuffer,
                          unsigned int nFrames, double streamTime,
                          RtAudioStreamStatus status, void *userData) {
     float* out = (float*)outputBuffer;
+    float* in = (float*)inputBuffer;
     for (unsigned i = 0; i < nFrames; i += 1) {
 
     }
     auto* app = (pdlExampleApp*)userData;
     if (app && app->callback) {
-        app->callback(out, nFrames, app->sampling_rate, app->output_channels,
+        app->callback(out, in, nFrames, app->sampling_rate, app->output_channels,
                       streamTime, app);
     }
     return 0;
@@ -139,16 +141,21 @@ pdlExampleApp* pdlInitExampleApp(pdlExampleCallback callback) {
     auto device_info = app->audio.getDeviceInfo(default_out);
     app->device_id = default_out;
     app->device_name = device_info.name;
+    app->input_channels = device_info.inputChannels;
     app->output_channels = device_info.outputChannels;
     app->sampling_rate = device_info.preferredSampleRate;
     app->buffer_size = 512;
 
-    RtAudio::StreamParameters p;
-    p.deviceId = app->device_id;
-    p.nChannels = app->output_channels;
-    p.firstChannel = 0;
+    RtAudio::StreamParameters outputParameters;
+    outputParameters.deviceId = app->device_id;
+    outputParameters.nChannels = app->output_channels;
+    outputParameters.firstChannel = 0;
+    RtAudio::StreamParameters inputParameters;
+    inputParameters.deviceId = app->device_id;
+    inputParameters.nChannels = app->input_channels;
+    inputParameters.firstChannel = 0;
     try {
-        app->audio.openStream(&p, nullptr, RTAUDIO_FLOAT32,
+        app->audio.openStream(&outputParameters, &inputParameters, RTAUDIO_FLOAT32,
                               app->sampling_rate, &app->buffer_size,
                               audioCallback, app,
                               nullptr, nullptr); // option & error callback

@@ -23,7 +23,7 @@ BufferedRMS rms;
 float panPosition;
 Compressor compressor;
 //========================Audio Callback
-void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
+void callback(float* out,float* in, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
 
   //testBuffer.fillSineSweep();//fails here, but delayed.

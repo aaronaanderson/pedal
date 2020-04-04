@@ -24,7 +24,7 @@ CREnvelope fancyEnvelope;
 
 BLIT blit;
 //========================Audio Callback
-void callback(float* out, unsigned buffer, unsigned rate, unsigned channel,
+void callback(float* out,float* in, unsigned buffer, unsigned rate, unsigned channel,
               double time, pdlExampleApp* app) {
     
     sine.setFrequency(pdlGetSlider(app, 9));//set frequecy by slider
