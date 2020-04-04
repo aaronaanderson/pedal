@@ -25,8 +25,8 @@ PinkNoise noise;
 SmoothValue<float> frequency;
 TSine oscillator;
 //========================Audio Callback
-void callback(float* out,float* in, unsigned buffer, unsigned rate, unsigned channel,
-              double time, pdlExampleApp* app) {
+void callback(float* out,float* in, unsigned buffer, unsigned rate, unsigned outputChannels,
+              unsigned inputChannels, double time, pdlExampleApp* app) {
     float mx, my; pdlGetCursorPos(app, &mx, &my);//obtain mouse x and y coordinates
     oscillator.setFrequency(pdlGetSlider(app, 0));//set frequecy by slider
 
@@ -44,8 +44,8 @@ void callback(float* out,float* in, unsigned buffer, unsigned rate, unsigned cha
        oscillator.setFrequency(frequency.process());
       }
       float currentSample = oscillator.generateSample();//assign the saw to current sample
-      for (unsigned j = 0; j < channel; j += 1) {//for every sample in frame
-        out[channel * i + j] = currentSample * 0.1f;
+      for (unsigned j = 0; j < outputChannels; j += 1) {//for every sample in frame
+        out[outputChannels * i + j] = currentSample * 0.1f;
       }
     }
 }

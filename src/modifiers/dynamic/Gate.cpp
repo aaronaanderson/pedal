@@ -6,6 +6,7 @@ Gate::Gate(){
   setRangeDB(0.0f);//how much reduction if below threshold (in addition to any reduction brought on by ratio/threshold)
   setRatio(20.0f);//if below threshold by N decibels, reduce furth to N*ratio decibels
   setInputGainDB(0.0f);//Raising input gain is effectively the same as lowering threshold
+  setMakeUpGainDB(0.0f);
   setAttackTime(5.0f);//how long to reach full attenuation (in ms)
   setHoldTime(2.0f);//how long to hold attenuation before releasing
   setReleaseTime(20.0f);//how long to reach no attenuation

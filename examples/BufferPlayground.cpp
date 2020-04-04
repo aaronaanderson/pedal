@@ -23,8 +23,8 @@ BufferedRMS rms;
 float panPosition;
 Compressor compressor;
 //========================Audio Callback
-void callback(float* out,float* in, unsigned buffer, unsigned rate, unsigned channel,
-              double time, pdlExampleApp* app) {
+void callback(float* out,float* in, unsigned buffer, unsigned rate, unsigned outputChannels,
+              unsigned inputChannels, double time, pdlExampleApp* app) {
 
   //testBuffer.fillSineSweep();//fails here, but delayed.
   bool writeFile = pdlGetTrigger(app, 0);
@@ -48,8 +48,8 @@ void callback(float* out,float* in, unsigned buffer, unsigned rate, unsigned cha
     panStereo(monoSum, panPosition, stereoFrame);
     rms.process(monoSum);
     
-    out[channel * i] = stereoFrame[0];
-    out[channel * i + 1] = stereoFrame[1];
+    out[outputChannels * i] = stereoFrame[0];
+    out[outputChannels * i + 1] = stereoFrame[1];
   }
 }
 //======================main loop

@@ -75,7 +75,7 @@ static int audioCallback(void *outputBuffer, void *inputBuffer,
     auto* app = (pdlExampleApp*)userData;
     if (app && app->callback) {
         app->callback(out, in, nFrames, app->sampling_rate, app->output_channels,
-                      streamTime, app);
+                      app->input_channels, streamTime, app);
     }
     return 0;
 }

@@ -16,9 +16,9 @@ Delay::~Delay(){
 }
 
 float Delay::insertSample(float inputSample){//returns current sample for convenience
-  float delayedSample = buffer.getDelayed(delayTime);//retrieve the delayed sample
-  buffer.inputSample(inputSample + delayedSample * feedback);
-  return delayedSample;
+  currentSample = buffer.getDelayed(delayTime);//retrieve the delayed sample
+  buffer.inputSample(inputSample + currentSample * feedback);
+  return currentSample;
 }
 
 float* Delay::insertBlock(float* inputBlock){//insert (buffersize) channels at a time

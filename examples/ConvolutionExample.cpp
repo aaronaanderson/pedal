@@ -13,8 +13,8 @@ STFT stftOne(512, 16);
 STFT stftTwo(512, 16);
 
 //========================Audio Callback
-void callback(float* out, float* in, unsigned buffer, unsigned rate, unsigned channel,
-              double time, pdlExampleApp* app) {
+void callback(float* out, float* in, unsigned buffer, unsigned rate, unsigned outputChannels,
+              unsigned inputChannels, double time, pdlExampleApp* app) {
     float mx, my; pdlGetCursorPos(app, &mx, &my);//obtain mouse x and y coordinates
     bool trigger = pdlGetToggle(app, 0);//trigger envelope with toggl
     //update frequency target with slider
@@ -37,8 +37,8 @@ void callback(float* out, float* in, unsigned buffer, unsigned rate, unsigned ch
       }
       stftOne.updateOutput();
 
-      out[channel * i] = stftOne.getCurrentSample();
-      out[channel * i + 1] = stftOne.getCurrentSample();
+      out[outputChannels * i] = stftOne.getCurrentSample();
+      out[outputChannels * i + 1] = stftOne.getCurrentSample();
     }
 }
 //======================main loop

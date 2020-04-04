@@ -3,8 +3,9 @@
 
 struct pdlExampleApp;
 using pdlExampleCallback = void (*)(float* out, float* in, unsigned bufferSize,
-                                    unsigned samplingRate, unsigned numChannels,
-                                    double streamTime, pdlExampleApp* app);
+                                    unsigned samplingRate, unsigned numChannelsOut,
+                                    unsigned numChannelsIn,double streamTime, 
+                                    pdlExampleApp* app);
 
 pdlExampleApp* pdlInitExampleApp(pdlExampleCallback callback);
 void pdlStartExampleApp(pdlExampleApp* app);

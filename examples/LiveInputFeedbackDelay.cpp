@@ -3,14 +3,27 @@
 
 //include class if using
 #include "pedal/pdlSettings.hpp"
-
+#include "pedal/Delay.hpp"
+#include "pedal/utilities.hpp"
+Delay delay;
+SmoothValue<float> delayTime;
 //========================Audio Callback
-void callback(float* out,float* in, unsigned buffer, unsigned rate, unsigned channel,
-              double time, pdlExampleApp* app) {
-  for (unsigned i = 0; i < buffer; i += 1) {//for entire buffer of frames
-    float currentSample = in[i];
-    for (unsigned j = 0; j < channel; j += 1) {//for every sample in frame
-      out[channel * i + j] = currentSample * 0.1f;
+void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned outputChannels,
+              unsigned inputChannels, double time, pdlExampleApp* app) {
+  
+  delay.setFeedback(pdlGetSlider(app, 0));
+  delayTime.setTarget(pdlGetSlider(app, 1));
+
+  for (unsigned i = 0; i < bufferSize; i += 1) {//for entire buffer of frames
+    float liveInputSample = in[i * inputChannels];
+    
+    delay.setDelayTime(delayTime.process());
+    
+    float currentSample = delay.insertSample(liveInputSample);
+    currentSample = delay.getSample();
+
+    for (unsigned j = 0; j < outputChannels; j += 1) {//for every sample in frame
+      out[outputChannels * i + j] = currentSample * 0.1f;
     }
   }
 }
@@ -23,9 +36,10 @@ int main() {
     }
     pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
     pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
-
+    delayTime.setTime(500.0f);
     // Add your GUI elements here
-    pdlAddSlider(app, 0, "feedback", 0.0f, 0.99f, 0.7f);
+    pdlAddSlider(app, 0, "feedback", 0.0f, 0.99f, 0.4f);
+    pdlAddSlider(app, 1, "delay time(ms)", 0.0f, 2000.0f, 500.0f);
 
     //begin the app--------
     pdlStartExampleApp(app);
