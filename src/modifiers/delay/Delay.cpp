@@ -12,26 +12,12 @@ Delay::Delay(float initialTime, float initialFeedback){
 }
 Delay::~Delay(){
   delete tap;
-  delete[] currentBlock;
 }
-
 float Delay::insertSample(float inputSample){//returns current sample for convenience
   currentSample = buffer.getDelayed(delayTime);//retrieve the delayed sample
   buffer.inputSample(inputSample + currentSample * feedback);
   return currentSample;
 }
-
-float* Delay::insertBlock(float* inputBlock){//insert (buffersize) channels at a time
-  if(currentBlock == nullptr){//if the block has not been allocated
-      currentBlock = new float[pdlSettings::bufferSize];//allocate space
-  }
-  for(int i = 0; i < pdlSettings::bufferSize; i++){//for every sample in the currentBlock
-    //insertSample() returns current sample for convenience
-    currentBlock[i] = insertSample(inputBlock[i]);//insert the sample
-  }
-  return currentBlock;//return (a pointer to) currentBlock
-}
-
 void Delay::setDelayTime(float newDelayTime){
     clamp(newDelayTime, 0.0f, buffer.getDuration());//clamp value to useable range
     delayTime = newDelayTime;
@@ -42,5 +28,7 @@ void Delay::setMaximumFeedbackTime(float newMaximumFeedbackTime){
     //this function allocates samples for the maximum delay Time
     buffer.setDuration(newMaximumFeedbackTime);
 }
+float Delay::getDelayTime(){return delayTime;}
+float Delay::getFeedback(){return feedback;}
+float Delay::getMaximumFeedbackTime(){return buffer.getDuration();}
 float Delay::getSample(){return currentSample;}
-float* Delay::getBlock(){return currentBlock;}
