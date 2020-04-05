@@ -12,7 +12,11 @@ MicroBenchmark::~MicroBenchmark(){
   //printHighlites();
   //printAllResults();
 }
-void MicroBenchmark::initialize(std::string name, long numberOfIterations){
+void MicroBenchmark::initialize(std::string name, long iterations){
+  completeFlag = false;
+  foundStopCall = true;
+  currentIteration = 0;
+  numberOfIterations = std::max(iterations, static_cast<long>(1));
   timerName = name;
   timerResults.resize(numberOfIterations);
 }
@@ -80,7 +84,7 @@ void MicroBenchmark::printHighlites(){
     report += std::to_string(fastest * 1000000.0) + "(us) ";
   }
   report += " | range ";
-  if(range > 0.0001){
+  if(range > 0.00001){
     report += std::to_string(std::abs(range) * 1000.0) + "(ms) ";
   }else{
     report += std::to_string(std::abs(range) * 1000000.0) + "(us) ";

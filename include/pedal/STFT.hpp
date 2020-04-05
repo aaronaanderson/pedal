@@ -32,7 +32,7 @@ class STFT{
   float getCurrentSample();//get output without udpating
   Window::Mode getWindowType();
   int getWindowSize();
-  int getOverlap();
+  int getOverlap();//windowSize / hopSize 
   int getHopSize();//windowSize / overlap
   int getNumberOfBins();//windowSize / 2
   std::complex<float> getBin(int whichBin);//get fft output at whichBin

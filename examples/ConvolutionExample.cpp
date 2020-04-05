@@ -50,7 +50,7 @@ int main() {
     }
     pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
     pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
-    mB.initialize("stft", 10000);
+    mB.initialize("stft", 100000);
     // Add your GUI elements here
     pdlAddSlider(app, 0, "octave", 5.0f, 14.0f, 6.0f);
     
