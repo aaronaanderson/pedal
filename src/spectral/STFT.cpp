@@ -11,11 +11,8 @@ STFT::STFT(int initialWindowSize, int initialOverlap){
   inputWriteRedundantPosition = inputWritePosition + windowSize;
   currentOutputIndex = 0;
   currentSample = 0.0f;//not used unless inversing
-
-  mB.initialize("updateInput", 1000000);
 }
 bool STFT::updateInput(float input){
-  mB.startTiming();
   inputBuffer[inputWritePosition] = input;
   //redundant write for clean array access later
   inputBuffer[inputWriteRedundantPosition] = input;
@@ -28,15 +25,12 @@ bool STFT::updateInput(float input){
     const int offset = inputWritePosition % windowSize;//safe because of if check
     calculateWindowedInput(offset);//scale input segment by window, assign to windowedInputSegment
     //realBuffer and imaginaryBuffer are updated in place, ready for use after this call
-    mB.pauseTimer();
     fft.fft(windowedInputSegment.data(), realBuffer.data(), imaginaryBuffer.data());
-    mB.resumeTimer();
     fftReadyFlag = true;//allow bin manipulation, and tell output resynthesis is ready
     //increment and wrap which input segment is being pointed to
   }else{
     fftReadyFlag = false;//still need more samples for analysis
   }
-  mB.stopTiming();
   return fftReadyFlag;
 }
 bool STFT::isFFTReady(){

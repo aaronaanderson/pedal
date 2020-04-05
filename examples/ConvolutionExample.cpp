@@ -5,13 +5,13 @@
 #include "pedal/PinkNoise.hpp"
 #include "pedal/TSine.hpp"
 #include "pedal/utilities.hpp"//for SmoothValue
-
+#include "pedal/MicroBenchmark.hpp"
 PinkNoise pinkNoise;
 TSine sineOsc;
 SmoothValue<float> smoothFrequency;
 STFT stftOne(512, 16);
 STFT stftTwo(512, 16);
-
+MicroBenchmark mB;
 //========================Audio Callback
 void callback(float* out, float* in, unsigned buffer, unsigned rate, unsigned outputChannels,
               unsigned inputChannels, double time, pdlExampleApp* app) {
@@ -24,7 +24,7 @@ void callback(float* out, float* in, unsigned buffer, unsigned rate, unsigned ou
       sineOsc.setFrequency(smoothFrequency.process());//set frequency each sample
       float playerOneSample = sineOsc.generateSample() * 0.05f;
       float playerTwoSample = pinkNoise.generateSample() * 0.05f;//pinkNoise.generateSample() * 0.1f;
-
+      mB.startTiming();
       stftOne.updateInput(playerOneSample);
       stftTwo.updateInput(playerTwoSample);
       
@@ -36,7 +36,7 @@ void callback(float* out, float* in, unsigned buffer, unsigned rate, unsigned ou
         }
       }
       stftOne.updateOutput();
-
+      mB.stopTiming();
       out[outputChannels * i] = stftOne.getCurrentSample();
       out[outputChannels * i + 1] = stftOne.getCurrentSample();
     }
@@ -50,7 +50,7 @@ int main() {
     }
     pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
     pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
-
+    mB.initialize("stft", 10000);
     // Add your GUI elements here
     pdlAddSlider(app, 0, "octave", 5.0f, 14.0f, 6.0f);
     
@@ -59,6 +59,9 @@ int main() {
     //pdlSettings::sampleRate = app->sampling_rate;
     while (pdlRunExampleApp(app)) {//run forever
         pdlUpdateExampleApp(app);//run the application
+    }
+    if(mB.getCompleteFlag()){
+      mB.printHighlites();
     }
     //the application has stopped running, 
     pdlDeleteExampleApp(app);//free the app from memory

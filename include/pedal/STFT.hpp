@@ -63,7 +63,6 @@ class STFT{
   std::vector<std::vector<float>> windowedOutput;//updated every 'hopSize' samples
   int currentOutputIndex;//which sample in the overlapAddOutput buffer
   audiofft::AudioFFT fft;//fast fourier transform (from external audioFFT library)
-  MicroBenchmark mB;
 };
 
 inline void STFT::calculateWindowedInput(const int inputOffset){
