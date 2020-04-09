@@ -70,6 +70,8 @@ target_include_directories(pedal PUBLIC include external)
 # Libraries to link when building this target
 # target_link_libraries(pedal PUBLIC "")
 
-# Also include examples and tests folder in this project
-add_subdirectory(examples)
-add_subdirectory(tests)
+if ("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
+  # Also include examples and tests folder in this project
+  add_subdirectory(examples)
+  add_subdirectory(tests)
+endif()

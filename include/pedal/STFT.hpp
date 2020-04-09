@@ -4,7 +4,8 @@
 Short-Time Fourier Transform
 windowed overlap+add FFT
 */
-#include "../../AudioFFT/AudioFFT.h"//external FFT library
+//#include "../../AudioFFT/AudioFFT.h"//external FFT library
+#include "../../external/AudioFFT.h"
 #include <complex>//std complex data type
 #include <vector>//for dynamic arrays
 #include <cmath>
