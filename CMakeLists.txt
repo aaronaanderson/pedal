@@ -44,6 +44,7 @@ add_library(pedal STATIC
     src/generators/oscillators/BLIT.cpp
     src/generators/Window.cpp
     src/utilities/MicroBenchmark.cpp
+    src/utilities/MIDIEvent.cpp
     external/AudioFFT.cpp
 )
 

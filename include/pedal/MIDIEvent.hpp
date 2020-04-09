@@ -19,13 +19,14 @@ class MIDIEvent{
   void setFromBytes(std::vector<unsigned char>* inputBytes);
   int getChannel();
   int getNoteNumber();
-  int getVelocity();
+  int getNoteVelocity();
   int getControlNumber();
   int getControlValue();
+  void clear();
   EventTypes getEventType();
   private:
   int channel;
-  int noteNumber, velocity;
+  int noteNumber, noteVelocity;
   int controlNumber, controlValue;
   EventTypes eventType;
   std::vector<unsigned char> bytes;

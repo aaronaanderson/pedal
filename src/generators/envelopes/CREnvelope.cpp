@@ -14,10 +14,10 @@ CREnvelope::CREnvelope(){
   release.curveOvershoot = decay.curveOvershoot;
   release.curveOffset = decay.curveOffset;
   setMode(modes::ADSR);
-  setAttackTime(5000.0f);
-  setDecayTime(5000.0f);
+  setAttackTime(100.0f);
+  setDecayTime(40.0f);
   setSustainLevel(0.7f);
-  setReleaseTime(20000.0f);
+  setReleaseTime(800.0f);
   setHoldTime(50.0f);
   trigger = false;
   holdSampleCount = 0;
@@ -148,6 +148,8 @@ void CREnvelope::setTrigger(bool newTrigger){
   if(newTrigger == true && trigger == false){
     currentState = ATTACK;
     holdSampleCount = 0;
+  }else if(newTrigger == false && trigger == true){
+    currentState = RELEASE;
   }
   //for envelopes with sustain, set to release state if new trigger is false but previous trigger was true
   if(currentMode == modes::ADSR || currentMode == modes::AHDSR){
