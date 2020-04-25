@@ -21,10 +21,10 @@ class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   float generateSample();//calculate and return next sample
   float* generateBlock();//calculate and return next block of samples
   
-  float getAttack();
-  float getDecay();
-  float getSustain();
-  float getRelease();
+  float getAttackTime();
+  float getDecayTime();
+  float getSustainLevel();
+  float getReleaseTime();
   float getSample();
   float* getBlock();
   int getCurrentState();
@@ -33,10 +33,10 @@ class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   bool isBusy();
   
   void setMode(modes newMode);
-  void setAttack(float newAttack);
-  void setDecay(float newDecay);
-  void setSustain(float newSustain);
-  void setRelease(float newRelease);
+  void setAttackTime(float newAttack);
+  void setDecayTime(float newDecay);
+  void setSustainLevel(float newSustain);
+  void setReleaseTime(float newRelease);
   void setTrigger(bool newTrigger);
   //=======================================================
   private:

@@ -18,7 +18,7 @@ CREnvelope::CREnvelope(){
   setDecayTime(40.0f);
   setSustainLevel(0.7f);
   setReleaseTime(800.0f);
-  setHoldTime(50.0f);
+  setHoldTime(0.0f);
   trigger = false;
   holdSampleCount = 0;
 }
@@ -116,6 +116,7 @@ float CREnvelope::generateSample(){
           if(currentSample <= 0.0f || release.timeInSamples == 0.0f){
             currentSample = 0.0f;
             currentState = OFF;
+            trigger = false;
           }
         break;//end of currentState switch
       }
@@ -136,6 +137,7 @@ float CREnvelope::generateSample(){
           if(currentSample <= 0.0f || release.timeInSamples == 0.0f){
             currentSample = 0.0f;
             currentState = OFF;
+            trigger = false;
           }
         break;//end of currentState switch
       }
@@ -150,10 +152,6 @@ void CREnvelope::setTrigger(bool newTrigger){
     holdSampleCount = 0;
   }else if(newTrigger == false && trigger == true){
     currentState = RELEASE;
-  }
-  //for envelopes with sustain, set to release state if new trigger is false but previous trigger was true
-  if(currentMode == modes::ADSR || currentMode == modes::AHDSR){
-    if(newTrigger == false && trigger == true){currentState = RELEASE;}
   }
   //assign the new trigger for next call
   trigger = newTrigger;

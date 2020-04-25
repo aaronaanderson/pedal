@@ -19,10 +19,10 @@ CTEnvelope::~CTEnvelope(){//deconstructor
 //primary mechanics of class
 //=========================================================
 void CTEnvelope::setup(float newAttack, float newDecay, float newSustain, float newRelease){
-  setSustain(newSustain);//clamp sustain 0.0 to 1.0
-  setAttack(newAttack);
-  setDecay(newDecay);
-  setRelease(newRelease);
+  setSustainLevel(newSustain);//clamp sustain 0.0 to 1.0
+  setAttackTime(newAttack);
+  setDecayTime(newDecay);
+  setReleaseTime(newRelease);
   currentSample = 0.0;
   currentState = states::OFF;
   currentMode = modes::ADSR;
@@ -33,9 +33,6 @@ float CTEnvelope::generateSample(){//generate a single sample
     case modes::ADSR://Attack, Decay, Sustain, Release (default)
       switch(currentState){//envelope behaves differently based on which state it is in
         case OFF:
-          if(trigger){
-              currentState = ATTACK;
-          }
         break;
         case ATTACK://initial portion of a 'note'
           currentSample += attackIncrement;//increase value one sample at a time
@@ -68,9 +65,6 @@ float CTEnvelope::generateSample(){//generate a single sample
     case modes::ASR://Attack, Sustain, Release
       switch(currentState){
         case OFF:
-          if(trigger){
-              currentSample = SUSTAIN;
-          }
         break;
         case ATTACK://initial portion of a 'note'
         currentSample += attackIncrement;//increase value one sample at a time
@@ -96,9 +90,6 @@ float CTEnvelope::generateSample(){//generate a single sample
     case modes::AR://Attack, Release (useful for percusive envelopes)
       switch(currentState){
         case OFF:
-          if(trigger){
-              currentState = ATTACK;
-          }
         break;
         case ATTACK://initial portion of a 'note'
         currentSample += attackIncrement;//increase value one sample at a time
@@ -140,24 +131,28 @@ void CTEnvelope::calculateIncrement(states whichIncrement){
   //going next.
   switch(whichIncrement){
     case ATTACK:
-      attackIncrement = 1/(pdlSettings::sampleRate * (attack * 0.001));
+      attackIncrement = 1.0f/(pdlSettings::sampleRate * (attack * 0.001f));
     break;
     case DECAY:
-      decayIncrement = (1.0 - sustain)/(pdlSettings::sampleRate * (decay * 0.001));
+      decayIncrement = (1.0f - sustain)/(pdlSettings::sampleRate * (decay * 0.001f));
     break;
     //SUSTAIN has no increment; it is a measure of level, not time
     case RELEASE:
-      releaseIncrement = sustain/(pdlSettings::sampleRate * (release * 0.001));
+      if(currentMode == modes::AR){
+        releaseIncrement = 1.0f/(pdlSettings::sampleRate * (release * 0.001f));
+      }else{
+        releaseIncrement = sustain/(pdlSettings::sampleRate * (release * 0.001f));
+      }
     break;
   }
 } 
 
 //Getters and setters
 //=========================================================
-float CTEnvelope::getAttack(){return attack;}
-float CTEnvelope::getDecay(){return decay;}
-float CTEnvelope::getSustain(){return sustain;}
-float CTEnvelope::getRelease(){return release;}
+float CTEnvelope::getAttackTime(){return attack;}
+float CTEnvelope::getDecayTime(){return decay;}
+float CTEnvelope::getSustainLevel(){return sustain;}
+float CTEnvelope::getReleaseTime(){return release;}
 float CTEnvelope::getSample(){return currentSample;}
 float* CTEnvelope::getBlock(){return currentBlock;}
 int CTEnvelope::getCurrentState(){return currentState;}
@@ -173,22 +168,22 @@ bool CTEnvelope::isBusy(){
 }
 
 void CTEnvelope::setMode(modes newMode){currentMode = newMode;}
-void CTEnvelope::setAttack(float newAttack){//any positive value
+void CTEnvelope::setAttackTime(float newAttack){//any positive value
   attack = newAttack;
   calculateIncrement(ATTACK);//changing value requires recalculating increment
 }
-void CTEnvelope::setDecay(float newDecay){//any positive value
+void CTEnvelope::setDecayTime(float newDecay){//any positive value
   decay = newDecay;
   calculateIncrement(DECAY);//changing value requires recalculating increment
 }
-void CTEnvelope::setSustain(float newSustain){//amplitude from 0.0 to 1.0
+void CTEnvelope::setSustainLevel(float newSustain){//amplitude from 0.0 to 1.0
   sustain = newSustain;
   if(currentMode == modes::ADSR || currentMode == modes::ASR){//protect a AR user from themselves
     calculateIncrement(DECAY);//New sustain value will change this value
     calculateIncrement(RELEASE);//New sustain value will changes this value
   }
 }
-void CTEnvelope::setRelease(float newRelease){//any positive value
+void CTEnvelope::setReleaseTime(float newRelease){//any positive value
   release = newRelease;
   calculateIncrement(RELEASE);//changing vale requires recalculating increment
 }

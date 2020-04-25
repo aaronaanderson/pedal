@@ -1,7 +1,8 @@
 #ifndef Biquad_hpp
 #define Biquad_hpp
 
-#include "math.h"
+#define _USING_MATH_DEFINES
+#include <cmath>
 #include "pdlSettings.hpp"
 
 /*
@@ -10,19 +11,18 @@ implementation:
 https://www.earlevel.com/main/2012/11/26/biquad-c-source-code/
 */
 
-enum FilterType{
-  LOW_PASS = 0,
+class Biquad{
+  public:
+  enum class modes{
+  LOW_PASS,
   HIGH_PASS,
   BAND_PASS,
   BAND_REJECT,
   PEAK,
   LOW_SHELF,
   HIGH_SHELF
-};
-
-class Biquad{
-  public:
-  Biquad(FilterType initialMode = LOW_SHELF, 
+  };
+  Biquad(modes initialMode = modes::LOW_SHELF, 
          float initialFrequency = 2000.0f/pdlSettings::sampleRate,
          float initialQ = 0.7f);
   ~Biquad();
@@ -31,17 +31,17 @@ class Biquad{
   float* processBlock(float* input);
   void flush();//0.0f history
   
-  void setBiquad(FilterType mode, float newFrequency, 
+  void setBiquad(modes mode, float newFrequency, 
                  float newQ, float newGain);
   void setFrequency(float newFrequency);
   void setGain(float newGain);
   void setQ(float newQ);
-  void setMode(FilterType newMode);
+  void setMode(modes newMode);
 
   float getFrequency();
   float getGain();
   float getQ();
-  FilterType getMode();
+  modes getMode();
   float getSample();
   float* getBlock();
 
@@ -51,7 +51,7 @@ class Biquad{
   //Frequency is stored in normalized mode to reduce calculations (0.0 -> 1.0)
   double q;
   double gain;
-  FilterType mode;//enumerated above
+  modes mode;//enumerated above
   double a0, a1, a2;//feed-forward coefficients
   double b1, b2;//feed-back coefficients
   double z1, z2;//containers for previous output

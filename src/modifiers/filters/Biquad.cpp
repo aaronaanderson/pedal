@@ -6,7 +6,7 @@ https://www.earlevel.com/main/2012/11/26/biquad-c-source-code/
 */
 //constructors and deconstructors
 //=========================================================
-Biquad::Biquad(FilterType initialMode, float initialFrequency, float initialQ){
+Biquad::Biquad(modes initialMode, float initialFrequency, float initialQ){
   frequency = initialFrequency;
   mode = initialMode;
   q = initialQ;
@@ -37,7 +37,7 @@ void Biquad::calculateCoefficients(){
   double k_squared = k * k;
   double kdivbyq = k / q;
   switch(mode){
-    case LOW_PASS:https://www.youtube.com/watch?v=GmBHwjoIFNM
+    case modes::LOW_PASS:https://www.youtube.com/watch?v=GmBHwjoIFNM
     norm = 1.0 / (1.0 + kdivbyq + k_squared);
     a0 = k_squared * norm;
     a1 = 2.0 * a0;
@@ -45,7 +45,7 @@ void Biquad::calculateCoefficients(){
     b1 = 2.0 * (k_squared - 1.0) * norm;
     b2 = (1.0 - kdivbyq + k_squared) * norm;
     break;
-    case HIGH_PASS:
+    case modes::HIGH_PASS:
     norm = 1.0 / (1.0 + kdivbyq + k_squared);
     a0 = 1.0 * norm;
     a1 = -2.0 * a0;
@@ -53,7 +53,7 @@ void Biquad::calculateCoefficients(){
     b1 = 2.0 * (k_squared - 1.0) * norm;
     b2 = (1.0 - kdivbyq + k_squared) * norm;
     break;
-    case BAND_PASS:
+    case modes::BAND_PASS:
     norm = 1.0 / (1.0 + kdivbyq + k_squared);
     a0 = k / q * norm;
     a1 = 0.0;
@@ -61,7 +61,7 @@ void Biquad::calculateCoefficients(){
     b1 = 2.0 * (k_squared - 1.0) * norm;
     b2 = (1.0 - kdivbyq + k_squared) * norm;
     break;
-    case BAND_REJECT:
+    case modes::BAND_REJECT:
     norm = 1.0 / (1.0 + kdivbyq + k_squared);
     a0 = (1.0 + k_squared) * norm;
     a1 = 2.0 * (k_squared - 1.0) * norm;
@@ -69,7 +69,7 @@ void Biquad::calculateCoefficients(){
     b1 = a1;
     b2 = (1.0 - kdivbyq + k_squared) * norm;
     break;
-    case PEAK:
+    case modes::PEAK:
     {
     a1 = 2.0 * (k_squared - 1.0) * norm;
     b1 = a1;
@@ -87,7 +87,7 @@ void Biquad::calculateCoefficients(){
     }
     }
     break;
-    case LOW_SHELF:
+    case modes::LOW_SHELF:
     {
     double sqrt2k = sqrt(2.0f)*k;//calculate and store, since used often
     double sqrt2vk = sqrt(2.0f * v) * k;
@@ -108,7 +108,7 @@ void Biquad::calculateCoefficients(){
     }
     }
     break;
-    case HIGH_SHELF:
+    case modes::HIGH_SHELF:
     {
     float sqrt2k = sqrt(2.0)*k;//calculate and store, since used often
     float sqrt2vk = sqrt(2.0 * v) * k;
@@ -136,7 +136,7 @@ void Biquad::flush(){
 }
 //Getters and setters
 //=========================================================
-void Biquad::setBiquad(FilterType newMode, float newFrequency, 
+void Biquad::setBiquad(modes newMode, float newFrequency, 
                        float newQ, float newGain){
   mode = newMode;
   frequency = newFrequency/pdlSettings::sampleRate;
@@ -162,7 +162,7 @@ void Biquad::setQ(float newQ){
     calculateCoefficients();
   }
 }
-void Biquad::setMode(FilterType newMode){
+void Biquad::setMode(modes newMode){
   if(newMode != mode){
     mode = newMode;
     flush();
@@ -173,6 +173,6 @@ void Biquad::setMode(FilterType newMode){
 float Biquad::getFrequency(){return frequency * pdlSettings::sampleRate;}
 float Biquad::getGain(){return gain;}
 float Biquad::getQ(){return q;}
-FilterType Biquad::getMode(){return mode;}
+Biquad::modes Biquad::getMode(){return mode;}
 float Biquad::getSample(){return currentSample;}
 float* Biquad::getBlock(){return currentBlock;}

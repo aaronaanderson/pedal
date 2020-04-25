@@ -61,13 +61,7 @@ target_link_libraries(example_app PUBLIC glfw gl3w imgui rtaudio)
 
 # list of examples, give `examplename` if example file is `examplename.cpp`
 set(example_list
-    hello_pedal
-    SimpleEnvelope
-    WindChimes
-    BufferPlayground
-    BiquadExample
-    DynamicsExample
-    ConvolutionExample
+    Envelopes
     LiveInputFeedbackDelay
 )
 
