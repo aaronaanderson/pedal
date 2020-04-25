@@ -35,8 +35,8 @@ add_library(pedal STATIC
     src/modifiers/filters/LowPass.cpp
     src/modifiers/filters/HighPass.cpp
     src/modifiers/reverb/MoorerReverb.cpp
-    src/BufferedRMS.cpp
-    src/StreamedRMS.cpp
+    src/analysis/BufferedRMS.cpp
+    src/analysis/StreamedRMS.cpp
     src/modifiers/dynamic/Compressor.cpp
     src/modifiers/dynamic/Gate.cpp
     src/spectral/STFT.cpp
