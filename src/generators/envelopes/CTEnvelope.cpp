@@ -1,22 +1,17 @@
 #include "pedal/CTEnvelope.hpp"
 
-//constructors and deconstructors
 //=========================================================
 CTEnvelope::CTEnvelope(){
  setup(100, 40, 0.7, 400);//simple default values
 }
-
 CTEnvelope::CTEnvelope(float initialAttack, float initialDecay, float initialSustain, float initialRelease){
   setup(initialAttack, initialDecay, initialSustain, initialRelease);
 }
-
 CTEnvelope::~CTEnvelope(){//deconstructor
   if(currentBlock != nullptr){//if block exists
     delete[] currentBlock;//free the memory
   }
 }
-
-//primary mechanics of class
 //=========================================================
 void CTEnvelope::setup(float newAttack, float newDecay, float newSustain, float newRelease){
   setSustainLevel(newSustain);//clamp sustain 0.0 to 1.0
@@ -27,7 +22,6 @@ void CTEnvelope::setup(float newAttack, float newDecay, float newSustain, float 
   currentState = states::OFF;
   currentMode = modes::ADSR;
 }
-
 float CTEnvelope::generateSample(){//generate a single sample
   switch(currentMode){//which mode (ADSR, ASR, or AR)
     case modes::ADSR://Attack, Decay, Sustain, Release (default)
@@ -111,19 +105,6 @@ float CTEnvelope::generateSample(){//generate a single sample
   }//end of mode switch statement
   return currentSample;
 }
-
-float* CTEnvelope::generateBlock(){
-  //check if block has been allocated in memory yet
-  if(currentBlock == nullptr){
-    currentBlock = new float[pdlSettings::bufferSize];
-  }
-  //fill the block with samples
-  for(int i = 0; i < pdlSettings::bufferSize; i++){
-    currentBlock[i] = generateSample();
-  }
-  return currentBlock;//return (a pointer to) the block
-}
-
 void CTEnvelope::calculateIncrement(states whichIncrement){
   //these are the values that are added or subtracted to currentSample
   //depending on the current state of the envelope. These values will be 
@@ -147,7 +128,6 @@ void CTEnvelope::calculateIncrement(states whichIncrement){
   }
 } 
 
-//Getters and setters
 //=========================================================
 float CTEnvelope::getAttackTime(){return attack;}
 float CTEnvelope::getDecayTime(){return decay;}
@@ -159,14 +139,11 @@ int CTEnvelope::getCurrentState(){return currentState;}
 CTEnvelope::modes CTEnvelope::getCurrentMode(){return currentMode;}
 bool CTEnvelope::getTrigger(){return trigger;}
 bool CTEnvelope::isBusy(){
-  if(currentState == OFF){
-    return false;
-  }else{
+  if(currentState != OFF){
     return true;
   }
-  return false;//for windows compiler, should never happen
+  return false;
 }
-
 void CTEnvelope::setMode(modes newMode){currentMode = newMode;}
 void CTEnvelope::setAttackTime(float newAttack){//any positive value
   attack = newAttack;
@@ -190,5 +167,9 @@ void CTEnvelope::setReleaseTime(float newRelease){//any positive value
 void CTEnvelope::setTrigger(bool newTrigger){
   if(newTrigger == true && trigger == false){currentState = ATTACK;}
   if(newTrigger == false && trigger == true){currentState = RELEASE;}
-  trigger = newTrigger;
+  if(currentMode == modes::AR){
+    trigger = false;
+  }else{
+    trigger = newTrigger;
+  }
 }

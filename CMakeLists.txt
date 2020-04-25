@@ -46,6 +46,7 @@ add_library(pedal STATIC
     src/utilities/MicroBenchmark.cpp
     src/utilities/MIDIEvent.cpp
     src/analysis/EdgeDetector.cpp
+    src/utilities/Counter.cpp
     external/AudioFFT.cpp
 )
 

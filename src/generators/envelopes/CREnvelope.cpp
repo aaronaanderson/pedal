@@ -150,11 +150,16 @@ void CREnvelope::setTrigger(bool newTrigger){
   if(newTrigger == true && trigger == false){
     currentState = ATTACK;
     holdSampleCount = 0;
+
   }else if(newTrigger == false && trigger == true){
     currentState = RELEASE;
   }
   //assign the new trigger for next call
-  trigger = newTrigger;
+  if(currentMode == modes::AHR || currentMode == modes::AR){
+    trigger = false;
+  }else{
+    trigger = newTrigger;
+  }
 }
 void CREnvelope::setMode(modes newMode){currentMode = newMode;}
 void CREnvelope::setAttackTime(float newAttackTime){
