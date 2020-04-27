@@ -151,8 +151,9 @@ pdlExampleApp* pdlInitExampleApp(pdlExampleCallback callback) {
     outputParameters.nChannels = app->output_channels;
     outputParameters.firstChannel = 0;
     RtAudio::StreamParameters inputParameters;
-    inputParameters.deviceId = app->device_id;
-    inputParameters.nChannels = app->input_channels;
+    unsigned default_in = app->audio.getDefaultInputDevice();
+    inputParameters.deviceId = default_in;
+    inputParameters.nChannels = app->audio.getDeviceInfo(default_in).inputChannels;
     inputParameters.firstChannel = 0;
     try {
         app->audio.openStream(&outputParameters, &inputParameters, RTAUDIO_FLOAT32,
