@@ -44,6 +44,7 @@ set_target_properties(gl3w PROPERTIES
 )
 target_include_directories(gl3w PUBLIC imgui/examples/libs/gl3w)
 target_link_libraries(gl3w PUBLIC ${OPENGL_gl_LIBRARY})
+target_compile_definitions(gl3w PUBLIC IMGUI_IMPL_OPENGL_LOADER_GL3W)
 
 # common example app functionality
 add_library(example_app STATIC example_app.cpp
