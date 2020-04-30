@@ -17,6 +17,7 @@ FDNReverb::FDNReverb(){
   currentSample = 0.0f;
   setRoomSize(5.0f);
   setReverbTime(2000.0f, 1300.0f);
+  std::cout << "FDNReverb not complete" << std::endl;
 }
 float FDNReverb::process(float input){
   currentSample *= twoOverN;

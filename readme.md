@@ -23,8 +23,13 @@ For generators, check https://cmake.org/cmake/help/latest/manual/cmake-generator
 
 Examples
    Assumes running command from Pedal root directory with build folder named 'build' inside the root directory
-
-   Linux/MacOS + Make: cmake -DCMAKE_BUILD_TYPE=Debug -S . -B build
-     Default generator is Make for both Linux and MacOS so can be skipped
-   Windows + Visual Studio 2017 64 bit: cmake -G Visual Studio 15 2017 -A x64 -S . -B build
-     Build type will be selected in Visual Studio so the option is not needed
+Linux/MacOS + Make: 
+```
+cmake -DCMAKE_BUILD_TYPE=Debug -S . -B build
+```
+Default generator is Make for both Linux and MacOS so can be skipped
+Windows + Visual Studio 2017 64 bit: 
+```
+cmake -G Visual Studio 15 2017 -A x64 -S . -B build
+```
+Build type will be selected in Visual Studio so the option is not needed
