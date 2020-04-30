@@ -65,6 +65,7 @@ set(example_list
     Envelopes
     LiveInputFeedbackDelay
     LowFrequencyOscillators
+    Reverb
 )
 
 # loop through example targets

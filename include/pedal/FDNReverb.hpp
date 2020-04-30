@@ -1,6 +1,6 @@
 #ifndef FDNReverb_hpp
 #define FDNReverb_hpp
-
+//not ready
 #include <cmath>
 #include "pedal/utilities.hpp"
 #include "pedal/CircularBuffer.hpp"
@@ -9,11 +9,12 @@
 #define PRMIE_BASE 7
 struct node{
   float m;//delay in samples
-  float delayOutput;
+  float delayOutput=0.0f;
   float gain;
   float pole;
-  float filterOutput;
-  CircularBuffer delayLine;};
+  float filterOutput=0.0f;
+  CircularBuffer delayLine = CircularBuffer(20000.0f);
+};
 class FDNReverb{
   public:
   FDNReverb();

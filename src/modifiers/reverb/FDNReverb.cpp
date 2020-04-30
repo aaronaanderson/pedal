@@ -8,12 +8,14 @@ FDNReverb::FDNReverb(){
       //multiply this value by every A4 value
       for( int subX = 0; subX < 4; subX++){
         for(int subY = 0; subY < 4; subY++){
-          A[x * 4 + subX][y * 4 + subY] = aFourVal * AFour[subX][subY];
+          A[x * 4 + subX][y * 4 + subY] = aFourVal * AFour[subX][subY];// * 0.25f;
+          //std::cout << "x: " << x * 4 + subX << " y: " << y * 4 + subY << " "  << aFourVal * AFour[subX][subY] << std::endl;
         }
       }
     }
   }
-  setRoomSize(20.0f);
+  currentSample = 0.0f;
+  setRoomSize(5.0f);
   setReverbTime(2000.0f, 1300.0f);
 }
 float FDNReverb::process(float input){
@@ -23,7 +25,7 @@ float FDNReverb::process(float input){
   for(int i = 0; i < N; i++){
     float matrixOutput = 0;
     for(int j = 0; j < N; j++){
-      matrixOutput += nodes[j].delayOutput * A[i][j];
+      matrixOutput += nodes[j].delayOutput * A[j][i];
     }
     nodes[i].filterOutput = (nodes[i].gain * matrixOutput) + (nodes[i].pole * nodes[i].filterOutput);
     nodes[i].delayLine.inputSample(nodes[i].filterOutput + currentSample);
@@ -42,22 +44,26 @@ void FDNReverb::calculateNodes(){
                        nyquistReverbTimeInSamples;
     nodes[i].gain = (2.0f * rDC * rNyquist)/
                     (rDC + rNyquist);
+    std::cout << "node: " << i << " gain: " << nodes[i].gain;
     nodes[i].pole = (rDC - rNyquist)/
                     (rDC + rNyquist);
+    std::cout << " pole: " << nodes[i].pole << std::endl;
   }
 }
 void FDNReverb::setReverbTime(float timeDC,float timeNyquist){
   dCReverbTimeInSamples = std::max(msToSamples(timeDC), 0.0f);
   nyquistReverbTimeInSamples = std::max(msToSamples(timeNyquist), 0.0f);
   
-  float shortestDelay = roomSize / (340.0f * (1/pdlSettings::sampleRate));
+  float shortestDelay = roomSize / (343.0f * (1.0f/pdlSettings::sampleRate));
   //set the delay of each node to the nearest co-prime spread linearly from the minimal
   //size to 1.5 x the minimal size
   for(int i = 0; i < N; i++){
-    float targetLength = linearInterpolation(i/static_cast<float>(N-1), 0.0f, roomSize, 1.0f, roomSize * 1.5f);
+    float targetLength = linearInterpolation(i/static_cast<float>(N-1), shortestDelay,  shortestDelay * 1.5f);
     //use method from page 113 to round multiplier to nearest prime multiple
     float multiplier = std::floor(0.5f + std::log(targetLength)/std::log(PRMIE_BASE));
-    nodes[i].m = PRMIE_BASE * multiplier;
+    nodes[i].m = msToSamples(targetLength * (1.0f + (i/float(N))));//PRMIE_BASE * multiplier;
+    //nodes[i].delayLine.setDuration(targetLength * (1.0f + (i/float(N))));
+    std::cout << "node " << i << " " << nodes[i].m << std::endl;
   }
   calculateNodes();
 }
