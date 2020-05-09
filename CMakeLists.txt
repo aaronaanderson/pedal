@@ -48,6 +48,7 @@ add_library(pedal STATIC
     src/analysis/EdgeDetector.cpp
     src/utilities/Counter.cpp
     src/modifiers/reverb/FDNReverb.cpp
+    src/generators/VOSIM.cpp
     external/AudioFFT.cpp
 )
 

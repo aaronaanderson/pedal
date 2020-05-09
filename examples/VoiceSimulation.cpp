@@ -3,27 +3,21 @@
 
 //include class if using
 #include "pedal/pdlSettings.hpp"
-#include "pedal/MoorerReverb.hpp"
-#include "pedal/WhiteNoise.hpp"
-#include "pedal/CREnvelope.hpp"
-#include "pedal/ImpulseGenerator.hpp"
+#include "pedal/VOSIM.hpp"
 
-ImpulseGenerator impulse;
-CREnvelope envelope;
-WhiteNoise noise;
-MoorerReverb reverb;
+VOSIM voice;
 //========================Audio Callback
 void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned outputChannels,
               unsigned inputChannels, double time, pdlExampleApp* app) {
-  
+
+  voice.setFrequency(pdlGetSlider(app, 0));
+  voice.setFormantFrequency(pdlGetSlider(app, 1));
+  voice.setDecayFactor(pdlGetSlider(app, 2));
+  voice.setOscillationsPerPeriod(pdlGetSlider(app, 3));
   for (unsigned i = 0; i < bufferSize; i += 1) {//for entire buffer of frames
-    if(impulse.generateSample() == 1.0f){
-        envelope.setTrigger(true);
-    }
-    float currentSample = noise.generateSample() * envelope.generateSample();
-    currentSample = reverb.process(currentSample * 0.1f);
+    float currentSample = voice.generateSample();
     for (unsigned j = 0; j < outputChannels; j += 1) {//for every sample in frame
-      out[outputChannels * i + j] = currentSample;// * 0.1f;//deliver output to every channel
+      out[outputChannels * i + j] = currentSample * 0.1f;//deliver output to every channel
     }
   }
 }
@@ -36,13 +30,11 @@ int main() {
     }
     pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
     pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
-    
-    impulse.setFrequency(1.0f);
-    envelope.setMode(CREnvelope::modes::AR);
-    envelope.setAttackTime(5.0f);
-    envelope.setReleaseTime(10.0f);
-    
-
+    // Add your GUI elements here
+    pdlAddSlider(app, 0, "Fundamental Frequency", 40.0f, 300.0f, 100.0f);
+    pdlAddSlider(app, 1, "Formant Frequency", 40.0f, 5000.0f, 500.0f);
+    pdlAddSlider(app, 2, "Decay Factor", 0.0f, 1.0f, 0.8);
+    pdlAddSlider(app, 3, "Oscillations Per Period", 1, 40, 4);
     //begin the app--------
     pdlStartExampleApp(app);
     //pdlSettings::sampleRate = app->sampling_rate;
