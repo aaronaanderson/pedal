@@ -66,6 +66,7 @@ set(example_list
     LiveInputFeedbackDelay
     LowFrequencyOscillators
     VoiceSimulation
+    BandLimitedImpulseTrain
 )
 
 # loop through example targets

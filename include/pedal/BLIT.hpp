@@ -21,9 +21,11 @@ class BLIT{
   float getFrequency();
   float getPhase();
   bool getSyncHarmonicsToFrequency();
+
   private:
   float currentSample;
   float numberOfHarmonics;
+  float nextNumberOfHarmonics;
   bool syncHarmonicsWithFrequency;
   float frequency;//Emission rate of Band Limited Impulses
   float phase;//location within the band limited impulse
