@@ -49,6 +49,7 @@ add_library(pedal STATIC
     src/utilities/Counter.cpp
     src/modifiers/reverb/FDNReverb.cpp
     src/generators/VOSIM.cpp
+    src/generators/oscillators/BLITSaw.cpp
     external/AudioFFT.cpp
 )
 

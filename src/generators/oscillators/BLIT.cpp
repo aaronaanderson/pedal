@@ -26,14 +26,14 @@ float BLIT::generateSample(){
 }
 void BLIT::setNumberOfHarmonics(float newNumberOfHarmonics){
   nextNumberOfHarmonics = std::fmax(newNumberOfHarmonics, 1.0f);
-  nextNumberOfHarmonics = std::floor(nextNumberOfHarmonics * 0.5f)  * 2.0f + 1.0f;
+  nextNumberOfHarmonics = std::floor(nextNumberOfHarmonics)  * 2.0f + 1.0f;
 }
 void BLIT::setFrequency(float newFrequency){
   frequency = newFrequency;
   phaseIncrement = (0.5f *M_PI * frequency) / pdlSettings::sampleRate;
   if(syncHarmonicsWithFrequency){
-    setNumberOfHarmonics(20000.0f/frequency);
-    std::cout << numberOfHarmonics << " : " << numberOfHarmonics * frequency << std::endl;
+    setNumberOfHarmonics(std::floor((pdlSettings::sampleRate*0.5f)/frequency));
+    std::cout << numberOfHarmonics << std::endl;
   }
 
 }
