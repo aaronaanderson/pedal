@@ -64,8 +64,6 @@ target_link_libraries(example_app PUBLIC glfw gl3w imgui rtaudio)
 set(example_list
     Envelopes
     LiveInputFeedbackDelay
-    LowFrequencyOscillators
-    Reverb
 )
 
 # loop through example targets
