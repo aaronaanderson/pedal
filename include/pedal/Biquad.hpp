@@ -1,7 +1,7 @@
 #ifndef Biquad_hpp
 #define Biquad_hpp
 
-#define _USING_MATH_DEFINES
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include "pdlSettings.hpp"
 
