@@ -13,7 +13,7 @@ void LowPass::setFrequency(float newFrequency){
   //Designing Audio Effect Plug-ins in C++, pg 165
   float theta = (M_PI * 2.0f * newFrequency)/pdlSettings::sampleRate;
   float gamma = 2.0f - cos(theta);
-  b = sqrt((gamma * gamma) -1.0f) - gamma;
+  b = std::sqrt((gamma * gamma) -1.0f) - gamma;
   a = 1.0f + b;
 }
 float LowPass::getSample(){return currentSample;}

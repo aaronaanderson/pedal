@@ -1,7 +1,8 @@
 #ifndef LowPass_hpp
 #define LowPass_hpp
 
-#include "math.h"
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include "pdlSettings.hpp"
 #include "iostream"
 
