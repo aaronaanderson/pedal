@@ -2,6 +2,7 @@
 #define CREnvelope_hpp
 
 #include <cmath>
+#include <algorithm>
 #include "pedal/pdlSettings.hpp"
 #include "pedal/utilities.hpp"
 

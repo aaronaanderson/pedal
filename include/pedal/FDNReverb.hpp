@@ -2,6 +2,7 @@
 #define FDNReverb_hpp
 //not ready
 #include <cmath>
+#include <algorithm>
 #include "pedal/utilities.hpp"
 #include "pedal/CircularBuffer.hpp"
 #include "pedal/Interpolation.hpp"

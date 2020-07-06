@@ -77,7 +77,7 @@ class MoorerReverb{
   AllPass allPass;//Moorer argues that only one allpass is useful
   CircularBuffer delayLine;//buffer for multi-tap delay (early reflections)
   //18 delay times and amplitudes for early reflections, taken from paper {time(ms), amplitude}
-  const Tap taps[NUM_TAPS] = {{4.3f, 0.841}, {21.5f, 0.504f},
+  const Tap taps[NUM_TAPS] = {{4.3f, 0.841f}, {21.5f, 0.504f},
                               {22.5f, 0.491f}, {26.8f, 0.379f},
                               {27.0f, 0.380f}, {29.8f, 0.346f},
                               {45.8f, 0.289f}, {48.5f, 0.272f},
