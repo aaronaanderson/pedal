@@ -1,6 +1,7 @@
 #ifndef LowPassCombFilter_hpp
 #define LowPassCombFilter_hpp
 
+#include "pedal/pdlConstants.hpp"
 #include "pedal/CircularBuffer.hpp"
 #include "pedal/LowPass.hpp"
 
