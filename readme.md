@@ -1,6 +1,4 @@
 # Pedal
-
-## Pedagogical Audio Library
   
 As a computer music composer, I found the transition from domain-specific languages/environments such as SuperCollider, MaxMSP, or PD into C++ audio programming tremendously challenging. Resources for learning common practices are scattered throughout multiple academic domains, including mathematics and computer science. Without access to the luxuries of higher education, this task may have been impossible to overcome.
 
