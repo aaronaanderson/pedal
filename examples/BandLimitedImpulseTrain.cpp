@@ -9,9 +9,10 @@
 BLIT blit;
 HighPass highPass;
 float currentSample = 0.0f;
+
 //========================Audio Callback
 void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned outputChannels,
-              unsigned inputChannels, double time, pdlExampleApp* app) {
+              unsigned inputChannels, double time, PedalExampleApp* app) {
   
   float frequency = std::pow(2, pdlGetSlider(app, 0));
   blit.setFrequency(frequency);
@@ -29,12 +30,12 @@ void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned
 //======================main loop
 int main() {
     //make an app (a pointer to an app, actually)
-    pdlExampleApp* app = pdlInitExampleApp(callback);
+    PedalExampleApp* app = pdlInitializeExampleApp(callback);
     if (!app) {//if app doesn't succesfully allocate
       return 1;//cancel program, return 1
     }
-    pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
-    pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
+    pdlSettings::sampleRate = pdlGetSampleRate(app);
+    pdlSettings::bufferSize = pdlGetBufferSize(app);
     // Add your GUI elements here
     pdlAddSlider(app, 0, "Fundamental octave", 0.5f, 14.5f, 1.0f);
     pdlAddSlider(app, 1, "number Of Harmonics", 40.0f, 1000.0f, 500.0f);

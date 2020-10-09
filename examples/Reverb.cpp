@@ -12,9 +12,10 @@ ImpulseGenerator impulse;
 CREnvelope envelope;
 WhiteNoise noise;
 MoorerReverb reverb;
+
 //========================Audio Callback
 void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned outputChannels,
-              unsigned inputChannels, double time, pdlExampleApp* app) {
+              unsigned inputChannels, double time, PedalExampleApp* app) {
   
   for (unsigned i = 0; i < bufferSize; i += 1) {//for entire buffer of frames
     if(impulse.generateSample() == 1.0f){
@@ -30,12 +31,12 @@ void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned
 //======================main loop
 int main() {
     //make an app (a pointer to an app, actually)
-    pdlExampleApp* app = pdlInitExampleApp(callback);
+    PedalExampleApp* app = pdlInitializeExampleApp(callback);
     if (!app) {//if app doesn't succesfully allocate
       return 1;//cancel program, return 1
     }
-    pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
-    pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
+    pdlSettings::sampleRate = pdlGetSampleRate(app);
+    pdlSettings::bufferSize = pdlGetBufferSize(app);
     
     impulse.setFrequency(1.0f);
     envelope.setMode(CREnvelope::modes::AR);

@@ -1,34 +1,44 @@
+/*
+// Minimal functionality to build simple examples
+*/
 #ifndef PDL_EX_APP
 #define PDL_EX_APP
 
-struct pdlExampleApp;
-using pdlExampleCallback = void (*)(float* out, float* in, unsigned bufferSize,
-                                    unsigned samplingRate, unsigned numChannelsOut,
-                                    unsigned numChannelsIn,double streamTime, 
-                                    pdlExampleApp* app);
+struct PedalExampleApp;
+using pdlExampleAudioCallback = void (*)(float* out, float* in, unsigned bufferSize,
+                                         unsigned samplingRate, unsigned numChannelsOut,
+                                         unsigned numChannelsIn,double streamTime, 
+                                         PedalExampleApp* app);
+#include <vector>
+using pdlExampleMidiInputCallback = void (*)(double deltatime, 
+                                             std::vector< unsigned char >* message,
+                                             PedalExampleApp* app);
 
-pdlExampleApp* pdlInitExampleApp(pdlExampleCallback callback);
-void pdlStartExampleApp(pdlExampleApp* app);
-bool pdlRunExampleApp(pdlExampleApp* app);
-void pdlUpdateExampleApp(pdlExampleApp* app);
-void pdlDeleteExampleApp(pdlExampleApp* app);
-unsigned pdlExampleAppGetSamplingRate(pdlExampleApp* app);
-unsigned pdlExampleAppGetBufferSize(pdlExampleApp* app);
+PedalExampleApp* pdlInitializeExampleApp(pdlExampleAudioCallback, pdlExampleMidiInputCallback = nullptr);
 
-void pdlGetCursorPos(pdlExampleApp* app, float* mx, float* my);
+void pdlOpenMidiPort(PedalExampleApp* app, int port);
+void pdlStartExampleApp(PedalExampleApp* app);
+bool pdlRunExampleApp(PedalExampleApp* app);
+void pdlUpdateExampleApp(PedalExampleApp* app);
+void pdlDeleteExampleApp(PedalExampleApp* app);
+unsigned pdlGetSampleRate(PedalExampleApp* app);
+unsigned pdlGetBufferSize(PedalExampleApp* app);
 
-void pdlAddSlider(pdlExampleApp* app, int sliderIndex, const char* name,
+void pdlGetCursorPos(PedalExampleApp* app, float* mx, float* my);
+
+void pdlAddSlider(PedalExampleApp* app, int sliderIndex, const char* name,
                   float low, float high, float initialValue);
-float pdlGetSlider(pdlExampleApp* app, int idx);
+float pdlGetSlider(PedalExampleApp* app, int idx);
 
-void pdlAddToggle(pdlExampleApp* app, int toggleIndex, const char* name,
+void pdlAddToggle(PedalExampleApp* app, int toggleIndex, const char* name,
                   bool initialValue);
-bool pdlGetToggle(pdlExampleApp* app, int idx);
+bool pdlGetToggle(PedalExampleApp* app, int idx);
 
-//void pdlAddDropdown(pdlExampleApp* app, )
-void pdlAddTrigger(pdlExampleApp* app, int triggerIndex, const char* name);
-bool pdlGetTrigger(pdlExampleApp* app, int idx);
+//void pdlAddDropdown(PedalExampleApp* app, )
+void pdlAddTrigger(PedalExampleApp* app, int triggerIndex, const char* name);
+bool pdlGetTrigger(PedalExampleApp* app, int idx);
 
-void pdlAddDropDown(pdlExampleApp* app, int idx, const char* name,  char*  content[], int length);
-int pdlGetDropDown(pdlExampleApp* app, int indx);
+void pdlAddDropDown(PedalExampleApp* app, int idx, const char* name,  
+                    char*  content[], int length);
+int pdlGetDropDown(PedalExampleApp* app, int indx);
 #endif

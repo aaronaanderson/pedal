@@ -10,7 +10,7 @@ SmoothValue<float> delayTime;//smooth changes in delay time
 
 //========================Audio Callback
 void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned outputChannels,
-              unsigned inputChannels, double time, pdlExampleApp* app) {
+              unsigned inputChannels, double time, PedalExampleApp* app) {
   
   delay.setFeedback(pdlGetSlider(app, 0));//set feedback amplitude from 0th slider
   delayTime.setTarget(pdlGetSlider(app, 1));//tell smooth value to target 1st slider value
@@ -31,12 +31,12 @@ void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned
 //======================main loop
 int main() {
     //make an app (a pointer to an app, actually)
-    pdlExampleApp* app = pdlInitExampleApp(callback);
+    PedalExampleApp* app = pdlInitializeExampleApp(callback);
     if (!app) {//if app doesn't succesfully allocate
       return 1;//cancel program, return 1
     }
-    pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
-    pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
+    pdlSettings::sampleRate = pdlGetSampleRate(app);
+    pdlSettings::bufferSize = pdlGetBufferSize(app);
     delayTime.setTime(500.0f);
     // Add your GUI elements here
     pdlAddSlider(app, 0, "feedback", 0.0f, 0.99f, 0.4f);

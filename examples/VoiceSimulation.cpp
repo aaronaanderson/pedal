@@ -6,9 +6,10 @@
 #include "pedal/VOSIM.hpp"
 
 VOSIM voice;
+
 //========================Audio Callback
 void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned outputChannels,
-              unsigned inputChannels, double time, pdlExampleApp* app) {
+              unsigned inputChannels, double time, PedalExampleApp* app) {
 
   voice.setFrequency(pdlGetSlider(app, 0));
   voice.setFormantFrequency(pdlGetSlider(app, 1));
@@ -24,12 +25,12 @@ void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned
 //======================main loop
 int main() {
     //make an app (a pointer to an app, actually)
-    pdlExampleApp* app = pdlInitExampleApp(callback);
+    PedalExampleApp* app = pdlInitializeExampleApp(callback);
     if (!app) {//if app doesn't succesfully allocate
       return 1;//cancel program, return 1
     }
-    pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
-    pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
+    pdlSettings::sampleRate = pdlGetSampleRate(app);
+    pdlSettings::bufferSize = pdlGetBufferSize(app);
     // Add your GUI elements here
     pdlAddSlider(app, 0, "Fundamental Frequency", 40.0f, 300.0f, 100.0f);
     pdlAddSlider(app, 1, "Formant Frequency", 40.0f, 5000.0f, 500.0f);

@@ -15,9 +15,10 @@ CREnvelope curvedAR;
 
 Biquad resLowpass;//just because it's nice
 WTSaw saw(180.0f);//wavetable sawtooth at 180Hz
+
 //========================Audio Callback
 void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned outputChannels,
-              unsigned inputChannels, double time, pdlExampleApp* app) {
+              unsigned inputChannels, double time, PedalExampleApp* app) {
   //Set attack for all envelopes
   linearADSR.setAttackTime(pdlGetSlider(app, 0));
   linearAR.setAttackTime(pdlGetSlider(app, 0));
@@ -61,12 +62,12 @@ void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned
 //======================main loop
 int main() {
     //make an app (a pointer to an app, actually)
-    pdlExampleApp* app = pdlInitExampleApp(callback);
+    PedalExampleApp* app = pdlInitializeExampleApp(callback);
     if (!app) {//if app doesn't succesfully allocate
       return 1;//cancel program, return 1
     }
-    pdlSettings::sampleRate = pdlExampleAppGetSamplingRate(app);
-    pdlSettings::bufferSize = pdlExampleAppGetBufferSize(app);
+    pdlSettings::sampleRate = pdlGetSampleRate(app);
+    pdlSettings::bufferSize = pdlGetBufferSize(app);
     
     linearADSR.setMode(CTEnvelope::modes::ADSR);
     linearAR.setMode(CTEnvelope::modes::AR);
