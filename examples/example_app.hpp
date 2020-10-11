@@ -13,14 +13,16 @@ using pdlExampleAudioCallback = void (*)(float* out, float* in, unsigned bufferS
 using pdlExampleMidiInputCallback = void (*)(double deltatime, 
                                              std::vector< unsigned char >* message,
                                              PedalExampleApp* app);
-
-PedalExampleApp* pdlInitializeExampleApp(pdlExampleAudioCallback, pdlExampleMidiInputCallback = nullptr);
+//using pdlExampleKeyboardCallback = void (*)(GLFWwindow* window, int key, int scancode, int action, int mods)
+PedalExampleApp* pdlInitializeExampleApp(pdlExampleAudioCallback, 
+                                         pdlExampleMidiInputCallback = nullptr);
 
 void pdlOpenMidiPort(PedalExampleApp* app, int port);
 void pdlStartExampleApp(PedalExampleApp* app);
 bool pdlRunExampleApp(PedalExampleApp* app);
 void pdlUpdateExampleApp(PedalExampleApp* app);
 void pdlDeleteExampleApp(PedalExampleApp* app);
+void pdlSetKeyboardCallback(void (*)(int keyPressed, bool keyDown));
 unsigned pdlGetSampleRate(PedalExampleApp* app);
 unsigned pdlGetBufferSize(PedalExampleApp* app);
 

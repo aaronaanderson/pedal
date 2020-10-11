@@ -55,7 +55,7 @@ void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned
     currentSample += saw.getSample() * curvedAR.generateSample();
 
     for (unsigned j = 0; j < outputChannels; j += 1) {//for every sample in frame
-      out[outputChannels * i + j] = currentSample;//deliver output to every channel
+      out[outputChannels * i + j] = currentSample * 0.1f;//deliver output to every channel
     }
   }
 }

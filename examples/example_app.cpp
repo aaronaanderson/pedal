@@ -59,7 +59,7 @@ struct PedalExampleApp {
     pdlExampleAudioCallback callback;
     RtMidiIn* rtMidiIn = nullptr;
     std::string midiDeviceName;
-    unsigned int numPorts;
+    unsigned int numPorts;    
     slider sliders[NUM_SLIDERS_MAX];
     toggle toggles[NUM_TOGGLES_MAX];
     trigger triggers[NUM_TRIGGERS_MAX];
@@ -68,14 +68,14 @@ struct PedalExampleApp {
     std::atomic<float> cursory;
 };
 
+//callback function for ascii keyboard
+void (*customKeyboardCallback)(int keyPressed, bool keyDown) = nullptr;
+
 static int audioCallback(void *outputBuffer, void *inputBuffer,
                          unsigned int nFrames, double streamTime,
                          RtAudioStreamStatus status, void *userData) {
     float* out = (float*)outputBuffer;
     float* in = (float*)inputBuffer;
-    for (unsigned i = 0; i < nFrames; i += 1) {
-
-    }
     auto* app = (PedalExampleApp*)userData;
     if (app && app->callback) {
         app->callback(out, in, nFrames, app->sample_rate, app->output_channels,
@@ -94,6 +94,11 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
     if ((action == GLFW_PRESS) && (mods & GLFW_MOD_CONTROL) && (key == GLFW_KEY_Q)) {
         glfwSetWindowShouldClose(window, 1);
     }
+    bool keyDown = (action == GLFW_PRESS) ? true : false;
+    if(*customKeyboardCallback != nullptr){
+        customKeyboardCallback(key, keyDown);
+    }
+    
 }
 
 PedalExampleApp* pdlInitializeExampleApp(pdlExampleAudioCallback callback, pdlExampleMidiInputCallback midiInputCallback) {
@@ -153,6 +158,7 @@ PedalExampleApp* pdlInitializeExampleApp(pdlExampleAudioCallback callback, pdlEx
     RtAudio::StreamParameters outputParameters;
     outputParameters.deviceId = app->device_id;
     outputParameters.nChannels = app->output_channels;
+    
     outputParameters.firstChannel = 0;
     RtAudio::StreamParameters inputParameters;
     unsigned default_in = app->audio.getDefaultInputDevice();
@@ -161,11 +167,19 @@ PedalExampleApp* pdlInitializeExampleApp(pdlExampleAudioCallback callback, pdlEx
     app->input_channels = device_info.inputChannels;
     inputParameters.nChannels = app->audio.getDeviceInfo(default_in).inputChannels;
     inputParameters.firstChannel = 0;
+    
     try {
-        app->audio.openStream(&outputParameters, &inputParameters, RTAUDIO_FLOAT32,
-                              app->sample_rate, &app->buffer_size,
-                              audioCallback, app,
-                              nullptr, nullptr); // option & error callback
+        if(inputParameters.nChannels > 0){
+            app->audio.openStream(&outputParameters, &inputParameters, RTAUDIO_FLOAT32,
+            app->sample_rate, &app->buffer_size,
+            audioCallback, app,
+            nullptr, nullptr); // option & error callback
+        }else{
+            app->audio.openStream(&outputParameters, nullptr, RTAUDIO_FLOAT32,
+            app->sample_rate, &app->buffer_size,
+            audioCallback, app,
+            nullptr, nullptr); // option & error callback
+        }
     }
     catch (RtAudioError& e) {
         e.printMessage();
@@ -340,6 +354,9 @@ void pdlDeleteExampleApp(PedalExampleApp* app) {
     glfwDestroyWindow(app->window);
     glfwTerminate();
     delete app;
+}
+void pdlSetKeyboardCallback(void (*keyboardCallback)(int key, bool keyDown)){
+    customKeyboardCallback = *keyboardCallback;
 }
 void pdlOpenMidiPort(PedalExampleApp* app, int port){
   if(port < app->rtMidiIn->getPortCount()){

@@ -74,6 +74,7 @@ set(example_list
     LowFrequencyOscillators
     VoiceSimulation
     BandLimitedImpulseTrain
+    MonophonicSynth
 )
 
 # loop through example targets
