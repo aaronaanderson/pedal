@@ -11,8 +11,7 @@ HighPass highPass;
 float currentSample = 0.0f;
 
 //========================Audio Callback
-void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned outputChannels,
-              unsigned inputChannels, double time, PedalExampleApp* app) {
+void callback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, PedalExampleApp* app) {
   
   float frequency = std::pow(2, pdlGetSlider(app, 0));
   blit.setFrequency(frequency);
@@ -23,7 +22,7 @@ void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned
     float currentSample = highPass.process(blit.generateSample() - 0.5f) - (currentSample * pdlGetSlider(app, 2));
     
     for (unsigned j = 0; j < outputChannels; j += 1) {//for every sample in frame
-      out[outputChannels * i + j] = currentSample * 0.1f;//deliver output to every channel
+      output[outputChannels * i + j] = currentSample * 0.1f;//deliver output to every channel
     }
   }
 }

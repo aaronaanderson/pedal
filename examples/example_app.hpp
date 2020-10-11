@@ -5,24 +5,25 @@
 #define PDL_EX_APP
 
 struct PedalExampleApp;
-using pdlExampleAudioCallback = void (*)(float* out, float* in, unsigned bufferSize,
-                                         unsigned samplingRate, unsigned numChannelsOut,
-                                         unsigned numChannelsIn,double streamTime, 
+using pdlExampleAudioCallback = void (*)(float* out, float* in, int bufferSize,
+                                         int numChannelsOut, int numChannelsIn, 
                                          PedalExampleApp* app);
 #include <vector>
 using pdlExampleMidiInputCallback = void (*)(double deltatime, 
                                              std::vector< unsigned char >* message,
                                              PedalExampleApp* app);
 //using pdlExampleKeyboardCallback = void (*)(GLFWwindow* window, int key, int scancode, int action, int mods)
-PedalExampleApp* pdlInitializeExampleApp(pdlExampleAudioCallback, 
-                                         pdlExampleMidiInputCallback = nullptr);
+PedalExampleApp* pdlInitializeExampleApp(pdlExampleAudioCallback, int sampleRate = 48000, int bufferSize = 512);
 
 void pdlOpenMidiPort(PedalExampleApp* app, int port);
 void pdlStartExampleApp(PedalExampleApp* app);
 bool pdlRunExampleApp(PedalExampleApp* app);
 void pdlUpdateExampleApp(PedalExampleApp* app);
 void pdlDeleteExampleApp(PedalExampleApp* app);
+
+void pdlSetMidiCallback(PedalExampleApp* app, pdlExampleMidiInputCallback);
 void pdlSetKeyboardCallback(void (*)(int keyPressed, bool keyDown));
+
 unsigned pdlGetSampleRate(PedalExampleApp* app);
 unsigned pdlGetBufferSize(PedalExampleApp* app);
 

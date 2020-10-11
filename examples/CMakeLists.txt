@@ -75,6 +75,7 @@ set(example_list
     VoiceSimulation
     BandLimitedImpulseTrain
     MonophonicSynth
+    EmptyExample
 )
 
 # loop through example targets

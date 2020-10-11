@@ -9,14 +9,13 @@ Delay delay;//feedback delay
 SmoothValue<float> delayTime;//smooth changes in delay time
 
 //========================Audio Callback
-void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned outputChannels,
-              unsigned inputChannels, double time, PedalExampleApp* app) {
+void callback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, PedalExampleApp* app) {
   
   delay.setFeedback(pdlGetSlider(app, 0));//set feedback amplitude from 0th slider
   delayTime.setTarget(pdlGetSlider(app, 1));//tell smooth value to target 1st slider value
 
   for (unsigned i = 0; i < bufferSize; i += 1) {//for entire buffer of frames
-    float liveInputSample = in[i * inputChannels];//get the input sample (on the 0th channel)
+    float liveInputSample = input[i * inputChannels];//get the input sample (on the 0th channel)
     delayTime.process();//advance SmoothValue
     //set delay time per-sample
     delay.setDelayTime(delayTime.getCurrentValue());
@@ -24,7 +23,7 @@ void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned
     float currentSample = delay.getSample();//collect the output
 
     for (unsigned j = 0; j < outputChannels; j += 1) {//for every sample in frame
-      out[outputChannels * i + j] = currentSample * 0.1f;//deliver output to every channel
+      output[outputChannels * i + j] = currentSample * 0.1f;//deliver output to every channel
     }
   }
 }

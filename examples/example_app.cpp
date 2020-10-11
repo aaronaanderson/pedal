@@ -60,6 +60,7 @@ struct PedalExampleApp {
     RtMidiIn* rtMidiIn = nullptr;
     std::string midiDeviceName;
     unsigned int numPorts;    
+    int userDefinedPort = -1;//initiate with invalid port
     slider sliders[NUM_SLIDERS_MAX];
     toggle toggles[NUM_TOGGLES_MAX];
     trigger triggers[NUM_TRIGGERS_MAX];
@@ -78,8 +79,8 @@ static int audioCallback(void *outputBuffer, void *inputBuffer,
     float* in = (float*)inputBuffer;
     auto* app = (PedalExampleApp*)userData;
     if (app && app->callback) {
-        app->callback(out, in, nFrames, app->sample_rate, app->output_channels,
-                      app->input_channels, streamTime, app);
+        app->callback(out, in, nFrames, app->output_channels,
+                      app->input_channels, app);
     }
     return 0;
 }
@@ -101,7 +102,7 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
     
 }
 
-PedalExampleApp* pdlInitializeExampleApp(pdlExampleAudioCallback callback, pdlExampleMidiInputCallback midiInputCallback) {
+PedalExampleApp* pdlInitializeExampleApp(pdlExampleAudioCallback callback, int sampleRate, int bufferSize) {
     auto* app = new PedalExampleApp;
     if (!app) {
         std::cerr << "Fail: app creation\n";
@@ -152,8 +153,9 @@ PedalExampleApp* pdlInitializeExampleApp(pdlExampleAudioCallback callback, pdlEx
     app->device_name = device_info.name;
     
     app->output_channels = device_info.outputChannels;
-    app->sample_rate = device_info.preferredSampleRate;
-    app->buffer_size = 512;
+    //app->sample_rate = device_info.preferredSampleRate;
+    app->sample_rate = sampleRate;
+    app->buffer_size = bufferSize;
 
     RtAudio::StreamParameters outputParameters;
     outputParameters.deviceId = app->device_id;
@@ -187,29 +189,7 @@ PedalExampleApp* pdlInitializeExampleApp(pdlExampleAudioCallback callback, pdlEx
         glfwTerminate();
         delete app;
         return nullptr;
-    }
-    //RTMidi
-    if(midiInputCallback != nullptr){
-        app->rtMidiIn = new RtMidiIn();
-        // Check available ports.
-        app->numPorts = app->rtMidiIn->getPortCount();
-        for(int i = 0; i < app->numPorts; i++){
-            std::cout << "Port " << i << ": " << app->rtMidiIn->getPortName(i) << std::endl;
-        }
-        if ( app->numPorts == 0 ) {
-            std::cout << "No ports available!\n";
-        }else{
-            app->rtMidiIn->openPort(0);
-            // Set our callback function.  This should be done immediately after
-            // opening the port to avoid having incoming messages written to the
-            // queue.
-            app->rtMidiIn->setCallback((RtMidiIn::RtMidiCallback)midiInputCallback);
-            app->midiDeviceName = app->rtMidiIn->getPortName(0);
-            // Don't ignore sysex, timing, or active sensing messages.
-            app->rtMidiIn->ignoreTypes( true, false, false );
-        }
-    }
-    
+    }    
     for (int i = 0; i < NUM_SLIDERS_MAX; i += 1) {
         slider* s = app->sliders + i;
         s->name = "";
@@ -355,15 +335,47 @@ void pdlDeleteExampleApp(PedalExampleApp* app) {
     glfwTerminate();
     delete app;
 }
+void pdlSetMidiCallback(PedalExampleApp* app, pdlExampleMidiInputCallback newMidiCallback){
+    if(!app->rtMidiIn){
+        app->rtMidiIn = new RtMidiIn();
+    }
+    // Check available ports.
+    app->numPorts = app->rtMidiIn->getPortCount();
+    std::cout << "The following MIDI ports are available:\n";
+    for(int i = 0; i < app->numPorts; i++){
+        std::cout << "Port " << i << ": " << app->rtMidiIn->getPortName(i) << std::endl;
+    }
+    if ( app->numPorts == 0 ) {
+        std::cout << "No ports available!\n";
+    }else{
+        int port;
+        if(app->userDefinedPort > -1 && app->userDefinedPort < app->numPorts){
+            port = app->userDefinedPort;
+        }else{
+            port = 0;
+        }
+        app->rtMidiIn->openPort(port);
+        // Set our callback function.  This should be done immediately after
+        // opening the port to avoid having incoming messages written to the
+        // queue.
+        app->rtMidiIn->setCallback((RtMidiIn::RtMidiCallback)newMidiCallback);
+        app->midiDeviceName = app->rtMidiIn->getPortName(port);
+        // Don't ignore sysex, timing, or active sensing messages.
+        app->rtMidiIn->ignoreTypes( true, false, false );
+    }    
+}
 void pdlSetKeyboardCallback(void (*keyboardCallback)(int key, bool keyDown)){
     customKeyboardCallback = *keyboardCallback;
 }
 void pdlOpenMidiPort(PedalExampleApp* app, int port){
-  if(port < app->rtMidiIn->getPortCount()){
-    app->rtMidiIn->closePort();
-    app->rtMidiIn->openPort(port);
-    app->midiDeviceName = app->rtMidiIn->getPortName(port);
-  }
+    app->userDefinedPort = port;
+    if(app->userDefinedPort < app->rtMidiIn->getPortCount()){
+        app->rtMidiIn->closePort();
+        app->rtMidiIn->openPort(port);
+        app->midiDeviceName = app->rtMidiIn->getPortName(port);
+    }else{
+        std::cout << "Port: " << port << " is not available" << std::endl;
+    }
 }
 unsigned pdlGetSampleRate(PedalExampleApp* app) {
     return app->sample_rate;

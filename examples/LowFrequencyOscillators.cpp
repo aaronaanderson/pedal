@@ -24,8 +24,7 @@ Counter counter(5);
 int sequence[5] = {50, 52, 54, 57, 59};
 
 //========================Audio Callback
-void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned outputChannels,
-              unsigned inputChannels, double time, PedalExampleApp* app) {
+void callback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, PedalExampleApp* app) {
   float x, y;
   pdlGetCursorPos(app, &x, &y);
 
@@ -39,7 +38,7 @@ void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned
     }
     float currentSample = tri.generateSample() * envelope.generateSample();
     for (unsigned j = 0; j < outputChannels; j += 1) {//for every sample in frame
-      out[outputChannels * i + j] = currentSample;//deliver output to every channel
+      output[outputChannels * i + j] = currentSample;//deliver output to every channel
     }
   }
 }

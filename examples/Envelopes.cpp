@@ -17,8 +17,7 @@ Biquad resLowpass;//just because it's nice
 WTSaw saw(180.0f);//wavetable sawtooth at 180Hz
 
 //========================Audio Callback
-void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned outputChannels,
-              unsigned inputChannels, double time, PedalExampleApp* app) {
+void callback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, PedalExampleApp* app) {
   //Set attack for all envelopes
   linearADSR.setAttackTime(pdlGetSlider(app, 0));
   linearAR.setAttackTime(pdlGetSlider(app, 0));
@@ -55,7 +54,7 @@ void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned
     currentSample += saw.getSample() * curvedAR.generateSample();
 
     for (unsigned j = 0; j < outputChannels; j += 1) {//for every sample in frame
-      out[outputChannels * i + j] = currentSample * 0.1f;//deliver output to every channel
+      output[outputChannels * i + j] = currentSample * 0.1f;//deliver output to every channel
     }
   }
 }

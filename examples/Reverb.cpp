@@ -14,8 +14,7 @@ WhiteNoise noise;
 MoorerReverb reverb;
 
 //========================Audio Callback
-void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned outputChannels,
-              unsigned inputChannels, double time, PedalExampleApp* app) {
+void callback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, PedalExampleApp* app) {
   
   for (unsigned i = 0; i < bufferSize; i += 1) {//for entire buffer of frames
     if(impulse.generateSample() == 1.0f){
@@ -24,7 +23,7 @@ void callback(float* out,float* in, unsigned bufferSize, unsigned rate, unsigned
     float currentSample = noise.generateSample() * envelope.generateSample();
     currentSample = reverb.process(currentSample * 0.1f);
     for (unsigned j = 0; j < outputChannels; j += 1) {//for every sample in frame
-      out[outputChannels * i + j] = currentSample;// * 0.1f;//deliver output to every channel
+      output[outputChannels * i + j] = currentSample;// * 0.1f;//deliver output to every channel
     }
   }
 }

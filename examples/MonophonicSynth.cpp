@@ -21,14 +21,14 @@ void keyboardCallback(int key, bool keyDown){
     }
 }
 
-void audioCallback(float* output, float* input, unsigned bufferSize, unsigned sampleRate, 
-                   unsigned outputChannels, unsigned inputChannels, double time, PedalExampleApp* app){
+void audioCallback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, PedalExampleApp* app){
 
 }
 
 int main(){
-    PedalExampleApp* app = pdlInitializeExampleApp(audioCallback, midiCallback);
+    PedalExampleApp* app = pdlInitializeExampleApp(audioCallback);
     pdlSetKeyboardCallback(keyboardCallback);
+    pdlSetMidiCallback(app, midiCallback);
     pdlOpenMidiPort(app, 1);
     while(pdlRunExampleApp(app)){
         pdlUpdateExampleApp(app);
