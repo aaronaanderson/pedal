@@ -91,19 +91,35 @@ static float clampf01(float x) {
     else return x;
 }
 
+PedalExampleApp* appPtr;
+PedalExampleApp* getAppPtr(){return appPtr;}
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if ((action == GLFW_PRESS) && (mods & GLFW_MOD_CONTROL) && (key == GLFW_KEY_Q)) {
         glfwSetWindowShouldClose(window, 1);
+    }else if(action == GLFW_PRESS && (mods &GLFW_MOD_CONTROL) && (key >= 48) && (key <=57)){// if ctl + number
+        // // ascii number on keyboard is n + 48
+        // int deviceIndex = key - 48;
+        // //check to make sure that it isn't already running
+        // if(getAppPtr()->audio.isStreamOpen())
+        //     getAppPtr()->audio.closeStream();
+        // }
+        // if(deviceIndex < getAppPtr()->audio.getDeviceCount()){
+        //     getAppPtr()->audio.
+        // }
+        
     }
-    bool keyDown = (action == GLFW_PRESS) ? true : false;
-    if(*customKeyboardCallback != nullptr){
-        customKeyboardCallback(key, keyDown);
+    bool keyDown;
+    if(action == GLFW_PRESS || action == GLFW_RELEASE){
+        keyDown = (action == GLFW_PRESS) ? true : false;
+        if(*customKeyboardCallback != nullptr){
+            customKeyboardCallback(key, keyDown);
+        }
     }
-    
 }
 
 PedalExampleApp* pdlInitializeExampleApp(pdlExampleAudioCallback callback, int sampleRate, int bufferSize) {
     auto* app = new PedalExampleApp;
+    appPtr = app;
     if (!app) {
         std::cerr << "Fail: app creation\n";
         return nullptr;
@@ -148,6 +164,7 @@ PedalExampleApp* pdlInitializeExampleApp(pdlExampleAudioCallback callback, int s
     ImGui_ImplOpenGL3_Init("#version 330");
 
     unsigned default_out = app->audio.getDefaultOutputDevice();
+
     auto device_info = app->audio.getDeviceInfo(default_out);
     app->device_id = default_out;
     app->device_name = device_info.name;
@@ -217,7 +234,11 @@ PedalExampleApp* pdlInitializeExampleApp(pdlExampleAudioCallback callback, int s
 }
 
 void pdlStartExampleApp(PedalExampleApp* app) {
-    app->audio.startStream();
+    try{
+        app->audio.startStream();
+    }catch(RtAudioError& e) {
+        e.printMessage();
+    }
 }
 
 bool pdlRunExampleApp(PedalExampleApp* app) {
@@ -438,3 +459,54 @@ int pdlGetDropDown(PedalExampleApp* app, int idx){
     return app->dropDowns[idx].atomic_val.load();
 }
 
+int pdlAsciiToMidi(int asciiCode){
+    //start with invalid midi note
+    int midiNoteNumber = -1;
+    if(asciiCode > 64 && asciiCode < 90){
+        switch(asciiCode){
+            case 65://a 
+                midiNoteNumber = 48;//(one octave below middle C)
+            break;
+            case 87://w
+                midiNoteNumber = 49;
+            break;
+            case 83://s
+                midiNoteNumber = 50;
+            break;
+            case 69://e
+                midiNoteNumber = 51;
+            break;
+            case 68://d
+                midiNoteNumber = 52;
+            break;
+            case 70://f
+                midiNoteNumber = 53;
+            break;
+            case 84://t
+                midiNoteNumber = 54;
+            break;
+            case 71://g
+                midiNoteNumber = 55;
+            break;
+            case 89://y
+                midiNoteNumber = 56;
+            break;
+            case 72://h
+                midiNoteNumber = 57;
+            break;
+            case 85://u
+                midiNoteNumber = 58;
+            break;
+            case 74://j
+                midiNoteNumber = 59;
+            break;
+            case 75://k
+                midiNoteNumber = 60;//(middle C)
+            break;
+            default: //any other key is invalid
+                midiNoteNumber = -1;
+            break;
+        }
+    }
+    return midiNoteNumber;
+}

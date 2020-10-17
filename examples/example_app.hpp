@@ -12,7 +12,7 @@ using pdlExampleAudioCallback = void (*)(float* out, float* in, int bufferSize,
 using pdlExampleMidiInputCallback = void (*)(double deltatime, 
                                              std::vector< unsigned char >* message,
                                              PedalExampleApp* app);
-//using pdlExampleKeyboardCallback = void (*)(GLFWwindow* window, int key, int scancode, int action, int mods)
+
 PedalExampleApp* pdlInitializeExampleApp(pdlExampleAudioCallback, int sampleRate = 48000, int bufferSize = 512);
 
 void pdlOpenMidiPort(PedalExampleApp* app, int port);
@@ -44,4 +44,6 @@ bool pdlGetTrigger(PedalExampleApp* app, int idx);
 void pdlAddDropDown(PedalExampleApp* app, int idx, const char* name,  
                     char*  content[], int length);
 int pdlGetDropDown(PedalExampleApp* app, int indx);
+
+int pdlAsciiToMidi(int ascii);
 #endif
