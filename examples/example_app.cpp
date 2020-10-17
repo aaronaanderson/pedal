@@ -302,8 +302,8 @@ void pdlUpdateExampleApp(PedalExampleApp* app) {
     }//Combo(const char* label, int* current_item, const char* const items[], int items_count, int popup_max_height_in_items = -1);
     ImGui::End();
 
-    ImGui::SetNextWindowPos(ImVec2{window_w/2.0f,0.0f});
-    ImGui::SetNextWindowSize(ImVec2{window_w/2.0f, float(window_h)});
+    ImGui::SetNextWindowPos(ImVec2{160.0f,0.0f});
+    ImGui::SetNextWindowSize(ImVec2{window_w - 160, float(window_h)});
     ImGui::Begin("Right Window", nullptr, flags);
     for (int i = 0; i < NUM_SLIDERS_MAX; i += 1) {
         slider* s = app->sliders + i;
