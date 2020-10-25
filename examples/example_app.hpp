@@ -46,4 +46,8 @@ void pdlAddDropDown(PedalExampleApp* app, int idx, const char* name,
 int pdlGetDropDown(PedalExampleApp* app, int indx);
 
 int pdlAsciiToMidi(int ascii);
+
+#include <string>
+std::string pdlGetPathToSoundFiles();
+
 #endif

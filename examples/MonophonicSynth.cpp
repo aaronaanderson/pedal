@@ -18,7 +18,6 @@
 #include <iostream>
 
 #include "pedal/MIDIEvent.hpp"
-
 #include "pedal/CREnvelope.hpp"
 #include "pedal/WTSquare.hpp"
 #include "pedal/Biquad.hpp"
@@ -28,7 +27,6 @@ WTSquare squareOscillator;
 CREnvelope amplitudeEnvelope;
 Biquad resonantLowPass;
 CREnvelope filterEnvelope;
-
 SmoothValue<float> frequency;
 SmoothValue<float> amplitude;
 
@@ -72,11 +70,13 @@ void keyboardCallback(int key, bool keyDown){
 }
 
 void audioCallback(float* output, float* input, int bufferSize, int outputChannels, int inputChannels, PedalExampleApp* app){
+    
     //collect these values once per buffer (very lazy form of control rate)
     float portamento = pdlGetSlider(app, 0);
     frequency.setTime(portamento);//set the time it takes to arrive at target value
     float filterRange = pdlGetSlider(app, 1);//scalar for filter frequency envelope outpout
     float outputGainScalar = dBToAmplitude(pdlGetSlider(app, 2));// collect the 'volume' scalar (amplitude scalar)
+    
     for(int sampleIndex = 0; sampleIndex < bufferSize; sampleIndex++){//for every sample
         //update the squareOscillator frequency per sample
         squareOscillator.setFrequency(frequency.process());//update and output the frequency value in one line is clear and concise
@@ -110,6 +110,8 @@ int main(){
     //specify a MIDI port (the devices will print to the terminal, you may have to select a different index)
     pdlOpenMidiPort(app, 2);//<<<<=======================MIDI Port selected Here=============================
     
+    std::cout << PATH_TO_SOUNDFILES << std::endl;
+    std::cout << pdlGetPathToSoundFiles() << std::endl;
     //new amplitude targets will arrive smoothly over 100ms
     amplitude.setTarget(100.0f);
     amplitude.setTarget(1.0f);

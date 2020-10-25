@@ -510,3 +510,5 @@ int pdlAsciiToMidi(int asciiCode){
     }
     return midiNoteNumber;
 }
+//PATH_TO_SOUNDFILES set by CMAKE
+std::string pdlGetPathToSoundFiles(){return std::string(PATH_TO_SOUNDFILES) + std::string("/");}

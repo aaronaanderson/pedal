@@ -66,6 +66,10 @@ set_target_properties(example_app PROPERTIES
 )
 target_include_directories(example_app PUBLIC rtaudio rtmidi imgui/examples)
 target_link_libraries(example_app PUBLIC glfw gl3w imgui rtaudio rtmidi)
+set(PATH_TO_SOUNDFILES "${CMAKE_CURRENT_SOURCE_DIR}/SoundFiles/" CACHE FILEPATH "Path to example sound files")
+#cmake_policy(SET CMP0005 NEW) #https://stackoverflow.com/questions/48847771/file-path-from-cmake-as-string-in-c
+file(TO_CMAKE_PATH "${PATH_TO_SOUNDFILES}" FILE_PATH_NORMALIZED)
+add_definitions(-DPATH_TO_SOUNDFILES="${FILE_PATH_NORMALIZED}")
 
 # list of examples, give `examplename` if example file is `examplename.cpp`
 set(example_list
@@ -76,6 +80,7 @@ set(example_list
     BandLimitedImpulseTrain
     MonophonicSynth
     EmptyExample
+    MonophonicSampler
 )
 
 # loop through example targets
