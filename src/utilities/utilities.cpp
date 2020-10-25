@@ -3,6 +3,11 @@
 float mtof(float midiValue){//midi to frequency
   return 440.0f * (pow(2, (midiValue-69)/12.0f));
 }
+float midiNoteToPlaySpeed(int midiNoteValue, int normalizeToNote){
+  //by default, normalized to midi note 60 
+  float distanceFromNormal = (midiNoteValue - normalizeToNote)/12.0f;//normal = 1.0f
+  return std::pow(2.0f, distanceFromNormal);
+}
 /*
 template <class T, class U, class Z> 
 T clamp(T input, U lowerBound, Z upperBound){
