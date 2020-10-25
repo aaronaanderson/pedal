@@ -1,5 +1,5 @@
 /*
-// IN PROGRESS:
+//
 // A simple sound file player with playback speed
 // controlled by note value
 //
