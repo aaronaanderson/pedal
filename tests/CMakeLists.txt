@@ -1,4 +1,6 @@
-add_executable(pedal_test main.cpp)
+add_executable(pedal_test
+  main.cpp
+  MoogLadderFilterTests.cpp)
 
 set_target_properties(pedal_test PROPERTIES
     DEBUG_POSTFIX d

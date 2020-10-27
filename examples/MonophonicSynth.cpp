@@ -20,16 +20,15 @@
 #include "pedal/MIDIEvent.hpp"
 #include "pedal/CREnvelope.hpp"
 #include "pedal/WTSquare.hpp"
-#include "pedal/Biquad.hpp"
 #include "pedal/utilities.hpp"
+#include "pedal/MoogLadderFilter.hpp"
 
 WTSquare squareOscillator;
 CREnvelope amplitudeEnvelope;
-Biquad resonantLowPass;
 CREnvelope filterEnvelope;
 SmoothValue<float> frequency;
 SmoothValue<float> amplitude;
-
+MoogLadderFilter ladderFilter;
 int mostRecentNoteOn = -1;
 
 void midiCallback(double deltaTime, std::vector<unsigned char>* message, PedalExampleApp* app){
@@ -83,13 +82,12 @@ void audioCallback(float* output, float* input, int bufferSize, int outputChanne
         
         //The initial sample will be sourced from the squareOscillator generator, then scaled by the amplitude envelope
         float currentSample = squareOscillator.generateSample() * amplitudeEnvelope.generateSample() * outputGainScalar;
-        
         //The filter frequency will be at least as high as the squareOscillator frequency, but will scale via the filter envelope
         float filterFrequency = frequency.getCurrentValue() * (filterEnvelope.generateSample() * filterRange + 1.0f);
         //the filter frequency will have to be set per sample since it modulates
-        resonantLowPass.setFrequency(filterFrequency);
+        ladderFilter.setFrequency(filterFrequency);
         //replace currentSample with a filtered currentSample
-        currentSample = resonantLowPass.processSample(currentSample);
+        currentSample = ladderFilter.processSample(currentSample);
         //scale by amplitude (amplitude decided by midiNoteVelocity)
         currentSample *= amplitude.process();
         //assign the sample to every output channel
@@ -110,8 +108,6 @@ int main(){
     //specify a MIDI port (the devices will print to the terminal, you may have to select a different index)
     pdlOpenMidiPort(app, 2);//<<<<=======================MIDI Port selected Here=============================
     
-    std::cout << PATH_TO_SOUNDFILES << std::endl;
-    std::cout << pdlGetPathToSoundFiles() << std::endl;
     //new amplitude targets will arrive smoothly over 100ms
     amplitude.setTarget(100.0f);
     amplitude.setTarget(1.0f);
@@ -132,11 +128,6 @@ int main(){
     filterEnvelope.setDecayTime(500.0f);
     filterEnvelope.setSustainLevel(0.5f);
     filterEnvelope.setReleaseTime(1000.0f);
-    //I'm setting these and forgetting them as well. 
-    resonantLowPass.setMode(Biquad::modes::LOW_PASS);
-    resonantLowPass.setFrequency(880.0f);
-    resonantLowPass.setQ(4.0f);
-    resonantLowPass.setGain(3.0f);
 
     //add a few sliders for control
     pdlAddSlider(app, 0, "Portamento (ms)", 0.0f, 2000.0f, 250.0f);

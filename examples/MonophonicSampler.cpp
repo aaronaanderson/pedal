@@ -13,7 +13,6 @@
 #include <iostream>
 
 #include "pedal/MIDIEvent.hpp"
-#include "pedal/CREnvelope.hpp"
 #include "pedal/utilities.hpp"
 #include "pedal/Buffer.hpp"
 #include "pedal/BufferPlayer.hpp"

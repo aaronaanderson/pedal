@@ -76,11 +76,11 @@ set(example_list
     Envelopes
     LiveInputFeedbackDelay
     LowFrequencyOscillators
-    VoiceSimulation
     BandLimitedImpulseTrain
     MonophonicSynth
     EmptyExample
     MonophonicSampler
+    Reverb
 )
 
 # loop through example targets
