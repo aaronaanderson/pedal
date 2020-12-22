@@ -3,6 +3,7 @@
 BLIT::BLIT(){
   setFrequency(1.0f);
   setPhase(0.0f);
+  numberOfHarmonics = 1000.0f;
   setSyncHarmonicsToFrequency(true);//only generate non-aliasing harmonics
   phase = 0.0f;
 }
@@ -19,19 +20,20 @@ float BLIT::generateSample(){
   phase += phaseIncrement;
   if(phase >= M_PI){
     phase -= M_PI;
+    numberOfHarmonics = nextNumberOfHarmonics;
   }
   return currentSample;
 }
 void BLIT::setNumberOfHarmonics(float newNumberOfHarmonics){
-  numberOfHarmonics = std::fmax(newNumberOfHarmonics, 1.0f);
-  numberOfHarmonics = std::floor(numberOfHarmonics * 0.5f) * 2.0f + 1.0f;
+  nextNumberOfHarmonics = std::fmax(newNumberOfHarmonics, 1.0f);
+  nextNumberOfHarmonics = std::floor(nextNumberOfHarmonics)  * 2.0f + 1.0f;
 }
 void BLIT::setFrequency(float newFrequency){
   frequency = newFrequency;
   phaseIncrement = (0.5f *M_PI * frequency) / pdlSettings::sampleRate;
   if(syncHarmonicsWithFrequency){
-    setNumberOfHarmonics(20000.0f/frequency);
-    std::cout << numberOfHarmonics << " : " << numberOfHarmonics * frequency << std::endl;
+    setNumberOfHarmonics(std::floor((pdlSettings::sampleRate*0.5f)/frequency));
+    std::cout << numberOfHarmonics << std::endl;
   }
 
 }
@@ -44,3 +46,4 @@ void BLIT::setSyncHarmonicsToFrequency(bool newSyncHarmonicsToFrequency){
   }
   syncHarmonicsWithFrequency = newSyncHarmonicsToFrequency;
 }
+float BLIT::getNumberOfHarmonics(){return numberOfHarmonics;}

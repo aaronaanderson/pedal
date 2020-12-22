@@ -8,6 +8,7 @@
 #include "algorithm"
 
 float msToSamples(float timeInMS);
+float midiNoteToPlaySpeed(int midiNoteValue, int normalizeToNote = 60);
 float secondsToSamples(float timeInSeconds);
 float samplesToMS(float samples);
 float mtof(float midiValue);
