@@ -16,19 +16,20 @@ void MoogLadderFilter::setMode(MoogLadderFilter::MODE newMode){
 void MoogLadderFilter::setFrequency(float newFrequency){
     normalizedAngularFrequency = (newFrequency * 2.0f * M_PI) / pdlSettings::sampleRate;
     float g = (0.9892f * normalizedAngularFrequency) - 
-              std::pow(0.4342 * normalizedAngularFrequency, 2) + 
-              std::pow(0.1381 * normalizedAngularFrequency, 3) - 
-              std::pow(0.0202 * normalizedAngularFrequency, 4);
+              std::pow(0.4342f * normalizedAngularFrequency, 2) + 
+              std::pow(0.1381f * normalizedAngularFrequency, 3) - 
+              std::pow(0.0202f * normalizedAngularFrequency, 4);
     for(int i = 0; i < NUM_SUB_FILTERS; i++){
         filterArray[i].setG(g);
     }
+    setResonance(resonance);
 }
 void MoogLadderFilter::setResonance(float newResonance){
     float input = clamp(newResonance, 0.0f, 1.0f);
-    resonance = input * (1.0029 + 
-                        (0.0526 * normalizedAngularFrequency) - 
-                        std::pow(0.0926 * normalizedAngularFrequency, 2) + 
-                        std::pow(0.0218 * normalizedAngularFrequency, 3));
+    resonance = input * (1.0029f + 
+                        (0.0526f * normalizedAngularFrequency) - 
+                        std::pow(0.0926f * normalizedAngularFrequency, 2) + 
+                        std::pow(0.0218f * normalizedAngularFrequency, 3));
 }
 void MoogLadderFilter::setModeScalarsFromTable(){
     int modeIndex = (int)currentMode;

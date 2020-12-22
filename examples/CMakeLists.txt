@@ -73,14 +73,10 @@ add_definitions(-DPATH_TO_SOUNDFILES="${FILE_PATH_NORMALIZED}")
 
 # list of examples, give `examplename` if example file is `examplename.cpp`
 set(example_list
-    Envelopes
     LiveInputFeedbackDelay
-    LowFrequencyOscillators
-    BandLimitedImpulseTrain
     MonophonicSynth
     EmptyExample
     MonophonicSampler
-    Reverb
 )
 
 # loop through example targets
