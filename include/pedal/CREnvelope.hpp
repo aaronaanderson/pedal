@@ -8,6 +8,7 @@
 
 #include "pedal/DebugTool.hpp"
 
+namespace pedal{
 //Make a container for segments
 struct CurvedSegment{
   float timeInMS;

@@ -9,6 +9,7 @@
 #define NUM_TABLES 10
 #define TABLESIZE 2048
 
+namespace pedal{
 class SawTable{
   private://class members are private by default; added for clarity
   static SawTable* instance;//store a pointer to an instance of the table

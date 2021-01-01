@@ -6,6 +6,7 @@
 #include "utilities.hpp"
 #include <cmath>
 
+namespace pedal{
 class HanningWindow{
   public:
   HanningWindow();

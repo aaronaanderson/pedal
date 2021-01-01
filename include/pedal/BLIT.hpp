@@ -8,6 +8,7 @@
 #include "pedal/pdlSettings.hpp"
 #include "pedal/DebugTool.hpp"
 //Band Limited Impulse Train
+namespace pedal{
 class BLIT{
   public:
   BLIT();
@@ -32,4 +33,5 @@ class BLIT{
   double phaseIncrement;
   DebugTool dT;
 };
+}//end pedal namespace
 #endif

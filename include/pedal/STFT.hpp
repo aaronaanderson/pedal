@@ -17,6 +17,7 @@ STFT, or Short-Time Fourier Transform, converts
 an incoming signal from time domain to frequency
 domain.
 */
+namespace pedal{
 class STFT{
   public:
   STFT(int initialWindowSize = 512, int initialOverlap = 4);

@@ -23,6 +23,8 @@ useful results, it is include mostly for academic purposes.
 //design, as discussed in the paper. I will only use this 
 //here, in MoorerReverb, so I will make it specificallly
 //for the those needs.
+
+namespace pedal{
 class MoorerReverberationUnit{//Fig. 5 in paper
   public:
   float process(float input){

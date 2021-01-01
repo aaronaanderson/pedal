@@ -9,6 +9,7 @@
 //        |   Delay   |
 //        |_*g_<_|_>__|
 //          
+namespace pedal{
 class AllPass{
   public:
   AllPass();
@@ -29,4 +30,5 @@ class AllPass{
   float maxDelay = 2000.0f;
   float coefficient;
 };
+}//end pedal namespace
 #endif 

@@ -6,6 +6,7 @@
 #include "WhiteNoise.hpp"
 #define NUM_OCTAVES 14 
 
+namespace pedal{
 class PinkNoise{
   public:
   PinkNoise();//constructor

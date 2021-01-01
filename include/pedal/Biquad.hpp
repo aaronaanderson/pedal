@@ -10,7 +10,7 @@ This biquad object was based heavily on Nigel Redmon's
 implementation:
 https://www.earlevel.com/main/2012/11/26/biquad-c-source-code/
 */
-
+namespace pedal{
 class Biquad{
   public:
   enum class modes{
@@ -68,4 +68,5 @@ inline float Biquad::processSample(float input){
   z2 = input * a2 - b2 * currentSample;
   return currentSample;
 }
+}//end pedal namespace
 #endif

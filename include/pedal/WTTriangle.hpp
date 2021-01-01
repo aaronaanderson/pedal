@@ -9,6 +9,7 @@
 #define NUM_TABLES 10
 #define TABLESIZE 2048
 
+namespace pedal{
 class TriangleTable{
   private://class members are private by default; added for clarity
   static TriangleTable* instance;//store a pointer to an instance of the table

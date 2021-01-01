@@ -5,7 +5,7 @@
 #include "utilities.hpp"
 #include "Interpolation.hpp"
 #include "Buffer.hpp"
-
+namespace pedal{
 class CircularBuffer{
   public:
   //TapIn();

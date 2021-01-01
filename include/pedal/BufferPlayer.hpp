@@ -4,6 +4,8 @@
 #include "Buffer.hpp"
 #include "utilities.hpp"
 
+namespace pedal{
+
 enum InterpolationMode{
   NONE = 0, //may be noisey if speed != integer multiple of 1
   LINEAR, //lower cost, but great results

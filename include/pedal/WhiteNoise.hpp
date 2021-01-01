@@ -3,6 +3,7 @@
 
 #include "utilities.hpp"
 
+namespace pedal{
 class WhiteNoise{//basic white noise signal generator
   public:
   WhiteNoise();//Constructor

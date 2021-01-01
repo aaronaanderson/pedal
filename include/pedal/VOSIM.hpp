@@ -9,6 +9,8 @@
 #include <cmath>
 #include "pedal/pdlSettings.hpp"
 #include <iostream>
+
+namespace pedal{
 class VOSIM{
   public:
   VOSIM();

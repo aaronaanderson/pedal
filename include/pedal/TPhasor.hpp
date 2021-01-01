@@ -4,6 +4,7 @@
 #include <math.h> //so we can use sin()
 #include "pdlSettings.hpp"//so we can access sampleRate and bufferSize
 
+namespace pedal{
 class TPhasor{//Pedal Trivial Sine Oscillator
   public:
   TPhasor();//constructor, defined in the cpp

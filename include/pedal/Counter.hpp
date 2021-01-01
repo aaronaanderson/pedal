@@ -1,6 +1,7 @@
 #ifndef Counter_hpp
 #define Counter_hpp
 
+namespace pedal{
 class Counter{
   public:
   Counter(int counterSize = 8);

@@ -4,6 +4,7 @@
 #include <algorithm>
 #include "utilities.hpp"
 
+namespace pedal{
 class StreamedRMS{
   public:
   StreamedRMS(int samplePeriod = 32);

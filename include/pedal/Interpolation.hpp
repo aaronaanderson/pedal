@@ -2,6 +2,8 @@
 #define Interpolation_hpp
 
 #include "math.h"
+
+namespace pedal{
 //the least expensive, yet still effective option for interpolation
 inline float linearInterpolation(float inputSample, float previousSample, float nextSample){
   //determine position between previous and next sample

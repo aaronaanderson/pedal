@@ -7,6 +7,7 @@
 #include "pdlSettings.hpp"
 #include "algorithm"
 
+namespace pedal{
 float msToSamples(float timeInMS);
 float midiNoteToPlaySpeed(int midiNoteValue, int normalizeToNote = 60);
 float secondsToSamples(float timeInSeconds);

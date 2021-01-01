@@ -5,6 +5,7 @@
 #include "BufferTap.hpp"//an automated buffer lookup for CircularBuffer
 #include "pdlSettings.hpp"//access to pdlSettings::bufferSize
 
+namespace pedal{
 class Delay{
   public:
   Delay();//default constructor

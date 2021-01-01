@@ -9,6 +9,7 @@
 #include <cmath> 
 #include <limits>
 
+namespace pedal{
 class MicroBenchmark{
   public:
   MicroBenchmark(std::string eventName = "event", long iterations = 10000);

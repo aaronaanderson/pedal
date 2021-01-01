@@ -1,6 +1,7 @@
 #ifndef pdlSettings_hpp
 #define pdlSettings_hpp
 
+namespace pedal{
 class pdlSettings{
   public:
     static double sampleRate;

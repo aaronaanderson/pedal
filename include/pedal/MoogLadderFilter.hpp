@@ -40,6 +40,7 @@
 #define NUM_SUB_FILTERS 4
 #define NUM_MODE_SCALARS 5
 
+
 static const float modeTable[6][5] = {{0.0f, 0.0f, 1.0f, 0.0f, 0.0f},
                                       {0.0f, 0.0f, 0.0f, 0.0f, 1.0f},
                                       {0.0f, 2.0f, -2.0f, 0.0f, 0.0f},
@@ -47,6 +48,7 @@ static const float modeTable[6][5] = {{0.0f, 0.0f, 1.0f, 0.0f, 0.0f},
                                       {1.0f, -2.0f, 1.0f, 0.0f, 0.0f}, 
                                       {1.0f, -4.0f, 6.0f, -4.0f, 1.0f}};
 
+namespace pedal{
 class MoogLadderFilter{
     public:
     MoogLadderFilter();

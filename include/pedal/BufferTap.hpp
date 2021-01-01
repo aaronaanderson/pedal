@@ -4,6 +4,7 @@
 #include "CircularBuffer.hpp"
 #include "math.h"
 
+namespace pedal{
 class BufferTap{
   public:
   BufferTap(CircularBuffer* reference);

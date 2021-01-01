@@ -5,6 +5,7 @@
 #include "utilities.hpp"
 #include "math.h"
 
+namespace pedal{
 class ImpulseGenerator{
   public:
   ImpulseGenerator();

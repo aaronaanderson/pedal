@@ -2,6 +2,8 @@
 #define MIDIEvent_hpp
 
 #include <vector>
+
+namespace pedal{
 class MIDIEvent{
   public:
   MIDIEvent();

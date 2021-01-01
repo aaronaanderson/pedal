@@ -8,6 +8,8 @@
 #include "pedal/Interpolation.hpp"
 #define N 16
 #define PRMIE_BASE 7
+
+namespace pedal{
 struct node{
   float m;//delay in samples
   float delayOutput=0.0f;

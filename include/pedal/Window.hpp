@@ -11,6 +11,7 @@ an array of samples to zero at both ends. The shape of a window
 has spectral implications. The correct choice of window function
 is dependent upon application. 
 */
+namespace pedal{
 class Window {
   public:
   Window();

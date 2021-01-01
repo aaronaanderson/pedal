@@ -12,6 +12,8 @@ A gate is a special case of an expander; it is a downward
 expander with a high ratio. Typically these are used to 
 reduce microphone bleed or reduce noise from a signal. 
 */
+
+namespace pedal{
 class Gate{
   public:
   Gate();

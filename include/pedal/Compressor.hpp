@@ -12,6 +12,7 @@ set threshold, it is attenuated by an amount derived from
 the amount in dB the threshold was exceeded, and the 
 ratio. 
 */
+namespace pedal{
 class Compressor{
   public:
   Compressor();//default constructor

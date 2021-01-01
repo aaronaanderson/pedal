@@ -12,6 +12,7 @@
 #define TABLESIZE 2048//TODO revisit this
 //what's the smallest practical table? Calculate the StN ratio for bit depth
 
+namespace pedal{
 //======================Define a wavetable template
 class SineTable{
   private://class members are private by default; added for clarity

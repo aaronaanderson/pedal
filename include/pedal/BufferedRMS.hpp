@@ -8,6 +8,7 @@
 
 //Root Mean Squared
 //average adjusted accurately per sample
+namespace pedal{
 class BufferedRMS{
   public:
   BufferedRMS(int samplePeriod = 16);//this tool is best suited for small periods

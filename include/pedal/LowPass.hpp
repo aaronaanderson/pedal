@@ -6,6 +6,7 @@
 #include "pdlSettings.hpp"
 #include "iostream"
 
+namespace pedal{
 class LowPass{//One pole low pass filter
   public:
   LowPass(float frequency = 1000.0f);//default constructor

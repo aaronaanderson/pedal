@@ -4,6 +4,7 @@
 #include <cmath>
 //returns true if edge detected
 //useful for using a phasor as a timer
+namespace pedal{
 class EdgeDetector{
   public:
   EdgeDetector();

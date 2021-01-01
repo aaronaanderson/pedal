@@ -8,7 +8,8 @@
 intput__+___[DELAY]_____output
          \           /        
           \__*g_____/
-*/                  
+*/     
+namespace pedal{             
 class CombFilter{
   public:
   CombFilter(float maxDelay = 1000.0f);

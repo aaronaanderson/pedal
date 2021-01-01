@@ -14,6 +14,7 @@ default. The channels are interleaved. A soundfile may be
 read in to a buffer, and a buffer may be saved to disk as
 a soundfile. Currently, only .wav is supported.
 */
+namespace pedal{
 class Buffer{
   public:
   Buffer(float initialDuration = 1000.0f);
@@ -77,7 +78,5 @@ class Buffer{
   drwav_data_format outputFormat;
   drwav wavTemp;
 };
-/*
-TODO make buffer N channel
-*/
+}//end pedal namespace
 #endif

@@ -11,6 +11,7 @@ except for a lowpass filter in the
 feedback loop. Useful for digital 
 reverbs.
 */
+namespace pedal{
 class LowPassCombFilter{
   public:
   LowPassCombFilter(float maxDelay = 1000.0f, float initialFrequency = 1000.0f);

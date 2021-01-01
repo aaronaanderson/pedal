@@ -8,6 +8,7 @@ thread debugging
 #include <iostream>
 #include "pdlSettings.hpp"
 
+namespace pedal{
 class DebugTool{
   public:
   //DebugTool();
