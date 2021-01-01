@@ -36,6 +36,7 @@ class PinkNoise{
   float* currentBlock = nullptr;
   void checkGetOctaveLogic();//Leaving this in for the curious type
 };
+}//end pedal namespace
 #endif
 
 /*

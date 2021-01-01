@@ -52,4 +52,5 @@ class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   float currentSample;//current working sample
   float* currentBlock = nullptr;//(pointer to) current working block of samples
 };
+}//end pedal namespace
 #endif

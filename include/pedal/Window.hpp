@@ -73,4 +73,5 @@ class Window {
     return std::exp(phase * gausRecip);
   }
 };
+}//end pedal namespace
 #endif

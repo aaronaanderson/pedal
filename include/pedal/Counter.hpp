@@ -15,4 +15,5 @@ class Counter{
   int currentCount;
   int counterSize;
 };
+}//end pedal namespace
 #endif 

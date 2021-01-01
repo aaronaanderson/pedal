@@ -149,4 +149,5 @@ public:
   float aDown, bDown;//coefficients if going down
   T z;//storage for previous value
 };
+}//end pedal namespace
 #endif

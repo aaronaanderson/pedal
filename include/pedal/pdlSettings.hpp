@@ -15,5 +15,5 @@ class pdlSettings{
     pdlSettings(){};
 
 };
-
+}//end pedal namespace
 #endif 

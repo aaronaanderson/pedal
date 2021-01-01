@@ -72,4 +72,5 @@ inline void STFT::calculateWindowedInput(const int inputOffset){
     windowedInputSegment[i] = inputBuffer[i + inputOffset] * window[i];
   }
 }
+}//end pedal namespace
 #endif

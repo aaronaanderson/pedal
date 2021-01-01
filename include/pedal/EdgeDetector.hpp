@@ -27,4 +27,5 @@ class EdgeDetector{
   bool risingEdgeFlag;
   bool fallingEdgeFlag;
 };
+}//end pedal namespace
 #endif

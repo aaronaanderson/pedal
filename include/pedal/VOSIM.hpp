@@ -42,4 +42,5 @@ class VOSIM{
   int currentOscillation;
   int maxOscillationsPerPeriod;//how many sinusuoidal oscillations can fit in the period
 };
+}//end pedal namespace
 #endif

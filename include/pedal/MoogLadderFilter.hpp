@@ -123,4 +123,5 @@ float MoogLadderFilter::processSample(float inputSample){
   outputSample += outputAccumulator;
   return outputSample;
 }
+}//end pedal namespace
 #endif

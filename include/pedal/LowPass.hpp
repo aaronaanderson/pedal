@@ -28,4 +28,5 @@ inline float LowPass::process(float input){
   currentSample = (a*input) - (b*currentSample);
   return currentSample;
 }
+}//end pedal namespace
 #endif

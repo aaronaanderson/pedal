@@ -42,4 +42,5 @@ inline float BufferedRMS::process(float input){
   currentSample = sqrt(runningTotal * periodReciprocal);
   return currentSample;//return value
 }
+}//end pedal namespace
 #endif

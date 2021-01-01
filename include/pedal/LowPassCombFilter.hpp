@@ -35,5 +35,5 @@ class LowPassCombFilter{
   float maxDelayTime = 1000.0f;
   float feedBackGain;
 };
-
+}//end pedal namespace
 #endif 

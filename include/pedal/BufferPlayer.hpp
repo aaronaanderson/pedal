@@ -49,4 +49,5 @@ class BufferPlayer{
   bool isPlaying;//condition set by play/pause/stop functions
   Buffer* bufferReference;//a pointer to a buffer class
 };
+}//end pedal namespace
 #endif 

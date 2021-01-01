@@ -105,4 +105,5 @@ class MoorerReverb{
   const float reverbLagTime = 78.0f + 6.0f;//longest comb time + allpass time 
   CircularBuffer lagBuffer;
 };
+}//end pedal namespace
 #endif

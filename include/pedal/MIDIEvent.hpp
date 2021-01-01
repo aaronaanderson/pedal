@@ -33,4 +33,5 @@ class MIDIEvent{
   EventTypes eventType;
   std::vector<unsigned char> bytes;
 };
+}//end pedal namespace
 #endif

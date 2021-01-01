@@ -35,4 +35,5 @@ class DebugTool{
   private:
   int frameCount = 0;
 };
+}//end pedal namespace
 #endif

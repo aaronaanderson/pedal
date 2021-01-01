@@ -29,4 +29,5 @@ class Delay{
   float feedback;//how much of the feed back is re-inserted
   float delayTime;//Samples from 'delayTime' milliseconds ago
 };
+}//end pedal namespace
 #endif

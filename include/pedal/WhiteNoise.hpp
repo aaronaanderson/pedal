@@ -18,4 +18,5 @@ class WhiteNoise{//basic white noise signal generator
   float currentSample;//store current sample
   float* currentBlock = nullptr;//store curent buffer 
 };
+}//end pedal namespace
 #endif

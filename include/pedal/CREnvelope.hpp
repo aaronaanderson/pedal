@@ -87,4 +87,5 @@ inline void CREnvelope::calculateReleaseCurve(float newReleaseTime){
                                      release.timeInSamples);
   release.offset = -release.curveOvershoot * (1.0f - release.curveCoefficient);
 }
+}//end pedal namespace
 #endif

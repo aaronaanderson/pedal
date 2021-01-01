@@ -67,5 +67,5 @@ class WTSaw{
   float* currentBlock = nullptr;//current working block of samples
   double phaseIncrement;//extra precision necessary 
 };
-
+}//end pedal namespace
 #endif

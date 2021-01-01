@@ -19,4 +19,5 @@ inline float linearInterpolation(float x, float x0, float y0, float x1, float y1
 float cubicInterpolation(float inputSample, float backTwo, float backOne, 
                          float forwardOne, float forwardTwo);
 
+}//end pedal namespace
 #endif

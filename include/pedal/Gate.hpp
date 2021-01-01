@@ -65,4 +65,5 @@ class Gate{
   float linearMakeUpGain;//how much to scale the output
   float reductionTargetDB;//how much reduction is being attempted
 };
+}//end pedal namespace
 #endif

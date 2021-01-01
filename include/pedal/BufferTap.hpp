@@ -22,4 +22,5 @@ class BufferTap{
   float currentSample;
   float* currentBlock = nullptr;
 };
+}//end pedal namespace
 #endif

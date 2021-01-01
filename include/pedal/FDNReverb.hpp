@@ -42,4 +42,5 @@ class FDNReverb{
                   
   const float twoOverN = -2.0f / static_cast<float>(N);//2/N
 };
+}//end pedal namespace
 #endif

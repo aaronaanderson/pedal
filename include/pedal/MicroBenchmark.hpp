@@ -44,4 +44,5 @@ class MicroBenchmark{
   bool completeFlag;
   bool foundStopCall;
 };
+}//end pedal namespace
 #endif 

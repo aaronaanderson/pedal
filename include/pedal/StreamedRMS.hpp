@@ -39,4 +39,5 @@ inline float StreamedRMS::process(float input){
   currentSample = smoothOutput.process();;
   return currentSample;
 }
+}//end pedal namespace
 #endif

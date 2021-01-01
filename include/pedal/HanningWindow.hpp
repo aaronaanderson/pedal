@@ -32,4 +32,5 @@ class HanningWindow{
   float phase, phaseIncrement;
   float currentSample;
 };
+}//end pedal namespace
 #endif
