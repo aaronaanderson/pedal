@@ -1,5 +1,7 @@
 #include "pedal/Window.hpp"
 
+using namespace pedal;
+
 //Constructors and Deconstructors=============
 Window::Window(){
   setDuration(1000.0f);

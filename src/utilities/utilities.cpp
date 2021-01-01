@@ -1,7 +1,9 @@
 #include "pedal/utilities.hpp"
 
+using namespace pedal;
+
 float mtof(float midiValue){//midi to frequency
-  return 440.0f * (pow(2, (midiValue-69)/12.0f));
+  return 440.0f * (std::pow(2, (midiValue-69)/12.0f));
 }
 float midiNoteToPlaySpeed(int midiNoteValue, int normalizeToNote){
   //by default, normalized to midi note 60 
@@ -41,11 +43,11 @@ float samplesToMS(float samples){
 //pan input from left to right, position range -1 to 1
 void panStereo(float input, float position, float* outputFrame){
   //convert to radians
-  float theta = clamp(position, -1.0f, 1.0f) * PDL_PI * 0.25f * -1.0f;
+  float theta = clamp(position, -1.0f, 1.0f) * pedal::PI * 0.25f * -1.0f;
   float cosTheta = std::cos(theta);
   float sinTheta = std::sin(theta);
-  outputFrame[0] = PDL_SQRT1_2 * (sinTheta - cosTheta) * input;
-  outputFrame[1] = PDL_SQRT1_2 * (sinTheta + cosTheta) * input;
+  outputFrame[0] = pedal::SQRT1_2 * (sinTheta - cosTheta) * input;
+  outputFrame[1] = pedal::SQRT1_2 * (sinTheta + cosTheta) * input;
 }
 /* //function unnecessary, will be moved to buffer class
 void normalizeBuffer(float* inputBuffer, int bufferSize, bool correctDC = true){

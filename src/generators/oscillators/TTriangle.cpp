@@ -1,6 +1,8 @@
 
 #include "pedal/TTriangle.hpp"
 
+using namespace pedal;
+
 //constructors and deconstructors
 //=========================================================
 TTriangle::TTriangle(){//default constructor

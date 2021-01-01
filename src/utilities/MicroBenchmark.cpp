@@ -1,5 +1,7 @@
 #include "pedal/MicroBenchmark.hpp"
 
+using namespace pedal;
+
 MicroBenchmark::MicroBenchmark(std::string eventName, long iterations){
   completeFlag = false;
   foundStopCall = true;

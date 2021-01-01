@@ -1,5 +1,7 @@
 #include "pedal/Compressor.hpp"
 
+using namespace pedal;
+
 Compressor::Compressor(){
   delayLine.setDuration(100.0f);//won't need much
   setThresholdDB(-12.0f);//at what intensity should the compressor start compressing?

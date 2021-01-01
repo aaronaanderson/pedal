@@ -1,5 +1,7 @@
 #include "pedal/Gate.hpp"
 
+using namespace pedal;
+
 Gate::Gate(){
   delayLine.setDuration(100.0f);//100ms max pre-delay
   setThresholdDB(-50.0f);//at what intensity should the gate start attenuating

@@ -1,5 +1,7 @@
 #include "pedal/LowPass.hpp"
 
+using namespace pedal;
+
 LowPass::LowPass(float frequency){
   setFrequency(frequency);
   currentSample = 0.0f;

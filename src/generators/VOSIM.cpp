@@ -1,5 +1,7 @@
 #include "pedal/VOSIM.hpp"
 
+using namespace pedal;
+
 VOSIM::VOSIM(){
     frequency = 80.0f;
     setFrequency(80.0f);

@@ -1,5 +1,7 @@
 #include "pedal/BLIT.hpp"
 
+using namespace pedal;
+
 BLIT::BLIT(){
   setFrequency(1.0f);
   setPhase(0.0f);

@@ -1,5 +1,7 @@
 #include "pedal/TSquare.hpp"
 
+using namespace pedal;
+
 //constructors and deconstructors
 //=========================================================
 TSquare::TSquare(){//default constructor

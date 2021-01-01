@@ -1,5 +1,7 @@
 #include "pedal/CREnvelope.hpp"
 
+using namespace pedal;
+
 CREnvelope::CREnvelope(){
   //offset to get the more linear part of the curve
   attack.curveOvershoot = std::exp(-1.5);

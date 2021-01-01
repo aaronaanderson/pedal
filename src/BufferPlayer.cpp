@@ -1,5 +1,6 @@
 #include "pedal/BufferPlayer.hpp"
 
+using namespace pedal;
 //Constructors and deconstructors=====================
 BufferPlayer::BufferPlayer(Buffer* reference){//constructor (default)
   if(reference != nullptr){//if the reference isn't invalid (it is by default)

@@ -1,5 +1,7 @@
 #include "pedal/FDNReverb.hpp"
 
+using namespace pedal;
+
 FDNReverb::FDNReverb(){
   //fill the 16x16 matrix by nesting the Householder 4x4 matrix into itself
   for(int x = 0; x < 4; x++){

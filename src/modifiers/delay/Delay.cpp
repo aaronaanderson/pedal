@@ -1,5 +1,7 @@
 #include "pedal/Delay.hpp"
 
+using namespace pedal;
+
 Delay::Delay(){
   buffer.setDuration(4000.0f);//allocate 4 seconds worth of samples
   tap = new BufferTap(&buffer);//give the tap a buffer reference

@@ -1,6 +1,8 @@
 #include "pedal/Buffer.hpp"
 #include <cstring> // memcpy
 
+using namespace pedal;
+
 //Constructors and deconstructors=====================
 // -----rule of 5 --------------------
 Buffer::Buffer(float initialDuration){

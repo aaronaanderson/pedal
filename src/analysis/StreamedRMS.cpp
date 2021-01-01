@@ -1,5 +1,7 @@
 #include "pedal/StreamedRMS.hpp"
 
+using namespace pedal;
+
 StreamedRMS::StreamedRMS(int samplePeriod){
   samplesToAverage = std::max(samplePeriod, 1);
   //store this since used per sample

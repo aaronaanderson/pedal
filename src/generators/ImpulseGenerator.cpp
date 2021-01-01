@@ -1,5 +1,8 @@
 #include "pedal/ImpulseGenerator.hpp"
 #include "iostream"
+
+using namespace pedal;
+
 //Constructors and Deconstructors=========
 ImpulseGenerator::ImpulseGenerator(){
   setFrequency(1.0f);//one impulse per second

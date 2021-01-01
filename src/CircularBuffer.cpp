@@ -1,5 +1,8 @@
 #include "pedal/CircularBuffer.hpp"
 #include "pedal/DebugTool.hpp"
+
+using namespace pedal;
+
 CircularBuffer::CircularBuffer(float initialDuration){
   buffer.setDuration(initialDuration);//request space in ram
   writeLocation = 0;//start the write index at the beginning

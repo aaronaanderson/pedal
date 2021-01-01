@@ -1,4 +1,7 @@
 #include "pedal/MoorerReverb.hpp"
+
+using namespace pedal;
+
 /*
 James Moorer "About this Reverberation Business" - 1979
 

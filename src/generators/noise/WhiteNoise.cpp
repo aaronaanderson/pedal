@@ -1,5 +1,7 @@
 #include "pedal/WhiteNoise.hpp"
 
+using namespace pedal;
+
 //constructors and deconstructors
 //=========================================================
 WhiteNoise::WhiteNoise(){

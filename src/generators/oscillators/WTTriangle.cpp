@@ -1,5 +1,7 @@
 #include "pedal/WTTriangle.hpp"
 
+using namespace pedal;
+
 //Sine Table=====================================================
 TriangleTable::TriangleTable(){//when it is time to build a table (constructor)
   nyquist = (float)pdlSettings::sampleRate * 0.5f;

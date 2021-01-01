@@ -1,4 +1,7 @@
 #include "pedal/PinkNoise.hpp"
+
+using namespace pedal;
+
 //constructors and deconstructors
 //=========================================================
 PinkNoise::PinkNoise(){

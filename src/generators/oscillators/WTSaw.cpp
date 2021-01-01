@@ -2,6 +2,8 @@
 
 #include <cstring>
 
+using namespace pedal;
+
 //Sine Table=====================================================
 SawTable::SawTable(){//when it is time to build a table (constructor)
   nyquist = (float)pdlSettings::sampleRate * 0.5f;

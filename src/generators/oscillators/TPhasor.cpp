@@ -1,5 +1,7 @@
 #include "pedal/TPhasor.hpp"
 
+using namespace pedal;
+
 //constructors and deconstructors
 //=========================================================
 TPhasor::TPhasor(){//default constructor

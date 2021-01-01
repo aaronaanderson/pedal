@@ -1,5 +1,7 @@
 #include "pedal/BufferedRMS.hpp"
 
+using namespace pedal;
+
 BufferedRMS::BufferedRMS(int samplePeriod){//how many samples to average
   samplesToAverage = std::max(samplePeriod, 1);
   sampleCounter = 0;

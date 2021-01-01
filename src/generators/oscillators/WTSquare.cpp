@@ -1,5 +1,7 @@
 #include "pedal/WTSquare.hpp"
 
+using namespace pedal;
+
 //Sine Table=====================================================
 SquareTable::SquareTable(){//when it is time to build a table (constructor)
   nyquist = (float)pdlSettings::sampleRate * 0.5f;

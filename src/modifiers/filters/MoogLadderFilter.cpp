@@ -1,5 +1,7 @@
 #include "pedal/MoogLadderFilter.hpp"
 
+using namespace pedal;
+
 MoogLadderFilter::MoogLadderFilter(){
     //create the four sub lowpass filters
     for(int i = 0; i < NUM_SUB_FILTERS; i++){

@@ -1,5 +1,7 @@
 #include "pedal/WTSine.hpp"
 
+using namespace pedal;
+
 //Sine Table=====================================================
 SineTable::SineTable(){//when it is time to build a table (constructor)
   fundamentalFrequency = (float)pdlSettings::sampleRate / float(getTableSize());

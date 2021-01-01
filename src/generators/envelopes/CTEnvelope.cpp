@@ -1,5 +1,7 @@
 #include "pedal/CTEnvelope.hpp"
 
+using namespace pedal;
+
 //=========================================================
 CTEnvelope::CTEnvelope(){
  setup(100, 40, 0.7, 400);//simple default values

@@ -1,5 +1,7 @@
 #include "pedal/Counter.hpp"
 
+using namespace pedal;
+
 Counter::Counter(int countSize){
   counterSize = countSize;
   set(0);

@@ -1,5 +1,6 @@
 #include "pedal/DebugTool.hpp"
 
+using namespace pedal;
 /*
 void DebugTool::update(int currentFrame){
     //update flags based on buffer position

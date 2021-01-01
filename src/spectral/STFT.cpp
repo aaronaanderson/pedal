@@ -1,5 +1,7 @@
 #include "pedal/STFT.hpp"
 
+using namespace pedal;
+
 STFT::STFT(int initialWindowSize, int initialOverlap){
   overlap = initialOverlap;
   setWindowType(Window::Mode::HANNING);

@@ -1,5 +1,7 @@
 #include "pedal/LowPassCombFilter.hpp"
 
+using namespace pedal;
+
 //Constructors and deconstructors=====================
 LowPassCombFilter::LowPassCombFilter(float maxDelay, float initialFrequency){
   delayLine.setDuration(maxDelay);
@@ -30,7 +32,7 @@ void LowPassCombFilter::setFeedBackGain(float newFBGain){
 void LowPassCombFilter::setDelayByFrequency(float frequency){
   //convert from frequency to period, then multiply by sampling rate
   //TODO revisit this with a fresh brain
-  delayTime = (pdlSettings::sampleRate)/(frequency*PDL_HALFPI);//delayTime in MS
+  delayTime = (pdlSettings::sampleRate)/(frequency*pedal::HALFPI);//delayTime in MS
 }
 void LowPassCombFilter::setMaxDelayTime(float newMaxDelay){//maximum available delay (don't use more than you need)
   delayLine.setDuration(newMaxDelay);

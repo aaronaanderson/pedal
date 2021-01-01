@@ -1,5 +1,7 @@
 #include "pedal/BufferTap.hpp"
 
+using namespace pedal;
+
 BufferTap::BufferTap(CircularBuffer* reference){
   bufferReference = reference;
   setDelayTime(100.0f);//100ms behind write point

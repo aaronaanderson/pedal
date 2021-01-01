@@ -1,4 +1,7 @@
 #include "pedal/EdgeDetector.hpp"
+
+using namespace pedal;
+
 EdgeDetector::EdgeDetector(){
   allowRisingEdge(true);
   allowFallingEdge(true);

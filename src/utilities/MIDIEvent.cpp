@@ -1,4 +1,7 @@
 #include "pedal/MIDIEvent.hpp"
+
+using namespace pedal;
+
 MIDIEvent::MIDIEvent(){
   clear();
 }

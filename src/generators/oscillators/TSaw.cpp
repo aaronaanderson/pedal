@@ -1,5 +1,6 @@
-
 #include "pedal/TSaw.hpp"
+
+using namespace pedal;
 
 //constructors and deconstructors
 //=========================================================

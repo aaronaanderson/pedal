@@ -1,5 +1,7 @@
 #include "pedal/TSine.hpp"
 
+using namespace pedal;
+
 //constructors and deconstructors
 //=========================================================
 TSine::TSine(){//default constructor

@@ -1,5 +1,7 @@
 #include "pedal/AllPass.hpp"
 
+using namespace pedal;
+
 AllPass::AllPass(){
   delayLine.setDuration(maxDelay);
   coefficient = 0.7f;
