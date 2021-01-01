@@ -17,6 +17,8 @@
 #include "pedal/Buffer.hpp"
 #include "pedal/BufferPlayer.hpp"
 
+using namespace pedal;
+
 Buffer soundBuffer;//place to store the sound file
 BufferPlayer bufferPlayer(&soundBuffer);//simple buffer player
 SmoothValue<float> noteAmplitudeScalar;

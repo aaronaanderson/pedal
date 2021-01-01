@@ -1,11 +1,11 @@
 #include "pedal/utilities.hpp"
 
-using namespace pedal;
 
-float mtof(float midiValue){//midi to frequency
+
+float pedal::mtof(float midiValue){//midi to frequency
   return 440.0f * (std::pow(2, (midiValue-69)/12.0f));
 }
-float midiNoteToPlaySpeed(int midiNoteValue, int normalizeToNote){
+float pedal::midiNoteToPlaySpeed(int midiNoteValue, int normalizeToNote){
   //by default, normalized to midi note 60 
   float distanceFromNormal = (midiNoteValue - normalizeToNote)/12.0f;//normal = 1.0f
   return std::pow(2.0f, distanceFromNormal);
@@ -18,30 +18,27 @@ T clamp(T input, U lowerBound, Z upperBound){
   return result;
 }
 */
-float pedalSinc(const float phase){
-    return std::sin(phase)/phase;
-}
-float rangedRandom(float minimum, float maximum){
+float pedal::rangedRandom(float minimum, float maximum){
   //find an initial random value
-  float signedHalfNormal = (rand()/float(RAND_MAX))-0.5f;//(range of -0.5, 0.5)
+  float signedHalfNormal = (std::rand()/float(RAND_MAX))-0.5f;//(range of -0.5, 0.5)
   float range = maximum - minimum;//distance between max and min
   float center = (maximum + minimum) * 0.5f;//center point
   return (signedHalfNormal*range) + center;
 }
-float msToSamples(float timeInMS){
+float pedal::msToSamples(float timeInMS){
   return timeInMS * 0.001f * pdlSettings::sampleRate;
 }
-float secondsToSamples(float timeInSeconds){
+float pedal::secondsToSamples(float timeInSeconds){
   return timeInSeconds * pdlSettings::sampleRate;
 }
-float samplesToMS(float samples){
+float pedal::samplesToMS(float samples){
   return (samples*1000.0f)/pdlSettings::sampleRate;
 }
 //amplitudeToDB is in header since templated
 //dBToAmplitude is in header since templated
 
 //pan input from left to right, position range -1 to 1
-void panStereo(float input, float position, float* outputFrame){
+void pedal::panStereo(float input, float position, float* outputFrame){
   //convert to radians
   float theta = clamp(position, -1.0f, 1.0f) * pedal::PI * 0.25f * -1.0f;
   float cosTheta = std::cos(theta);

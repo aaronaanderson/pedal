@@ -5,6 +5,9 @@
 #include "pedal/pdlSettings.hpp"
 #include "pedal/Delay.hpp"
 #include "pedal/utilities.hpp"
+
+using namespace pedal;
+
 Delay delay;//feedback delay
 SmoothValue<float> delayTime;//smooth changes in delay time
 

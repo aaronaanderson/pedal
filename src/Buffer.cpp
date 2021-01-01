@@ -111,7 +111,7 @@ void Buffer::fillSineSweep(float lowFrequency, float highFrequency){
 void Buffer::fillNoise(){
   for(int i = 0; i < durationInSamples; i++){
     for(int j = 0; j < numberChannels; j++){
-      content[i * numberChannels + j] = rangedRandom(-1.0f, 1.0f);
+      content[i * numberChannels + j] = pedal::rangedRandom(-1.0f, 1.0f);
     }
   }
 }

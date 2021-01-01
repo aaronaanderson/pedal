@@ -1,8 +1,6 @@
 #include "pedal/Interpolation.hpp"
 
-using namespace pedal;
-
-float cubicInterpolation(float inputSample, float backTwo, float backOne, 
+float pedal::cubicInterpolation(float inputSample, float backTwo, float backOne, 
                          float forwardOne, float forwardTwo){
     float x = inputSample - int(inputSample);//position between samples
     float a = -0.5*backTwo + 1.5*backOne - 1.5*forwardOne + 0.5 * forwardTwo;

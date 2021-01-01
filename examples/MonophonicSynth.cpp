@@ -23,6 +23,8 @@
 #include "pedal/utilities.hpp"
 #include "pedal/MoogLadderFilter.hpp"
 
+using namespace pedal;
+
 WTSquare squareOscillator;
 CREnvelope amplitudeEnvelope;
 CREnvelope filterEnvelope;
