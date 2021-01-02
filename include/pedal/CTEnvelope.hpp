@@ -13,7 +13,7 @@ class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   CTEnvelope(float initialAttack, float initialDecay, float initialSustain, float initialRelease);
   ~CTEnvelope();//deconstructor, used to clear memory if allocated
   
-  enum class modes {
+  enum class Mode {
     ADSR=0, 
     ASR, 
     AR
@@ -29,11 +29,11 @@ class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   float getSample();
   float* getBlock();
   int getCurrentState();
-  modes getCurrentMode();
+  Mode getCurrentMode();
   bool getTrigger();
   bool isBusy();
   
-  void setMode(modes newMode);
+  void setMode(Mode newMode);
   void setAttackTime(float newAttack);
   void setDecayTime(float newDecay);
   void setSustainLevel(float newSustain);
@@ -41,11 +41,11 @@ class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   void setTrigger(bool newTrigger);
   //=======================================================
   private:
-  enum states {OFF=0, ATTACK, DECAY, SUSTAIN, RELEASE};
-  void calculateIncrement(states whichIncrement);//nead a 'state' variable
+  enum State {OFF, ATTACK, DECAY, SUSTAIN, RELEASE};
+  void calculateIncrement(State whichIncrement);//nead a 'state' variable
 
   int currentState;//which phase, off-a-d-s-r, is the envelope in
-  modes currentMode;//which type of envelope is it, adsr,asr, or ar
+  Mode currentMode;//which type of envelope is it, adsr,asr, or ar
   bool trigger;//on or off
   float attack, decay, sustain, release;//internal values for these variables
   float attackIncrement, decayIncrement, releaseIncrement;//necessary to calculate next sample

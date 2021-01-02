@@ -63,7 +63,7 @@ void TSquare::setFrequency(float newFrequency){
   phaseIncrement = (frequency)/pdlSettings::sampleRate;
 }
 void TSquare::setPhase(float newPhase){//expecting (0-2PI)
-    phase = fmod(newPhase, 2.0 * pedal::PI);//ensure 0-2PI
+    phase = fmod(newPhase, pedal::TWOPI);//ensure 0-2PI
     phase -= pedal::PI;//now -PI to PI
     phase /= pedal::PI;//nown -1 to 1
     //we need an offset. 0.0 phase should be 0.0 result

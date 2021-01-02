@@ -5,7 +5,7 @@ using namespace pedal;
 //constructors and deconstructors
 //=========================================================
 PinkNoise::PinkNoise(){
-  indexMax = pow(2, NUM_OCTAVES) - 1;//size of the octave pattern
+  indexMax = std::pow(2, NUM_OCTAVES) - 1;//size of the octave pattern
   runningSum = 0.0f;
   amplitudeScalar = 1/(float)NUM_OCTAVES;
   //generate a random value to start for all white noise generators

@@ -15,7 +15,7 @@ CREnvelope::CREnvelope(){
                                 decay.curveOvershoot);
   release.curveOvershoot = decay.curveOvershoot;
   release.curveOffset = decay.curveOffset;
-  setMode(modes::ADSR);
+  setMode(Mode::ADSR);
   setAttackTime(100.0f);
   setDecayTime(40.0f);
   setSustainLevel(0.7f);
@@ -26,7 +26,7 @@ CREnvelope::CREnvelope(){
 }
 float CREnvelope::generateSample(){
   switch(currentMode){
-    case modes::ADSR://Attack, Decay, Sustain, Release
+    case Mode::ADSR://Attack, Decay, Sustain, Release
       switch(currentState){
         case OFF:
         //do nothing
@@ -56,7 +56,7 @@ float CREnvelope::generateSample(){
         break;
       }
     break;
-    case modes::AHDSR://Attack, Hold, Decay, Sustain, Release
+    case Mode::AHDSR://Attack, Hold, Decay, Sustain, Release
       switch(currentState){
         case OFF:
         //do nothing
@@ -94,7 +94,7 @@ float CREnvelope::generateSample(){
         break;
       }
     break;
-    case modes::AHR://Attack, Hold, Release
+    case Mode::AHR://Attack, Hold, Release
       switch(currentState){
         case OFF:
         //do nothing
@@ -123,7 +123,7 @@ float CREnvelope::generateSample(){
         break;//end of currentState switch
       }
     break;
-    case modes::AR://Attack, Release
+    case Mode::AR://Attack, Release
       switch(currentState){
         case OFF:
         //do nothing
@@ -157,13 +157,13 @@ void CREnvelope::setTrigger(bool newTrigger){
     currentState = RELEASE;
   }
   //assign the new trigger for next call
-  if(currentMode == modes::AHR || currentMode == modes::AR){
+  if(currentMode == Mode::AHR || currentMode == Mode::AR){
     trigger = false;
   }else{
     trigger = newTrigger;
   }
 }
-void CREnvelope::setMode(modes newMode){currentMode = newMode;}
+void CREnvelope::setMode(Mode newMode){currentMode = newMode;}
 void CREnvelope::setAttackTime(float newAttackTime){
   attack.timeInMS = std::max(newAttackTime, 0.0f);
   calculateAttackCurve(attack.timeInMS);
@@ -186,7 +186,7 @@ void CREnvelope::setHoldTime(float newHoldTime){
 }
 
 float CREnvelope::getSample(){return currentState;}
-CREnvelope::modes CREnvelope::getCurrentMode(){return currentMode;}
+CREnvelope::Mode CREnvelope::getCurrentMode(){return currentMode;}
 float CREnvelope::getAttackTime(){return attack.timeInMS;}
 float CREnvelope::getDecayTime(){return decay.timeInMS;}
 float CREnvelope::getSustainLevel(){return sustainLevel;}

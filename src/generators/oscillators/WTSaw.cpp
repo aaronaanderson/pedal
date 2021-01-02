@@ -40,7 +40,7 @@ SawTable::SawTable(){//when it is time to build a table (constructor)
     for(int j = 0; j < TABLESIZE; j++){//for each sample in that table
       table[i][j] = 0.0f;
       for(int harmonic = 1;harmonic < availableHarmonics; harmonic++){//for each available harmonic
-        float harmonicPhase = (j * 6.2831853f * harmonic)/float(getTableSize());
+        float harmonicPhase = (j * pedal::TWOPI * harmonic)/float(getTableSize());
         float harmonicAmplitude = -1.0f/float(harmonic);
         table[i][j] += std::sin(harmonicPhase) * harmonicAmplitude;
       }
@@ -66,7 +66,7 @@ void SawTable::normalizeTables(){
     float largestValue = 0.0f;//TODO this should really be -inf
     //find the largest value in the buffer
     for(int j = 0; j < TABLESIZE; j++){
-      largestValue = fmax(fabs(table[i][j]), largestValue);
+      largestValue = std::fmax(std::fabs(table[i][j]), largestValue);
     }
     //Do some math, largestValue*scalarValue=1.0
     float scalarValue = 1.0f/largestValue;
@@ -171,14 +171,14 @@ void WTSaw::setFrequency(float newFrequency){
   phaseIncrement = frequency/float(instance->getFundamentalFrequency());
 }
 void WTSaw::setPhase(float newPhase){//expecting 0-TWO_PI
-  phase = std::fmod(std::fabs(newPhase), 6.2831853072f);//wrap to 0 -TWO_PI
-  float scalar = instance->getTableSize()/6.2831853072f;
+  phase = std::fmod(std::fabs(newPhase), pedal::TWOPI);//wrap to 0 -TWO_PI
+  float scalar = instance->getTableSize()/pedal::TWOPI;
   phase = phase * scalar;//map 0-TWO_PI to 0 - tablSize
 }
 void WTSaw::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 float WTSaw::getFrequency(){return frequency;}
 float WTSaw::getPhase(){
-  return (phase * 6.2831853072f)/float(instance->getTableSize());
+  return (phase * pedal::TWOPI)/float(instance->getTableSize());
 }
 float WTSaw::getAmplitude(){return amplitude;}
 float WTSaw::getSample(){return currentSample;}

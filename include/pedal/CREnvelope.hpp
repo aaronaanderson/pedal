@@ -24,7 +24,7 @@ class CREnvelope{
   CREnvelope();
   float generateSample();
   
-  enum class modes{
+  enum class Mode{
     ADSR, 
     AHDSR, 
     AR, 
@@ -32,15 +32,15 @@ class CREnvelope{
   };
 
   void setTrigger(bool newTrigger);
-  void setMode(modes newMode);
+  void setMode(Mode newMode);
   void setAttackTime(float newAttackTime);
   void setDecayTime(float newDecayTime);
   void setSustainLevel(float newSustainLevel);
   void setReleaseTime(float newReleaseTime);
-  void setHoldTime(float newHoldTime);//applicable to AHDSR and AHR modes
+  void setHoldTime(float newHoldTime);//applicable to AHDSR and AHR Mode
   void setLegato(float newLegato);//
   float getSample();
-  modes getCurrentMode();
+  Mode getCurrentMode();
   float getAttackTime();
   float getDecayTime();
   float getSustainLevel();
@@ -50,12 +50,12 @@ class CREnvelope{
 
   private:
   float currentSample;
-  enum states {OFF, ATTACK, DECAY, SUSTAIN, RELEASE, HOLD};
+  enum State {OFF, ATTACK, DECAY, SUSTAIN, RELEASE, HOLD};
   inline void calculateAttackCurve(float newAttackTime);
   inline void calculateDecayCurve(float newDecayTime);
   inline void calculateReleaseCurve(float newReleaseTime);
   int currentState;
-  modes currentMode;
+  Mode currentMode;
   bool trigger;
   CurvedSegment attack;
   CurvedSegment decay;

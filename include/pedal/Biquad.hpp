@@ -1,7 +1,7 @@
 #ifndef Biquad_hpp
 #define Biquad_hpp
 
-#define _USE_MATH_DEFINES
+#include "pdlConstants.hpp"
 #include <cmath>
 #include "pdlSettings.hpp"
 
@@ -13,7 +13,7 @@ https://www.earlevel.com/main/2012/11/26/biquad-c-source-code/
 namespace pedal{
 class Biquad{
   public:
-  enum class modes{
+  enum class Mode{
   LOW_PASS,
   HIGH_PASS,
   BAND_PASS,
@@ -22,26 +22,26 @@ class Biquad{
   LOW_SHELF,
   HIGH_SHELF
   };
-  Biquad(modes initialMode = modes::LOW_SHELF, 
+  Biquad(Mode initialMode = Mode::LOW_SHELF, 
          float initialFrequency = 2000.0f/pdlSettings::sampleRate,
          float initialQ = 0.7f);
   ~Biquad();
 
   inline float processSample(float input);
   float* processBlock(float* input);
-  void flush();//0.0f history
+  void clearHistory();//0.0f history
   
-  void setBiquad(modes mode, float newFrequency, 
+  void setBiquad(Mode mode, float newFrequency, 
                  float newQ, float newGain);
   void setFrequency(float newFrequency);
   void setGain(float newGain);
   void setQ(float newQ);
-  void setMode(modes newMode);
+  void setMode(Mode newMode);
 
   float getFrequency();
   float getGain();
   float getQ();
-  modes getMode();
+  Mode getMode();
   float getSample();
   float* getBlock();
 
@@ -51,7 +51,7 @@ class Biquad{
   //Frequency is stored in normalized mode to reduce calculations (0.0 -> 1.0)
   double q;
   double gain;
-  modes mode;//enumerated above
+  Mode mode;//enumerated above
   double a0, a1, a2;//feed-forward coefficients
   double b1, b2;//feed-back coefficients
   double z1, z2;//containers for previous output

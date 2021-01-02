@@ -8,7 +8,7 @@ https://www.earlevel.com/main/2012/11/26/biquad-c-source-code/
 */
 //constructors and deconstructors
 //=========================================================
-Biquad::Biquad(modes initialMode, float initialFrequency, float initialQ){
+Biquad::Biquad(Mode initialMode, float initialFrequency, float initialQ){
   frequency = initialFrequency;
   mode = initialMode;
   q = initialQ;
@@ -33,112 +33,112 @@ float* Biquad::processBlock(float* input){
 }
 void Biquad::calculateCoefficients(){
   double norm;
-  double v = pow(10, fabs(gain)/20.0);
-  double k = tan(M_PI * frequency);
+  double v = std::pow(10, fabs(gain)/20.0);
+  double k = std::tan(pedal::PI * frequency);
   //calculate and store these since used frequently
-  double k_squared = k * k;
-  double kdivbyq = k / q;
+  double kSquared = k * k;
+  double kDivByQ = k / q;
   switch(mode){
-    case modes::LOW_PASS:https://www.youtube.com/watch?v=GmBHwjoIFNM
-    norm = 1.0 / (1.0 + kdivbyq + k_squared);
-    a0 = k_squared * norm;
-    a1 = 2.0 * a0;
-    a2 = a0;
-    b1 = 2.0 * (k_squared - 1.0) * norm;
-    b2 = (1.0 - kdivbyq + k_squared) * norm;
+    case Mode::LOW_PASS:
+      norm = 1.0 / (1.0 + kDivByQ + kSquared);
+      a0 = kSquared * norm;
+      a1 = 2.0 * a0;
+      a2 = a0;
+      b1 = 2.0 * (kSquared - 1.0) * norm;
+      b2 = (1.0 - kDivByQ + kSquared) * norm;
     break;
-    case modes::HIGH_PASS:
-    norm = 1.0 / (1.0 + kdivbyq + k_squared);
-    a0 = 1.0 * norm;
-    a1 = -2.0 * a0;
-    a2 = a0;
-    b1 = 2.0 * (k_squared - 1.0) * norm;
-    b2 = (1.0 - kdivbyq + k_squared) * norm;
+    case Mode::HIGH_PASS:
+      norm = 1.0 / (1.0 + kDivByQ + kSquared);
+      a0 = 1.0 * norm;
+      a1 = -2.0 * a0;
+      a2 = a0;
+      b1 = 2.0 * (kSquared - 1.0) * norm;
+      b2 = (1.0 - kDivByQ + kSquared) * norm;
     break;
-    case modes::BAND_PASS:
-    norm = 1.0 / (1.0 + kdivbyq + k_squared);
-    a0 = k / q * norm;
-    a1 = 0.0;
-    a2 = -a0;
-    b1 = 2.0 * (k_squared - 1.0) * norm;
-    b2 = (1.0 - kdivbyq + k_squared) * norm;
+    case Mode::BAND_PASS:
+      norm = 1.0 / (1.0 + kDivByQ + kSquared);
+      a0 = k / q * norm;
+      a1 = 0.0;
+      a2 = -a0;
+      b1 = 2.0 * (kSquared - 1.0) * norm;
+      b2 = (1.0 - kDivByQ + kSquared) * norm;
     break;
-    case modes::BAND_REJECT:
-    norm = 1.0 / (1.0 + kdivbyq + k_squared);
-    a0 = (1.0 + k_squared) * norm;
-    a1 = 2.0 * (k_squared - 1.0) * norm;
-    a2 = a0;
-    b1 = a1;
-    b2 = (1.0 - kdivbyq + k_squared) * norm;
+    case Mode::BAND_REJECT:
+      norm = 1.0 / (1.0 + kDivByQ + kSquared);
+      a0 = (1.0 + kSquared) * norm;
+      a1 = 2.0 * (kSquared - 1.0) * norm;
+      a2 = a0;
+      b1 = a1;
+      b2 = (1.0 - kDivByQ + kSquared) * norm;
     break;
-    case modes::PEAK:
+    case Mode::PEAK:
     {
-    a1 = 2.0 * (k_squared - 1.0) * norm;
-    b1 = a1;
-    double vqk = v / q * k;//calculate and store, since used often
-    if(gain >= 0.0f){
-      norm = 1.0 / (1.0 + 1.0 / q * k + k_squared);
-      a0 = (1.0 + v / q * k + k_squared) * norm;
-      a2 = (1.0 - v / q * k + k_squared) * norm;
-      b2 = (1.0 - 1.0 / q * k + k_squared) * norm;
-    }else{
-      norm = 1.0 / (1.0 + vqk + k_squared);
-      a0 = (1.0 + 1.0 / q * k + k_squared) * norm;
-      a2 = (1.0 - 1.0 / q * k + k_squared) * norm;
-      b2 = (1.0 - v / q * k + k_squared) * norm;
-    }
-    }
-    break;
-    case modes::LOW_SHELF:
-    {
-    double sqrt2k = sqrt(2.0f)*k;//calculate and store, since used often
-    double sqrt2vk = sqrt(2.0f * v) * k;
-    if(gain >= 0.0){
-      norm = 1.0 / (1.0 + sqrt2k + k_squared);
-      a0 = (1.0 + sqrt2vk + v * k_squared)  * norm;
-      a1 = 2.0 * (v * k_squared - 1.0) * norm;
-      a2 = (1.0 - sqrt2vk + v * k_squared) * norm;
-      b1 = 2.0 * (k_squared - 1.0) * norm;
-      b2 = (1.0 - sqrt2k + k_squared) * norm;
-    }else{
-      norm = 1.0 / (1.0 + sqrt2vk + v * k_squared);
-      a0 = (1.0 + sqrt2k + k_squared) * norm;
-      a1 = 2.0 * (k_squared - 1.0) * norm;
-      a2 = (1.0 - sqrt2k + k_squared) * norm;
-      b1 = 2.0 * (v * k_squared - 1.0) * norm;
-      b2 = (1.0 - sqrt2vk + v * k_squared) * norm;
-    }
+      a1 = 2.0 * (kSquared - 1.0) * norm;
+      b1 = a1;
+      double vqk = v / q * k;//calculate and store, since used often
+      if(gain >= 0.0f){
+        norm = 1.0 / (1.0 + 1.0 / q * k + kSquared);
+        a0 = (1.0 + vqk + kSquared) * norm;
+        a2 = (1.0 - vqk + kSquared) * norm;
+        b2 = (1.0 - 1.0 / q * k + kSquared) * norm;
+      }else{
+        norm = 1.0 / (1.0 + vqk + kSquared);
+        a0 = (1.0 + 1.0 / q * k + kSquared) * norm;
+        a2 = (1.0 - 1.0 / q * k + kSquared) * norm;
+        b2 = (1.0 - v / q * k + kSquared) * norm;
+      }
     }
     break;
-    case modes::HIGH_SHELF:
+    case Mode::LOW_SHELF:
     {
-    float sqrt2k = sqrt(2.0)*k;//calculate and store, since used often
-    float sqrt2vk = sqrt(2.0 * v) * k;
-    if(gain >= 0.0f){
-      norm = 1.0 / (1.0 + sqrt2k + k_squared);
-      a0 = (v + sqrt2vk + k_squared) * norm;
-      a1 = 2.0 * (k_squared - v) * norm;
-      a2 = (v - sqrt2vk + k_squared) * norm;
-      b1 = 2.0 * (k_squared - 1.0) * norm;
-      b2 = (1.0 - sqrt2k + k_squared) * norm;
-    }else{
-      norm = 1.0 / (v + sqrt2vk + k_squared);
-      a0 = (1.0 + sqrt2vk + k_squared) * norm;
-      a1 = 2.0 * (k_squared - 1.0) * norm;
-      a2 = (1.0 - sqrt2k + k_squared) * norm;
-      b1 = 2.0 * (k_squared - v) * norm;
-      b2 = (v - sqrt2vk + k_squared) * norm;
+      double sqrt2k = std::sqrt(2.0f)*k;//calculate and store, since used often
+      double sqrt2vk = std::sqrt(2.0f * v) * k;
+      if(gain >= 0.0){
+        norm = 1.0 / (1.0 + sqrt2k + kSquared);
+        a0 = (1.0 + sqrt2vk + v * kSquared)  * norm;
+        a1 = 2.0 * (v * kSquared - 1.0) * norm;
+        a2 = (1.0 - sqrt2vk + v * kSquared) * norm;
+        b1 = 2.0 * (kSquared - 1.0) * norm;
+        b2 = (1.0 - sqrt2k + kSquared) * norm;
+      }else{
+        norm = 1.0 / (1.0 + sqrt2vk + v * kSquared);
+        a0 = (1.0 + sqrt2k + kSquared) * norm;
+        a1 = 2.0 * (kSquared - 1.0) * norm;
+        a2 = (1.0 - sqrt2k + kSquared) * norm;
+        b1 = 2.0 * (v * kSquared - 1.0) * norm;
+        b2 = (1.0 - sqrt2vk + v * kSquared) * norm;
+      }
     }
+    break;
+    case Mode::HIGH_SHELF:
+    {
+      float sqrt2k = std::sqrt(2.0)*k;//calculate and store, since used often
+      float sqrt2vk = std::sqrt(2.0 * v) * k;
+      if(gain >= 0.0f){
+        norm = 1.0 / (1.0 + sqrt2k + kSquared);
+        a0 = (v + sqrt2vk + kSquared) * norm;
+        a1 = 2.0 * (kSquared - v) * norm;
+        a2 = (v - sqrt2vk + kSquared) * norm;
+        b1 = 2.0 * (kSquared - 1.0) * norm;
+        b2 = (1.0 - sqrt2k + kSquared) * norm;
+      }else{
+        norm = 1.0 / (v + sqrt2vk + kSquared);
+        a0 = (1.0 + sqrt2vk + kSquared) * norm;
+        a1 = 2.0 * (kSquared - 1.0) * norm;
+        a2 = (1.0 - sqrt2k + kSquared) * norm;
+        b1 = 2.0 * (kSquared - v) * norm;
+        b2 = (v - sqrt2vk + kSquared) * norm;
+      }
     }
     break; 
   }
 }
-void Biquad::flush(){
+void Biquad::clearHistory(){
   z1 = z2 = 0.0;
 }
 //Getters and setters
 //=========================================================
-void Biquad::setBiquad(modes newMode, float newFrequency, 
+void Biquad::setBiquad(Mode newMode, float newFrequency, 
                        float newQ, float newGain){
   mode = newMode;
   frequency = newFrequency/pdlSettings::sampleRate;
@@ -164,10 +164,10 @@ void Biquad::setQ(float newQ){
     calculateCoefficients();
   }
 }
-void Biquad::setMode(modes newMode){
+void Biquad::setMode(Mode newMode){
   if(newMode != mode){
     mode = newMode;
-    flush();
+    clearHistory();
     calculateCoefficients();
   }
 }
@@ -175,6 +175,6 @@ void Biquad::setMode(modes newMode){
 float Biquad::getFrequency(){return frequency * pdlSettings::sampleRate;}
 float Biquad::getGain(){return gain;}
 float Biquad::getQ(){return q;}
-Biquad::modes Biquad::getMode(){return mode;}
+Biquad::Mode Biquad::getMode(){return mode;}
 float Biquad::getSample(){return currentSample;}
 float* Biquad::getBlock(){return currentBlock;}

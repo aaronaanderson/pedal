@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "pdlSettings.hpp"
+#include "pdlConstants.hpp"
 #include <cmath>
 #include "Interpolation.hpp"
 

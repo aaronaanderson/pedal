@@ -57,9 +57,9 @@ void TSaw::setFrequency(float newFrequency){
 }
 void TSaw::setPhase(float newPhase){//set phase (0 - 2PI)
   //convert the standard 0-2PI range to -1 to 1 to make calculations cheap
-  phase = fmod(newPhase, 2.0f * 3.1415926535f);//make sure phase is in the 0-twopi range
-  phase -= 3.1415926535f;//now the range is (-pi, pi);
-  phase /= 3.1415926535f;//now the phase is (-1, 1);
+  phase = fmod(newPhase, pedal::TWOPI);//make sure phase is in the 0-twopi range
+  phase -= pedal::PI;//now the range is (-pi, pi);
+  phase /= pedal::PI;//now the phase is (-1, 1);
 }
 void TSaw::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 

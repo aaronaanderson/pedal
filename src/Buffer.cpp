@@ -97,13 +97,13 @@ void Buffer::writeSoundFile(const char* pathToFile){
 }
 
 void Buffer::fillSineSweep(float lowFrequency, float highFrequency){
-  float lowExponent = log(lowFrequency)/log(2.0f);//2^x = 20.0Hz, find x
-  float highExponent = log(highFrequency)/log(2.0f);//2^x = 20,000Hz, find x
+  float lowExponent = std::log(lowFrequency)/std::log(2.0f);//2^x = 20.0Hz, find x
+  float highExponent = std::log(highFrequency)/std::log(2.0f);//2^x = 20,000Hz, find x
   float linearRange = highExponent - lowExponent;
   TSine sineOscillator;//briefly create a sine oscillator to generate samples
   for(int i = 0; i < durationInSamples; i++){//for every sample in array
     float linearPosition = (i/float(durationInSamples))*linearRange;//find the linear position between ranges
-    float frequency = pow(2, linearPosition);//determine appropriate frequency for sample
+    float frequency = std::pow(2, linearPosition);//determine appropriate frequency for sample
     sineOscillator.setFrequency(frequency);//set oscillator frequency
     content[i] = sineOscillator.generateSample();//generate and assign sample to array
   }

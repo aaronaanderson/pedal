@@ -57,9 +57,9 @@ void TPhasor::setFrequency(float newFrequency){
 }
 void TPhasor::setPhase(float newPhase){//set phase (0 - 2PI)
   //convert the standard 0-2PI range to -1 to 1 to make calculations cheap
-  phase = fmod(newPhase, 2.0 * 3.1415926);//make sure phase is in the 0-twopi range
-  phase -= 3.1415926;//now the range is (-pi, pi);
-  phase /= 3.1415926;//now the phase is (-1, 1);
+  phase = fmod(newPhase, pedal::TWOPI);//make sure phase is in the 0-twopi range
+  phase -= pedal::PI;//now the range is (-pi, pi);
+  phase /= pedal::PI;//now the phase is (-1, 1);
 }
 void TPhasor::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 

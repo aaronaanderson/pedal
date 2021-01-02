@@ -1,6 +1,7 @@
 #ifndef TPhasor_hpp
 #define TPhasor_hpp
 
+#include "pdlConstants.hpp"
 #include <cmath> 
 #include "pdlSettings.hpp"//so we can access sampleRate and bufferSize
 

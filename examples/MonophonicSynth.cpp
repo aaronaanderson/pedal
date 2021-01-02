@@ -81,7 +81,6 @@ void audioCallback(float* output, float* input, int bufferSize, int outputChanne
     for(int sampleIndex = 0; sampleIndex < bufferSize; sampleIndex++){//for every sample
         //update the squareOscillator frequency per sample
         squareOscillator.setFrequency(frequency.process());//update and output the frequency value in one line is clear and concise
-        
         //The initial sample will be sourced from the squareOscillator generator, then scaled by the amplitude envelope
         float currentSample = squareOscillator.generateSample() * amplitudeEnvelope.generateSample() * outputGainScalar;
         //The filter frequency will be at least as high as the squareOscillator frequency, but will scale via the filter envelope
@@ -119,13 +118,13 @@ int main(){
     
     //I'm going to set these and forget them (but please, explore changing these settings!)
     //This is just the final output amplitude envelope
-    amplitudeEnvelope.setMode(CREnvelope::modes::ADSR);
+    amplitudeEnvelope.setMode(CREnvelope::Mode::ADSR);
     amplitudeEnvelope.setAttackTime(100.0f);
     amplitudeEnvelope.setDecayTime(40.0f);
     amplitudeEnvelope.setSustainLevel(0.7f);
     amplitudeEnvelope.setReleaseTime(2000.0f);
     //A second envelope will control the filter frequency. This gives each note a bit more variety.
-    filterEnvelope.setMode(CREnvelope::modes::ADSR);
+    filterEnvelope.setMode(CREnvelope::Mode::ADSR);
     filterEnvelope.setAttackTime(250.0f);
     filterEnvelope.setDecayTime(500.0f);
     filterEnvelope.setSustainLevel(0.5f);

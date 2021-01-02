@@ -35,7 +35,7 @@ float TTriangle::generateSample(){//return a float even if you don't use it
     phase += 2.0;
   }
   //then convert sawtooth to triangle by flipping the negative regions
-  currentSample = (fabs(phase) * 2.0) - 1.0;//convert from saw to triangle
+  currentSample = (std::fabs(phase) * 2.0) - 1.0;//convert from saw to triangle
   currentSample *= amplitude;//scale by
   return currentSample;
 }
