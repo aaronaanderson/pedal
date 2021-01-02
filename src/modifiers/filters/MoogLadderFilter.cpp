@@ -16,7 +16,7 @@ void MoogLadderFilter::setMode(MoogLadderFilter::MODE newMode){
     setModeScalarsFromTable();
 }
 void MoogLadderFilter::setFrequency(float newFrequency){
-    normalizedAngularFrequency = (newFrequency * 2.0f * M_PI) / pdlSettings::sampleRate;
+    normalizedAngularFrequency = (newFrequency * 2.0f * pedal::PI) / pdlSettings::sampleRate;
     float g = (0.9892f * normalizedAngularFrequency) - 
               std::pow(0.4342f * normalizedAngularFrequency, 2) + 
               std::pow(0.1381f * normalizedAngularFrequency, 3) - 

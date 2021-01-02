@@ -1,7 +1,7 @@
 #ifndef HighPass_hpp
 #define HighPass_hpp
 
-#define _USE_MATH_DEFINES
+#include "pdlConstants.hpp"
 #include <cmath>
 #include "pdlSettings.hpp"
 #include "iostream"

@@ -23,9 +23,9 @@ float VOSIM::generateSample(){
     currentSample *= currentSample;//multiply by self for squared-sine
     currentSample *= localAmplitude;//scale by constant amount per sin half period
     oscillationPhase += oscillationPhaseIncrement;
-    if(oscillationPhase >= M_PI){//if past PI
+    if(oscillationPhase >= pedal::PI){//if past PI
       localAmplitude *= decayFactor;//scale the decay factor again
-      oscillationPhase -= M_PI;//rewind phasor
+      oscillationPhase -= pedal::PI;//rewind phasor
       currentOscillation++;//increment which oscillation is being calculated
     }
   }else{//no more sin curves, the rest of the waveform is silence
@@ -50,7 +50,7 @@ float VOSIM::generateSample(){
     }
     if(changed){
       maxOscillationsPerPeriod = (pdlSettings::sampleRate/frequency) / 
-                                 (pdlSettings::sampleRate/(formantFrequency * M_PI));
+                                 (pdlSettings::sampleRate/(formantFrequency * pedal::PI));
     }
   }
   return currentSample;
@@ -63,14 +63,14 @@ void VOSIM::updateFrequency(){
   frequency = nextFrequency;
   periodPhaseIncrement = (frequency / pdlSettings::sampleRate);
   maxOscillationsPerPeriod = (pdlSettings::sampleRate/frequency) / 
-                             (pdlSettings::sampleRate/(formantFrequency * M_PI));
+                             (pdlSettings::sampleRate/(formantFrequency * pedal::PI));
 }
 void VOSIM::setFormantFrequency(float newFormantFrequency){
   nextFormantFrequency = std::max(newFormantFrequency, 0.0f);
 }
 void VOSIM::updateFormantFrequency(){
   formantFrequency = nextFormantFrequency;
-  oscillationPhaseIncrement = ((formantFrequency * M_PI) / 
+  oscillationPhaseIncrement = ((formantFrequency * pedal::PI) / 
                               pdlSettings::sampleRate);
 
 }

@@ -169,14 +169,14 @@ void WTTriangle::setFrequency(float newFrequency){
   phaseIncrement = frequency/float(instance->getFundamentalFrequency());
 }
 void WTTriangle::setPhase(float newPhase){//expecting 0-TWO_PI
-  phase = std::fmod(std::fabs(newPhase), 6.2831853072f);//wrap to 0 -TWO_PI
-  float scalar = instance->getTableSize()/6.2831853072f;
+  phase = std::fmod(std::fabs(newPhase), pedal::TWOPI);//wrap to 0 -TWO_PI
+  float scalar = instance->getTableSize()/pedal::TWOPI;
   phase = phase * scalar;//map 0-TWO_PI to 0 - tablSize
 }
 void WTTriangle::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 float WTTriangle::getFrequency(){return frequency;}
 float WTTriangle::getPhase(){
-  return (phase * 6.2831853072f)/float(instance->getTableSize());
+  return (phase * pedal::TWOPI)/float(instance->getTableSize());
 }
 float WTTriangle::getAmplitude(){return amplitude;}
 float WTTriangle::getSample(){return currentSample;}

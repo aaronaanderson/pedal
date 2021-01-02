@@ -26,7 +26,6 @@ class ImpulseGenerator{
   float getMaskChance();
   float getDeviation();
   
-  private:
   float frequency, phase, period;
   float maskChance;
   float deviation, randomOffset;//deviation from periodicity

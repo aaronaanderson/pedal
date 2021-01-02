@@ -60,9 +60,9 @@ void TTriangle::setFrequency(float newFrequency){
   phaseIncrement = (frequency * 2.0 )/pdlSettings::sampleRate;
 }
 void TTriangle::setPhase(float newPhase){//expecting (0-2PI)
-    phase = fmod(newPhase, 2.0 * 3.1415926);//ensure 0-2PI
-    phase -= 3.1415926;//now -PI to PI
-    phase /= 3.1415926;//nown -1 to 1
+    phase = fmod(newPhase, pedal::TWOPI);//ensure 0-2PI
+    phase -= pedal::PI;//now -PI to PI
+    phase /= pedal::PI;//nown -1 to 1
     //we need an offset. 0.0 phase should be 0.0 result
 }
 void TTriangle::setAmplitude(float newAmplitude){amplitude = newAmplitude;}

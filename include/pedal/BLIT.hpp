@@ -1,7 +1,7 @@
 #ifndef BLIT_hpp
 #define BLIT_hpp
 
-#define _USE_MATH_DEFINES
+#include "pdlConstants.hpp"
 #include <cmath>
 #include <limits>
 

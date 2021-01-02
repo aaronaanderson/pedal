@@ -47,7 +47,7 @@ float* TSine::generateBlock(){//it is best to do all
 //=========================================================
 void TSine::setFrequency(float newFrequency){
   frequency = newFrequency;
-  phaseIncrement = (frequency * 2.0 * 3.1415926)/pdlSettings::sampleRate;//*see notes on bottom
+  phaseIncrement = (frequency * pedal::TWOPI)/pdlSettings::sampleRate;//*see notes on bottom
 }
 void TSine::setPhase(float newPhase){phase = newPhase;}
 void TSine::setAmplitude(float newAmplitude){amplitude = newAmplitude;}

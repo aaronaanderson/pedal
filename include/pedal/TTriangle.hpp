@@ -2,6 +2,7 @@
 #ifndef TTriangle_hpp
 #define TTriangle_hpp
 
+#include "pdlConstants.hpp"
 #include <cmath> //so we can use sin()
 #include "pdlSettings.hpp"//so we can access sampleRate and bufferSize
 

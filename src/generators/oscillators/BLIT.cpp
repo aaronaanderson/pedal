@@ -20,8 +20,8 @@ float BLIT::generateSample(){
                     (numberOfHarmonics * denominator);
   }
   phase += phaseIncrement;
-  if(phase >= M_PI){
-    phase -= M_PI;
+  if(phase >= pedal::PI){
+    phase -= pedal::PI;
     numberOfHarmonics = nextNumberOfHarmonics;
   }
   return currentSample;
@@ -32,7 +32,7 @@ void BLIT::setNumberOfHarmonics(float newNumberOfHarmonics){
 }
 void BLIT::setFrequency(float newFrequency){
   frequency = newFrequency;
-  phaseIncrement = (0.5f *M_PI * frequency) / pdlSettings::sampleRate;
+  phaseIncrement = (0.5f * pedal::PI * frequency) / pdlSettings::sampleRate;
   if(syncHarmonicsWithFrequency){
     setNumberOfHarmonics(std::floor((pdlSettings::sampleRate*0.5f)/frequency));
     std::cout << numberOfHarmonics << std::endl;
@@ -40,7 +40,7 @@ void BLIT::setFrequency(float newFrequency){
 
 }
 void BLIT::setPhase(float newPhase){
-  phase = std::fmod(newPhase, M_PI);
+  phase = std::fmod(newPhase, pedal::PI);
 }
 void BLIT::setSyncHarmonicsToFrequency(bool newSyncHarmonicsToFrequency){
   if(newSyncHarmonicsToFrequency){//if true, then calculate harmonics before nyquist

@@ -169,14 +169,14 @@ void WTSquare::setFrequency(float newFrequency){
   phaseIncrement = frequency/float(instance->getFundamentalFrequency());
 }
 void WTSquare::setPhase(float newPhase){//expecting 0-TWO_PI
-  phase = std::fmod(std::fabs(newPhase), 6.2831853072f);//wrap to 0 -TWO_PI
-  float scalar = instance->getTableSize()/6.2831853072f;
+  phase = std::fmod(std::fabs(newPhase), pedal::TWOPI);//wrap to 0 -TWO_PI
+  float scalar = instance->getTableSize()/pedal::TWOPI;
   phase = phase * scalar;//map 0-TWO_PI to 0 - tablSize
 }
 void WTSquare::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 float WTSquare::getFrequency(){return frequency;}
 float WTSquare::getPhase(){
-  return (phase * 6.2831853072f)/float(instance->getTableSize());
+  return (phase * pedal::TWOPI)/float(instance->getTableSize());
 }
 float WTSquare::getAmplitude(){return amplitude;}
 float WTSquare::getSample(){return currentSample;}

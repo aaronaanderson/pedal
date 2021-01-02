@@ -5,7 +5,8 @@
 //Created using resources 'VOSIM - A New Sound Synthesis Sysmtem' by Kaegi and Tempelaars
 //and 'Signals, Systems, and Sound Syntesis' by Neukom pg 324-5
 //as source material
-#define _USE_MATH_DEFINES
+
+#include "pdlConstants.hpp"
 #include <cmath>
 #include "pedal/pdlSettings.hpp"
 #include <iostream>

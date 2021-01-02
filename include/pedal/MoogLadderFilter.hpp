@@ -31,7 +31,7 @@
 
 #include <vector>
 #include <iostream>
-#define _USE_MATH_DEFINES
+#include "pdlConstants.hpp"
 #include <cmath>
 
 #include "pedal/pdlSettings.hpp"

@@ -1,6 +1,7 @@
 #ifndef TSine_hpp
 #define TSine_hpp
 
+#include "pdlConstants.hpp"
 #include <cmath> //so we can use sin()
 #include "pdlSettings.hpp"//so we can access sampleRate and bufferSize
 
@@ -34,7 +35,7 @@ class TSine {//Pedal Trivial Sine Oscillator
     //we will define it here. 
     currentSample = std::sin(phase) * amplitude;//calculate single sample
     phase += (float)phaseIncrement;//increment phase for the next sample
-    phase = fmod(phase, 6.283185307179586f);
+    phase = std::fmod(phase, pedal::TWOPI);
     return currentSample;
   }
 
