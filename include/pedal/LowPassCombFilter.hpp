@@ -1,9 +1,9 @@
 #ifndef LowPassCombFilter_hpp
 #define LowPassCombFilter_hpp
 
-#include "pedal/pdlConstants.hpp"
-#include "pedal/CircularBuffer.hpp"
-#include "pedal/LowPass.hpp"
+#include "pdlConstants.hpp"
+#include "CircularBuffer.hpp"
+#include "LowPass.hpp"
 
 /*
 This is the same as the comb filter, 

@@ -1,9 +1,9 @@
 #ifndef Compressor_hpp
 #define Compressor_hpp
 
-#include "pedal/CircularBuffer.hpp"
-#include "pedal/BufferedRMS.hpp"
-#include "pedal/utilities.hpp"
+#include "CircularBuffer.hpp"
+#include "BufferedRMS.hpp"
+#include "utilities.hpp"
 /*
 This is a basic compressor. More specifically, this 
 is a dynamic compressor; it comresses the dynamic range

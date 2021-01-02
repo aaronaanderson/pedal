@@ -2,7 +2,7 @@
 #define BufferTap_hpp
 
 #include "CircularBuffer.hpp"
-#include "math.h"
+#include <cmath>
 
 namespace pedal{
 class BufferTap{

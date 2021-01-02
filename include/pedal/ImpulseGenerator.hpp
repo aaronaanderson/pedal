@@ -3,7 +3,7 @@
 
 #include "pdlSettings.hpp"
 #include "utilities.hpp"
-#include "math.h"
+#include <cmath>
 
 namespace pedal{
 class ImpulseGenerator{

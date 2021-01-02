@@ -2,9 +2,9 @@
 #define MoorerReverb_hpp
 
 #include <cmath>
-#include "pedal/AllPass.hpp"
-#include "pedal/CircularBuffer.hpp"
-#include "pedal/utilities.hpp"
+#include "AllPass.hpp"
+#include "CircularBuffer.hpp"
+#include "utilities.hpp"
 #define NUM_COMBS 6
 #define NUM_TAPS 18
 /*

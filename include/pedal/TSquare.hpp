@@ -1,7 +1,7 @@
 #ifndef TSquare_hpp
 #define TSquare_hpp
 
-#include <math.h> //so we can use sin()
+#include <cmath> //so we can use sin()
 #include "pdlSettings.hpp"//so we can access sampleRate and bufferSize
 
 namespace pedal{

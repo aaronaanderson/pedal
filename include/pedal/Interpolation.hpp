@@ -1,7 +1,7 @@
 #ifndef Interpolation_hpp
 #define Interpolation_hpp
 
-#include "math.h"
+#include <cmath>
 
 namespace pedal{
 //the least expensive, yet still effective option for interpolation

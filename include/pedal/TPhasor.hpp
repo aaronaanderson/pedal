@@ -1,7 +1,7 @@
 #ifndef TPhasor_hpp
 #define TPhasor_hpp
 
-#include <math.h> //so we can use sin()
+#include <cmath> 
 #include "pdlSettings.hpp"//so we can access sampleRate and bufferSize
 
 namespace pedal{

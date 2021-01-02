@@ -1,7 +1,7 @@
 #ifndef CTEnvelope_hpp
 #define CTEnvelope_hpp
 
-#include "math.h"//for fmin and fmax
+#include <cmath>//for fmin and fmax
 #include "pdlSettings.hpp"//so we can access sampleRate and bufferSize
 #include "utilities.hpp"// for clamp 
 

@@ -2,7 +2,7 @@
 #define PinkNoise_hpp
 
 #include <iostream>
-#include "math.h"
+#include <cmath>
 #include "WhiteNoise.hpp"
 #define NUM_OCTAVES 14 
 

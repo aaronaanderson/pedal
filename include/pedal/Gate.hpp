@@ -1,9 +1,9 @@
 #ifndef Gate_hpp
 #define Gate_hpp
 
-#include "pedal/CircularBuffer.hpp"
-#include "pedal/BufferedRMS.hpp"
-#include "pedal/utilities.hpp"
+#include "CircularBuffer.hpp"
+#include "BufferedRMS.hpp"
+#include "utilities.hpp"
 /*
 A gate makes quiet sounds more quiet. How much more
 quiet depends on how high the ratio is, and how quiet
