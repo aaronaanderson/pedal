@@ -16,11 +16,8 @@ TSaw::TSaw(float frequency){//override constructor
   setAmplitude(1.0);
 }
 
-TSaw::~TSaw(){//deconstructor (needed to be explicit if freeing memory)
-  if(currentBlock != nullptr){//if space was allocated for current
-    delete[] currentBlock;//free the memory
-  }
-}
+
+TSaw::~TSaw(){}//deconstructor (called when object is deleted)
 
 //primary mechanics of class
 //=========================================================
@@ -36,19 +33,6 @@ float TSaw::generateSample(){//return a float even if you don't use it
   return currentSample;
 }
 
-float* TSaw::generateBlock(){//it is best to do all 
-  //calculations in a row if possible. This keeps the memory from 
-  //jumping around looking for data
-
-  if(currentBlock != nullptr){//if we don't have a local currentBlock yet, 
-    currentBlock = new float[pdlSettings::bufferSize];//create a new array of floats
-  }
-
-  for(int i = 0; i < pdlSettings::bufferSize; ++i){//for every sample in the buffer
-    currentBlock[i] = generateSample();
-  }
-  return currentBlock;//returns pointer to the begining of this block
-}
 //Getters and setters
 //=========================================================
 void TSaw::setFrequency(float newFrequency){
@@ -66,4 +50,3 @@ void TSaw::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 float TSaw::getFrequency(){return frequency;}
 float TSaw::getAmplitude(){return amplitude;}
 float TSaw::getSample(){return currentSample;}
-float* TSaw::getBlock(){return currentBlock;}

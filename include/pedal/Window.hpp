@@ -32,7 +32,6 @@ class Window {
   void setMode(Window::Mode newMode);
   float getCurrentSample();
   bool getActive();
-  float* getCurrentBlock();
   float getDuration();
   float getPhase();
   Window::Mode getMode();

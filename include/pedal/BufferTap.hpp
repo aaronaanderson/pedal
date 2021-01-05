@@ -13,14 +13,12 @@ class BufferTap{
   void setDelayTime(float newDelayTime);
   void setReference(CircularBuffer* newReference);
   float getSample();
-  float* getBlock();
 
   private:
   CircularBuffer* bufferReference;
   float delayTime;
   float readIndex;
   float currentSample;
-  float* currentBlock = nullptr;
 };
 }//end pedal namespace
 #endif

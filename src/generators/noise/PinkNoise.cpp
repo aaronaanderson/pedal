@@ -14,9 +14,8 @@ PinkNoise::PinkNoise(){
   }
   index = 0;//where are we in the 'whichOctave' logic?
 }
-PinkNoise::~PinkNoise(){
-  delete[] currentBlock;//free the memory 
-}
+PinkNoise::~PinkNoise(){}//when object is deleted
+
 //primary mechanics of class
 //=========================================================
 float PinkNoise::generateSample(){//generate a single sample
@@ -29,16 +28,6 @@ float PinkNoise::generateSample(){//generate a single sample
   runningSum += noiseArray[whichOctave].generateSample();
   currentSample = runningSum * amplitudeScalar;//scale then assign to current sample
   return currentSample;//return calculated sample
-}
-
-float* PinkNoise::generateBlock(){//generate a block of samples
-  if(currentBlock != nullptr){//if we don't have a local currentBlock yet, 
-    currentBlock = new float[pdlSettings::bufferSize];//create a new array of floats
-  }
-  for(int i = 0; i < pdlSettings::bufferSize; i++){//for every index in buffer
-    currentBlock[i] = generateSample();//generate and assign a sample
-  }
-  return currentBlock;//return full buffer
 }
 
 void PinkNoise::checkGetOctaveLogic(){//function used while designing this class
@@ -60,4 +49,3 @@ void PinkNoise::checkGetOctaveLogic(){//function used while designing this class
 //=========================================================
 //no setters in this class
 float PinkNoise::getSample(){return currentSample;}
-float* PinkNoise::getBlock(){return currentBlock;}

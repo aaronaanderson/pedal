@@ -27,7 +27,6 @@ class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   float getSustainLevel();
   float getReleaseTime();
   float getSample();
-  float* getBlock();
   int getCurrentState();
   Mode getCurrentMode();
   bool getTrigger();
@@ -50,7 +49,6 @@ class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   float attack, decay, sustain, release;//internal values for these variables
   float attackIncrement, decayIncrement, releaseIncrement;//necessary to calculate next sample
   float currentSample;//current working sample
-  float* currentBlock = nullptr;//(pointer to) current working block of samples
 };
 }//end pedal namespace
 #endif

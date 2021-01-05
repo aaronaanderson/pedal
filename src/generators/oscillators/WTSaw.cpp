@@ -107,9 +107,8 @@ WTSaw::WTSaw(float initialFrequency){
   setPhase(0.0f);
   setAmplitude(1.0f);
 }
-WTSaw::~WTSaw(){
-  delete[] currentBlock;
-}
+WTSaw::~WTSaw(){}//when object is deleted
+
 //Basic Functionallity of class==========
 float WTSaw::generateSample(){
   float** table = instance->getTable();
@@ -134,15 +133,6 @@ float WTSaw::generateSample(){
   return currentSample;//return results
 }
 
-float* WTSaw::generateBlock(){
-  if(currentBlock == nullptr){//if the block hasn't been allocated
-    currentBlock = new float[pdlSettings::bufferSize];//allocate the block
-  }
-  for(int i= 0; i < pdlSettings::bufferSize; i++){//for every sample in block
-    currentBlock[i] = generateSample();//assign the next sample
-  }
-  return currentBlock;
-}
 float WTSaw::whichTable(float testFrequency){//essentially the Y value of a 2D array
   float* frequencyList = instance->getLowFrequencyList();//get the list of table frequencies
   //boundry check
@@ -182,6 +172,3 @@ float WTSaw::getPhase(){
 }
 float WTSaw::getAmplitude(){return amplitude;}
 float WTSaw::getSample(){return currentSample;}
-float* WTSaw::getBlock(){return currentBlock;}
-
-

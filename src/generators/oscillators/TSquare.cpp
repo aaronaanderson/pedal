@@ -18,11 +18,7 @@ TSquare::TSquare(float frequency){//override constructor
   setDutyCycle(0.5);
 }
 
-TSquare::~TSquare(){//deconstructor (needed to be explicit if freeing memory)
-  if(currentBlock != nullptr){//if space was allocated for current
-    delete[] currentBlock;//free the memory
-  }
-}
+TSquare::~TSquare(){}//when object is deleted
 
 //primary mechanics of class
 //=========================================================
@@ -43,19 +39,6 @@ float TSquare::generateSample(){//return a float even if you don't use it
   return currentSample;
 }
 
-float* TSquare::generateBlock(){//it is best to do all 
-  //calculations in a row if possible. This keeps the memory from 
-  //jumping around looking for data
-
-  if(currentBlock != nullptr){//if we don't have a local currentBlock yet, 
-    currentBlock = new float[pdlSettings::bufferSize];//create a new array of floats
-  }
-
-  for(int i = 0; i < pdlSettings::bufferSize; ++i){//for every sample in the buffer
-    currentBlock[i] = generateSample();//place the calculated sample at current index
-  }
-  return currentBlock;//returns pointer to the begining of this block
-}
 //Getters and setters
 //=========================================================
 void TSquare::setFrequency(float newFrequency){
@@ -74,4 +57,3 @@ void TSquare::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 float TSquare::getFrequency(){return frequency;}
 float TSquare::getAmplitude(){return amplitude;}
 float TSquare::getSample(){return currentSample;}
-float* TSquare::getBlock(){return currentBlock;}

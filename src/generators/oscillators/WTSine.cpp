@@ -49,11 +49,7 @@ WTSine::WTSine(float initialFrequency){
   setPhase(0.0f);
   setAmplitude(1.0f);
 }
-WTSine::~WTSine(){
-  if(currentBlock != nullptr){
-      delete[] currentBlock;
-  }
-}
+WTSine::~WTSine(){}//when object is deleted
 
 float WTSine::generateSample(){
   //interpolate between the prvious and next stored value
@@ -67,16 +63,6 @@ float WTSine::generateSample(){
   if(phase < 0.0){phase += tableSize;}//if the phase is past the beginning of table (negative frequencies)
   currentSample *= amplitude;//scale result by amplitude
   return currentSample;//return results
-}
-
-float* WTSine::generateBlock(){
-  if(currentBlock == nullptr){//if the block hasn't been allocated
-    currentBlock = new float[pdlSettings::bufferSize];//allocate the block
-  }
-  for(int i= 0; i < pdlSettings::bufferSize; i++){//for every sample in block
-    currentBlock[i] = generateSample();//assign the next sample
-  }
-  return currentBlock;
 }
 
 void WTSine::setFrequency(float newFrequency){
@@ -96,6 +82,5 @@ float WTSine::getPhase(){
 }
 float WTSine::getAmplitude(){return amplitude;}
 float WTSine::getSample(){return currentSample;}
-float* WTSine::getBlock(){return currentBlock;}
 
 

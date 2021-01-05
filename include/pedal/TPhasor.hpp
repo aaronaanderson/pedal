@@ -22,12 +22,10 @@ class TPhasor{//Pedal Trivial Sine Oscillator
     float getPhase();
     float getAmplitude();
     float getSample();
-    float* getBlock();
     //=======================================================
     private://best practice to leave inner workings private
     float frequency, phase, amplitude;//standard oscillator variables
     float currentSample;//current working sample
-    float* currentBlock = nullptr;//current working block of samples
     double phaseIncrement;//extra precision necessary 
 };
 }//end pedal namespace

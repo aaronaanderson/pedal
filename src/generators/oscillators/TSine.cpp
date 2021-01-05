@@ -16,31 +16,13 @@ TSine::TSine(float frequency){//override constructor
   setAmplitude(1.0);
 }
 
-TSine::~TSine(){//when object is deleted
-  if(currentBlock != nullptr){//if this memory was allocated
-    delete[] currentBlock;//free the memory
-  }
-}
+TSine::~TSine(){}//when object is deleted
 
 //primary mechanics of class
 //=========================================================
 float TSine::generateSample(){//generate and return single sample
   currentSample = generateNextSample();//store the sample
   return currentSample;//return a copy
-}
-
-float* TSine::generateBlock(){//it is best to do all 
-  //calculations in a row if possible. This keeps the memory from 
-  //jumping around looking for data
-
-  if(currentBlock != nullptr){//if we don't have a local currentBlock yet, 
-    currentBlock = new float[pdlSettings::bufferSize];//create a new array of floats
-  }
-
-  for(int i = 0; i < pdlSettings::bufferSize; ++i){//for every sample in the buffer
-    currentBlock[i] = generateNextSample();
-  }
-  return currentBlock;//returns pointer to the begining of this block
 }
 
 //Getters and setters
@@ -55,7 +37,6 @@ void TSine::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 float TSine::getFrequency(){return frequency;}
 float TSine::getAmplitude(){return amplitude;}
 float TSine::getSample(){return currentSample;}
-float* TSine::getBlock(){return currentBlock;}
 
 /*
 *Why is a phase increment needed? 

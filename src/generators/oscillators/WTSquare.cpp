@@ -105,9 +105,8 @@ WTSquare::WTSquare(float initialFrequency){
   setPhase(0.0f);
   setAmplitude(1.0f);
 }
-WTSquare::~WTSquare(){
-  delete[] currentBlock;
-}
+WTSquare::~WTSquare(){}//when object is deleted
+
 //Basic Functionallity of class==========
 float WTSquare::generateSample(){
   float** table = instance->getTable();
@@ -132,15 +131,6 @@ float WTSquare::generateSample(){
   return currentSample;//return results
 }
 
-float* WTSquare::generateBlock(){
-  if(currentBlock == nullptr){//if the block hasn't been allocated
-    currentBlock = new float[pdlSettings::bufferSize];//allocate the block
-  }
-  for(int i= 0; i < pdlSettings::bufferSize; i++){//for every sample in block
-    currentBlock[i] = generateSample();//assign the next sample
-  }
-  return currentBlock;
-}
 float WTSquare::whichTable(float testFrequency){//essentially the Y value of a 2D array
   float* frequencyList = instance->getLowFrequencyList();//get the list of table frequencies
   //boundry check
@@ -180,4 +170,3 @@ float WTSquare::getPhase(){
 }
 float WTSquare::getAmplitude(){return amplitude;}
 float WTSquare::getSample(){return currentSample;}
-float* WTSquare::getBlock(){return currentBlock;}

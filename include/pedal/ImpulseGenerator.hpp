@@ -13,7 +13,6 @@ class ImpulseGenerator{
   ~ImpulseGenerator();
 
   float generateSample();
-  float* generateBlock();
 
   void setFrequency(float newFrequency);
   void setMaskChance(float newMaskChance);
@@ -30,7 +29,6 @@ class ImpulseGenerator{
   float maskChance;
   float deviation, randomOffset;//deviation from periodicity
   float currentSample;
-  float* currentBlock = nullptr;
 };
 }//end pedal namespace
 #endif

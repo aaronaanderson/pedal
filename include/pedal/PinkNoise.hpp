@@ -15,7 +15,6 @@ class PinkNoise{
   float* generateBlock();//fills entire buffer
   
   float getSample();//retrieve sample w/o processing
-  float* getBlock();//retrieve block w/o processing
 
   private:
   inline int getOctave(int index){//which whitenoise generator
@@ -33,7 +32,6 @@ class PinkNoise{
   float runningSum;//Sum of all octaves, updated per sample
   float amplitudeScalar;//ensure the output is between -1.0 and 1.0
   float currentSample;//store for retrieval
-  float* currentBlock = nullptr;
   void checkGetOctaveLogic();//Leaving this in for the curious type
 };
 }//end pedal namespace

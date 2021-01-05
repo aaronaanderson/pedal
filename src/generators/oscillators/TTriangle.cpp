@@ -17,11 +17,7 @@ TTriangle::TTriangle(float frequency){//override constructor
   setAmplitude(1.0);
 }
 
-TTriangle::~TTriangle(){//deconstructor (needed to be explicit if freeing memory)
-  if(currentBlock != nullptr){//if space was allocated for current
-    delete[] currentBlock;//free the memory
-  }
-}
+TTriangle::~TTriangle(){}//when object is deleted
 
 //primary mechanics of class
 //=========================================================
@@ -40,19 +36,6 @@ float TTriangle::generateSample(){//return a float even if you don't use it
   return currentSample;
 }
 
-float* TTriangle::generateBlock(){//it is best to do all 
-  //calculations in a row if possible. This keeps the memory from 
-  //jumping around looking for data
-
-  if(currentBlock != nullptr){//if we don't have a local currentBlock yet, 
-    currentBlock = new float[pdlSettings::bufferSize];//create a new array of floats
-  }
-
-  for(int i = 0; i < pdlSettings::bufferSize; ++i){//for every sample in the buffer
-    currentBlock[i] = generateSample();//place the calculated sample at current index
-  }
-  return currentBlock;//returns pointer to the begining of this block
-}
 //Getters and setters
 //=========================================================
 void TTriangle::setFrequency(float newFrequency){
@@ -70,4 +53,3 @@ void TTriangle::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 float TTriangle::getFrequency(){return frequency;}
 float TTriangle::getAmplitude(){return amplitude;}
 float TTriangle::getSample(){return currentSample;}
-float* TTriangle::getBlock(){return currentBlock;}

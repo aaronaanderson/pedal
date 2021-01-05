@@ -39,7 +39,6 @@ class WTSquare{
   WTSquare(float frequency);//option to set frequency on construction
   ~WTSquare();//deconstructor (may be needed to free memory)
   float generateSample();//generate and return a single sample
-  float* generateBlock();//generate and return a block of samples
 
   //"setters"
   void setFrequency(float newFrequency);
@@ -51,7 +50,6 @@ class WTSquare{
   float getPhase();
   float getAmplitude();
   float getSample();
-  float* getBlock();
     
   private://everything after this is private (cannot be accessed externally without
   //a "getter" or a "setter"
@@ -62,7 +60,6 @@ class WTSquare{
   float whichTable(float frequency);//input frequency, output which table to read
   float frequency, phase, amplitude;//standard oscillator variables
   float currentSample;//current working sample
-  float* currentBlock = nullptr;//current working block of samples
   double phaseIncrement;//extra precision necessary 
 };
 }//end pedal namespace

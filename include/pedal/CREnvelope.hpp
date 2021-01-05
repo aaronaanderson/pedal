@@ -23,15 +23,13 @@ class CREnvelope{
   public:
   CREnvelope();
   float generateSample();
-  
+  void setTrigger(bool newTrigger);
   enum class Mode{
     ADSR, 
     AHDSR, 
     AR, 
     AHR
   };
-
-  void setTrigger(bool newTrigger);
   void setMode(Mode newMode);
   void setAttackTime(float newAttackTime);
   void setDecayTime(float newDecayTime);

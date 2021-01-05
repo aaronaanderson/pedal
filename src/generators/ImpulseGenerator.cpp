@@ -18,9 +18,8 @@ ImpulseGenerator::ImpulseGenerator(float initialFrequency){
   setMaskChance(0.0f);//no missing impulses
   randomOffset = rangedRandom(-period*0.5, period*0.5) * deviation;
 }
-ImpulseGenerator::~ImpulseGenerator(){
-    delete[] currentBlock;
-}
+ImpulseGenerator::~ImpulseGenerator(){}//when object is deleted
+
 //core functionality======================
 float ImpulseGenerator::generateSample(){
   if(phase >= period+randomOffset){
@@ -37,15 +36,7 @@ float ImpulseGenerator::generateSample(){
   }
   return currentSample;
 }
-float* ImpulseGenerator::generateBlock(){
-  if(currentBlock == nullptr){
-    currentBlock = new float[pdlSettings::bufferSize];
-  }
-  for(int i = 0; i < pdlSettings::bufferSize; i++){
-    currentBlock[i] = generateSample();
-  }
-  return currentBlock;
-}
+
 //Getters and Setters======================
 void ImpulseGenerator::setFrequency(float newFrequency){
   frequency = fabs(newFrequency);//no need for negative frequencies for this
@@ -58,7 +49,6 @@ void ImpulseGenerator::setMaskChance(float newMaskChance){maskChance = newMaskCh
 void ImpulseGenerator::setDeviation(float newDeviation){deviation = newDeviation;}
 
 float ImpulseGenerator::getSample(){return currentSample;}
-float* ImpulseGenerator::getBlock(){return currentBlock;}
 float ImpulseGenerator::getFrequency(){return frequency;}
 float ImpulseGenerator::getMaskChance(){return maskChance;}
 float ImpulseGenerator::getDeviation(){return deviation;}

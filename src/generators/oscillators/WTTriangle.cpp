@@ -105,9 +105,8 @@ WTTriangle::WTTriangle(float initialFrequency){
   setPhase(0.0f);
   setAmplitude(1.0f);
 }
-WTTriangle::~WTTriangle(){
-  delete[] currentBlock;
-}
+WTTriangle::~WTTriangle(){}//when object is deleted
+
 //Basic Functionallity of class==========
 float WTTriangle::generateSample(){
   float** table = instance->getTable();
@@ -132,15 +131,6 @@ float WTTriangle::generateSample(){
   return currentSample;//return results
 }
 
-float* WTTriangle::generateBlock(){
-  if(currentBlock == nullptr){//if the block hasn't been allocated
-    currentBlock = new float[pdlSettings::bufferSize];//allocate the block
-  }
-  for(int i= 0; i < pdlSettings::bufferSize; i++){//for every sample in block
-    currentBlock[i] = generateSample();//assign the next sample
-  }
-  return currentBlock;
-}
 float WTTriangle::whichTable(float testFrequency){//essentially the Y value of a 2D array
   float* frequencyList = instance->getLowFrequencyList();//get the list of table frequencies
   //boundry check
@@ -180,6 +170,3 @@ float WTTriangle::getPhase(){
 }
 float WTTriangle::getAmplitude(){return amplitude;}
 float WTTriangle::getSample(){return currentSample;}
-float* WTTriangle::getBlock(){return currentBlock;}
-
-

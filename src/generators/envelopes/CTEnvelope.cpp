@@ -9,11 +9,7 @@ CTEnvelope::CTEnvelope(){
 CTEnvelope::CTEnvelope(float initialAttack, float initialDecay, float initialSustain, float initialRelease){
   setup(initialAttack, initialDecay, initialSustain, initialRelease);
 }
-CTEnvelope::~CTEnvelope(){//deconstructor
-  if(currentBlock != nullptr){//if block exists
-    delete[] currentBlock;//free the memory
-  }
-}
+CTEnvelope::~CTEnvelope(){}//when object is deleted
 //=========================================================
 void CTEnvelope::setup(float newAttack, float newDecay, float newSustain, float newRelease){
   setSustainLevel(newSustain);//clamp sustain 0.0 to 1.0
@@ -136,7 +132,6 @@ float CTEnvelope::getDecayTime(){return decay;}
 float CTEnvelope::getSustainLevel(){return sustain;}
 float CTEnvelope::getReleaseTime(){return release;}
 float CTEnvelope::getSample(){return currentSample;}
-float* CTEnvelope::getBlock(){return currentBlock;}
 int CTEnvelope::getCurrentState(){return currentState;}
 CTEnvelope::Mode CTEnvelope::getCurrentMode(){return currentMode;}
 bool CTEnvelope::getTrigger(){return trigger;}

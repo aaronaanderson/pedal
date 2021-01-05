@@ -12,7 +12,6 @@ class TSquare{//Pedal Trivial Square Oscillator
   TSquare(float frequency);//option to set frequency on construction
   ~TSquare();//deconstructor (may be needed to free memory)
   float generateSample();//calculate and return next sample
-  float* generateBlock();//calculate and return next block of samples
 
   //"setters"
   void setFrequency(float newFrequency);
@@ -25,7 +24,6 @@ class TSquare{//Pedal Trivial Square Oscillator
   float getPhase();
   float getAmplitude();
   float getSample();
-  float* getBlock();
   float getDutyCycle();
 
   //=======================================================
@@ -33,7 +31,6 @@ class TSquare{//Pedal Trivial Square Oscillator
   float frequency, phase, amplitude;//standard oscillator variables
   float dutyCycle;//width of rectangular wave (square if 0.5);
   float currentSample;//current working sample
-  float* currentBlock = nullptr;//current working block of samples
   double phaseIncrement;//extra precision necessary 
 };
 }//end pedal namespace
