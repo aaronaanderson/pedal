@@ -2,13 +2,7 @@
 #define AllPass_hpp
 
 #include "CircularBuffer.hpp"
-
-// Diagram from The Audio Programming Book, page 495
-// input__+_______+_*-g__output
-//        |      |    |
-//        |   Delay   |
-//        |_*g_<_|_>__|
-//          
+    
 namespace pedal{
 class AllPass{
   public:

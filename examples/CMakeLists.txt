@@ -77,6 +77,7 @@ set(example_list
     MonophonicSynth
     EmptyExample
     MonophonicSampler
+    LFO
 )
 
 # loop through example targets
@@ -84,7 +85,7 @@ foreach(example ${example_list})
     add_executable(${example} "${example}.cpp")
     set_target_properties(${example} PROPERTIES
         DEBUG_POSTFIX d
-        CXX_STANDARD 14
+        CXX_STANDARD 17
         CXX_STANDARD_REQUIRED ON
         RUNTIME_OUTPUT_DIRECTORY bin
         RUNTIME_OUTPUT_DIRECTORY_DEBUG bin

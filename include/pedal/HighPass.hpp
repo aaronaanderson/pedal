@@ -21,7 +21,7 @@ class HighPass{//One pole low pass filter
 
 inline float HighPass::process(float input){
   //note that currentSample on the right side
-  //of this expression is leftover from last call
+  //of this expression is leftover from the previous call
   //It is effectively 'previousSample'
   currentSample = (a*input) - (b*currentSample);
   return currentSample;

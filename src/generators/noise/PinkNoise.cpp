@@ -30,7 +30,7 @@ float PinkNoise::generateSample(){//generate a single sample
   return currentSample;//return calculated sample
 }
 
-void PinkNoise::checkGetOctaveLogic(){//function used while designing this class
+void PinkNoise::checkGetOctaveLogic(){
   unsigned numberOfSteps = pow(2, NUM_OCTAVES)-1;//number intuited from graph in hpp
   //print octaves and steps
   std::cout << "There are " <<  NUM_OCTAVES << 

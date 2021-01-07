@@ -20,7 +20,6 @@ class ImpulseGenerator{
   void setPhase(float newPhase);
 
   float getSample();
-  float* getBlock();
   float getFrequency();
   float getMaskChance();
   float getDeviation();
