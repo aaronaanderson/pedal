@@ -80,7 +80,10 @@ class SmoothValue{
   float a,b;//coefficients
   T z;//storage for previous value
 };
-
+template<class T>
+T map(T inputValue, T inputLowerBound, T inputUpperBound, T outputLowerBound, T outputUpperBound){
+  return (inputValue - inputLowerBound)/(inputUpperBound - inputLowerBound) * (outputUpperBound - outputLowerBound) + outputLowerBound;
+}
 template <class T>
 class DirectionalSmoothValue{
 public:

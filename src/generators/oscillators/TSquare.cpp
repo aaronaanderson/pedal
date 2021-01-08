@@ -28,7 +28,7 @@ float TSquare::generateSample(){//return a float even if you don't use it
     phase -= 1.0;
   }
   while(phase < 0.0){
-      phase += 1.0;
+    phase += 1.0;
   }
 
   if(phase > dutyCycle){
