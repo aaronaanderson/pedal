@@ -1,42 +1,43 @@
 #include "example_app.hpp"
 #include <iostream>
 
-#include "pedal/LowFrequencyOscillator.hpp"
+#include <vector>
 #include "pedal/WTSaw.hpp"
 #include "pedal/MoogLadderFilter.hpp"
-
+#include "pedal/utilities.hpp"
+#include "pedal/Counter.hpp"
+#include "pedal/TPhasor.hpp"
+#include "pedal/EdgeDetector.hpp"
+#include "pedal/CTEnvelope.hpp"
 using namespace pedal;
 
-WTSaw saw;
 MoogLadderFilter filter;
-LowFrequencyOscillator lfo;
 SmoothValue<float> frequency;
+Counter counter(8);
+TPhasor timer(32.0f);
+EdgeDetector edgeDetector;
 
+std::vector<int> sequence = {40, 42, 44, 45, 47, 49, 51, 52};
+WTSaw saw;
+CTEnvelope envelope;
 void keyboardCallback(int key, bool keyDown){
-  switch(key){
-    case '1':
-      lfo.setWaveShape(LowFrequencyOscillator::WaveShape::Sine);
-    break;
-    case '2':
-      lfo.setWaveShape(LowFrequencyOscillator::WaveShape::Triangle);
-    break;
-    case '3':
-      lfo.setWaveShape(LowFrequencyOscillator::WaveShape::Saw);
-    break;
-    case '4':
-      lfo.setWaveShape(LowFrequencyOscillator::WaveShape::Square);
-    break;
-  }
+
 }
 
 void audioCallback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, PedalExampleApp* app){
-  frequency.setTarget(pdlGetSlider(app, 0));
+
 
   for(int sampleIndex = 0; sampleIndex < bufferSize; sampleIndex++){
-    float currentSample = saw.generateSample();
-    lfo.setFrequency(frequency.process());
-    filter.setFrequency(lfo.generateSample());
-    currentSample = filter.processSample(currentSample);
+    //check for an envelope trigger
+    if(edgeDetector.process(timer.generateSample())){
+      frequency.setTarget(mtof(sequence[counter.getCount()]));
+      counter.increment();
+      std::cout << counter.getCount() << std::endl;
+      envelope.setTrigger(true);
+    }
+    saw.setFrequency(frequency.process());
+    float currentSample = saw.generateSample() * envelope.generateSample();
+
     for(int channelIndex = 0; channelIndex < outputChannels; channelIndex++){
       output[sampleIndex * outputChannels + channelIndex] = currentSample * 0.1f;
     }
@@ -48,10 +49,11 @@ int main(){
   PedalExampleApp* app = pdlInitializeExampleApp(audioCallback, pdlSettings::sampleRate, pdlSettings::bufferSize);
   pdlSetKeyboardCallback(keyboardCallback);
   saw.setFrequency(30.0f);
-  lfo.setOutputRange(60.0f, 2000.0f);
-  lfo.setFrequency(0.125f);
+  envelope.setMode(CTEnvelope::Mode::AR);
+  envelope.setAttackTime(35.0f);
+  envelope.setDecayTime(300.0f);
   filter.setResonance(0.94f);
-  pdlAddSlider(app, 0, "LFO frequency", 0.0f, 18.0f, 2.0f);
+
   pdlStartExampleApp(app);
   //This is the perpetual loop; it will keep going until the window is closed
   while(pdlRunExampleApp(app)){//while the window is still open

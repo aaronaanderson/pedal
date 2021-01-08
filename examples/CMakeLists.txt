@@ -78,6 +78,7 @@ set(example_list
     EmptyExample
     MonophonicSampler
     LFO
+    Sequencer_01
 )
 
 # loop through example targets
