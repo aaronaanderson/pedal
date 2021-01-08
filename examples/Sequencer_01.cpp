@@ -8,38 +8,36 @@
 #include "pedal/Counter.hpp"
 #include "pedal/TPhasor.hpp"
 #include "pedal/EdgeDetector.hpp"
-#include "pedal/CTEnvelope.hpp"
+#include "pedal/CREnvelope.hpp"
 using namespace pedal;
 
-MoogLadderFilter filter;
 SmoothValue<float> frequency;
-Counter counter(8);
-TPhasor timer(32.0f);
+
+TPhasor timer(bpmToHz(60.0));
 EdgeDetector edgeDetector;
 
 std::vector<int> sequence = {40, 42, 44, 45, 47, 49, 51, 52};
+Counter counter(sequence.size());
 WTSaw saw;
-CTEnvelope envelope;
-void keyboardCallback(int key, bool keyDown){
+CREnvelope envelope;
 
-}
-
+SmoothValue<float> outputVolume;
 void audioCallback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, PedalExampleApp* app){
-
-
+  timer.setFrequency(bpmToHz(pdlGetSlider(app, 0)));
+  int sequenceOffset = pdlGetSlider(app, 1);
+  outputVolume.setTarget(dBToAmplitude(pdlGetSlider(app, 2)));
   for(int sampleIndex = 0; sampleIndex < bufferSize; sampleIndex++){
-    //check for an envelope trigger
+    //Timer will generate N edged per second, which will be deteced by the edgeDetector
     if(edgeDetector.process(timer.generateSample())){
-      frequency.setTarget(mtof(sequence[counter.getCount()]));
+      frequency.setTarget(mtof(sequence[counter.getCount()] + sequenceOffset));
       counter.increment();
-      std::cout << counter.getCount() << std::endl;
       envelope.setTrigger(true);
     }
     saw.setFrequency(frequency.process());
     float currentSample = saw.generateSample() * envelope.generateSample();
 
     for(int channelIndex = 0; channelIndex < outputChannels; channelIndex++){
-      output[sampleIndex * outputChannels + channelIndex] = currentSample * 0.1f;
+      output[sampleIndex * outputChannels + channelIndex] = currentSample * outputVolume.process();
     }
   }
 }
@@ -47,13 +45,14 @@ void audioCallback(float* output, float* input, int bufferSize, int inputChannel
 int main(){
   //Create the application (an audio callback is required here)
   PedalExampleApp* app = pdlInitializeExampleApp(audioCallback, pdlSettings::sampleRate, pdlSettings::bufferSize);
-  pdlSetKeyboardCallback(keyboardCallback);
   saw.setFrequency(30.0f);
-  envelope.setMode(CTEnvelope::Mode::AR);
+  envelope.setMode(CREnvelope::Mode::AR);
   envelope.setAttackTime(35.0f);
-  envelope.setDecayTime(300.0f);
-  filter.setResonance(0.94f);
-
+  envelope.setDecayTime(150.0f);
+  
+  pdlAddSlider(app, 0, "BPM", 30.0f, 600.0f, 145.0f);
+  pdlAddSlider(app, 1, "Sequence offset", - 12, 12, 0);
+  pdlAddSlider(app, 2, "Output Gain(dB)", -60, 0.0f, -3.0f);
   pdlStartExampleApp(app);
   //This is the perpetual loop; it will keep going until the window is closed
   while(pdlRunExampleApp(app)){//while the window is still open

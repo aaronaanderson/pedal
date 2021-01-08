@@ -41,6 +41,14 @@ T clamp(T input, U lowerBound, V upperBound){
   }
 }
 
+template<class T>
+T bpmToHz(T bpm){
+  return bpm/60.0;
+}
+template<class T>
+T hzToBpm(T hz){
+  return hz * 60.0;
+}
  /*
 This class is a low pass filter for control
 input. Typically control rate is lower than
