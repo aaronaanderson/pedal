@@ -1,5 +1,4 @@
-//include functionality of a basic app
-#include "example_app.hpp"
+#include "example_app.hpp"//include functionality of a basic app
 
 //include class if using
 #include "pedal/pdlSettings.hpp"

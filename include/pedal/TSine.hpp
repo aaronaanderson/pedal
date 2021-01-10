@@ -1,6 +1,7 @@
 #ifndef TSine_hpp
 #define TSine_hpp
 
+#include "utilities.hpp"
 #include "pdlConstants.hpp"
 #include <cmath> //so we can use sin()
 #include "pdlSettings.hpp"//so we can access sampleRate and bufferSize
@@ -12,6 +13,7 @@ class TSine {//Pedal Trivial Sine Oscillator
   TSine(float frequency);//option to set frequency on construction
   ~TSine();//deconstructor (may be needed to free memory)
   float generateSample();//generate and return a single sample
+  float generateSample(float fromPhase);//phase driven overload
 
   //"setters"
   void setFrequency(float newFrequency);
@@ -24,20 +26,11 @@ class TSine {//Pedal Trivial Sine Oscillator
   float getAmplitude();
   float getSample();
     
-  private://everything after this is private (cannot be accessed externally without
-  //a "getter" or a "setter"
-  //best practice to leave inner workings private
+  private://everything after this is private
 
-  inline float generateNextSample(){//return a float even if you don't use it
-    //inline functions must be located in the header file, so 
-    //we will define it here. 
-    currentSample = std::sin(phase) * amplitude;//calculate single sample
-    phase += (float)phaseIncrement;//increment phase for the next sample
-    phase = std::fmod(phase, pedal::TWOPI);
-    return currentSample;
-  }
-
-  float frequency, phase, amplitude;//standard oscillator variables
+  float frequency;
+  float phase;
+  float amplitude;
   float currentSample;//current working sample
   double phaseIncrement;//extra precision necessary 
 };

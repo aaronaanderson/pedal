@@ -35,18 +35,29 @@ float TTriangle::generateSample(){//return a float even if you don't use it
   currentSample *= amplitude;//scale by
   return currentSample;
 }
-
+//overload expecting phase in the range of 0 to TWOPI
+float TTriangle::generateSample(float inputPhase){//return a float even if you don't use it
+  //We can start by making a trivial sawtooth
+  phase += phaseIncrement;
+  while(phase > pedal::TWOPI){
+    phase -= pedal::TWOPI;
+  }
+  while(phase < 0.0f){//to ensure that negative frequencies will work
+    phase += pedal::TWOPI;
+  }
+  //then convert sawtooth to triangle by flipping the negative regions
+  currentSample = (std::fabs(phase - pedal::PI) * pedal::PI_INVERSE * 2.0f) - 1.0;//convert from saw to triangle
+  currentSample *= amplitude;//scale by
+  return currentSample;
+}
 //Getters and setters
 //=========================================================
 void TTriangle::setFrequency(float newFrequency){
   frequency = newFrequency;
-  phaseIncrement = (frequency * 2.0 )/pdlSettings::sampleRate;
+  phaseIncrement = (frequency * pedal::TWOPI )/pdlSettings::sampleRate;
 }
 void TTriangle::setPhase(float newPhase){//expecting (0-2PI)
-    phase = fmod(newPhase, pedal::TWOPI);//ensure 0-2PI
-    phase -= pedal::PI;//now -PI to PI
-    phase /= pedal::PI;//nown -1 to 1
-    //we need an offset. 0.0 phase should be 0.0 result
+  phase = fmod(newPhase, pedal::TWOPI);//ensure 0-2PI
 }
 void TTriangle::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 

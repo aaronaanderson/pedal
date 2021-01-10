@@ -6,14 +6,14 @@
 #include "pedal/MoogLadderFilter.hpp"
 #include "pedal/utilities.hpp"
 #include "pedal/Counter.hpp"
-#include "pedal/TPhasor.hpp"
+#include "pedal/Phasor.hpp"
 #include "pedal/EdgeDetector.hpp"
 #include "pedal/CREnvelope.hpp"
 using namespace pedal;
 
 SmoothValue<float> frequency;
 
-TPhasor timer(bpmToHz(60.0));
+Phasor timer(bpmToHz(60.0));
 EdgeDetector edgeDetector;
 
 std::vector<int> sequence = {40, 42, 44, 45, 47, 49, 51, 52};

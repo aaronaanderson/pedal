@@ -13,7 +13,7 @@ class TTriangle{//Pedal Trivial Sine Oscillator
   TTriangle(float frequency);//option to set frequency on construction
   ~TTriangle();//deconstructor (may be needed to free memory)
   float generateSample();//calculate and return next sample
-
+  float generateSample(float fromPhase);//phase driven overload
   //"setters"
   void setFrequency(float newFrequency);
   void setPhase(float newPhase);

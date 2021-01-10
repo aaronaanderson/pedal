@@ -12,7 +12,7 @@ class TSquare{//Pedal Trivial Square Oscillator
   TSquare(float frequency);//option to set frequency on construction
   ~TSquare();//deconstructor (may be needed to free memory)
   float generateSample();//calculate and return next sample
-
+  float generateSample(float fromPhase);//phase driven overload
   //"setters"
   void setFrequency(float newFrequency);
   void setPhase(float newPhase);

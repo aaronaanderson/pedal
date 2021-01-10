@@ -21,10 +21,17 @@ TSine::~TSine(){}//when object is deleted
 //primary mechanics of class
 //=========================================================
 float TSine::generateSample(){//generate and return single sample
-  currentSample = generateNextSample();//store the sample
+  currentSample = std::sin(phase) * amplitude;//calculate single sample
+  phase += (float)phaseIncrement;//increment phase for the next sample
+  phase = std::fmod(phase, pedal::TWOPI);
   return currentSample;//return a copy
 }
-
+//expects input phase in the range of 0 to TWOPI
+float TSine::generateSample(float inputPhase){//generate and return single sample
+  setPhase(inputPhase);
+  currentSample = std::sin(phase) * amplitude;//calculate single sample
+  return currentSample;//return a copy
+}
 //Getters and setters
 //=========================================================
 void TSine::setFrequency(float newFrequency){

@@ -38,7 +38,17 @@ float TSquare::generateSample(){//return a float even if you don't use it
   }
   return currentSample;
 }
-
+//expects an input phase int he range of 0 to TWOPI
+float TSquare::generateSample(float inputPhase){//return a float even if you don't use it
+  //wrap phase to useful range then scale to 0.0 to 1.0
+  setPhase(inputPhase);
+  if(phase > dutyCycle){//phase stored locally 0.0 to 1.0
+    currentSample = -1.0;
+  }else{
+    currentSample = 1.0;
+  }
+  return currentSample;
+}
 //Getters and setters
 //=========================================================
 void TSquare::setFrequency(float newFrequency){
@@ -47,9 +57,8 @@ void TSquare::setFrequency(float newFrequency){
 }
 void TSquare::setPhase(float newPhase){//expecting (0-2PI)
     phase = fmod(newPhase, pedal::TWOPI);//ensure 0-2PI
-    phase -= pedal::PI;//now -PI to PI
-    phase /= pedal::PI;//nown -1 to 1
-    //we need an offset. 0.0 phase should be 0.0 result
+    phase *= pedal::PI_INVERSE;//convert range to 0.0 to 2.0
+    phase *= 0.5;//phase stored locally 0.0 to 1.0
 }
 void TSquare::setDutyCycle(float newDutyCycle){dutyCycle = newDutyCycle;}
 void TSquare::setAmplitude(float newAmplitude){amplitude = newAmplitude;}

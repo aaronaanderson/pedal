@@ -8,10 +8,10 @@
 using namespace pedal;
 
 TTriangle triangle(100.0f);
-STFT stftOne(4096, 64);
+STFT stftOne(16384, 128);
 LowFrequencyOscillator lfoOne;
 WTSaw saw(40.0f);
-STFT stftTwo(4096, 64);
+STFT stftTwo(16384, 128);
 LowFrequencyOscillator lfoTwo;
 SmoothValue<float> outputVolume;
 
