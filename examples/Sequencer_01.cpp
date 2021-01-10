@@ -22,10 +22,12 @@ WTSaw saw;
 CREnvelope envelope;
 
 SmoothValue<float> outputVolume;
+
 void audioCallback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, PedalExampleApp* app){
   timer.setFrequency(bpmToHz(pdlGetSlider(app, 0)));
   int sequenceOffset = pdlGetSlider(app, 1);
   outputVolume.setTarget(dBToAmplitude(pdlGetSlider(app, 2)));
+
   for(int sampleIndex = 0; sampleIndex < bufferSize; sampleIndex++){
     //Timer will generate N edged per second, which will be deteced by the edgeDetector
     if(edgeDetector.process(timer.generateSample())){

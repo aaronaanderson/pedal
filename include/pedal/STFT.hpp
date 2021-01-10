@@ -47,7 +47,7 @@ class STFT{
   private:
   float currentSample;
   void calculateWindow();//generate stored window data
-  inline void calculateWindowedInput(const int inputOffset);
+  inline void calculateWindowedInput(const int startingIndex);
   int hopSize;//how many new samples before next analysis?
   int overlap;//how many analyses in the span of one window
   int windowSize;//FFT analysis size (and size of many other data)
@@ -56,7 +56,6 @@ class STFT{
   int whichOutputLayer;//used to offset write position
   bool fftReadyFlag;//bins may be updated if so. iFFT is called next sample
   int inputWritePosition;//write location within input buffer
-  int inputWriteRedundantPosition;//duplicate entry for array alignment
   std::vector<float> inputBuffer;//time-domain input stream
   std::vector<float> windowedInputSegment;//FFT input
   std::vector<float> realBuffer;//real results of FFT
@@ -65,11 +64,12 @@ class STFT{
   std::vector<std::vector<float>> windowedOutput;//updated every 'hopSize' samples
   int currentOutputIndex;//which sample in the overlapAddOutput buffer
   audiofft::AudioFFT fft;//fast fourier transform (from external audioFFT library)
+  float outputNormalizationScalar;//scalar to attenuate output based on N overlap and window shape
 };
 
-inline void STFT::calculateWindowedInput(const int inputOffset){
-  for(int i = 0; i < windowSize; i ++){
-    windowedInputSegment[i] = inputBuffer[i + inputOffset] * window[i];
+inline void STFT::calculateWindowedInput(const int startingIndex){
+  for(int i = 0; i < windowSize; i++){
+    windowedInputSegment[i] = inputBuffer[(startingIndex + i)%windowSize] * window[i];
   }
 }
 }//end pedal namespace

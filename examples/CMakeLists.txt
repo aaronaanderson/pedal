@@ -79,6 +79,7 @@ set(example_list
     MonophonicSampler
     LFO
     Sequencer_01
+    Convolution
 )
 
 # loop through example targets

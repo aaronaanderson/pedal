@@ -4,27 +4,21 @@ using namespace pedal;
 
 STFT::STFT(int initialWindowSize, int initialOverlap){
   overlap = initialOverlap;
-  setWindowType(Window::Mode::HANNING);
+  windowType = Window::Mode::HANNING;
   setWindowSize(initialWindowSize);
   fft.init(windowSize);
   hopSize = windowSize / overlap;
   fftReadyFlag = false;
   inputWritePosition = 0;
-  inputWriteRedundantPosition = inputWritePosition + windowSize;
   currentOutputIndex = 0;
   currentSample = 0.0f;//not used unless inversing
 }
 bool STFT::updateInput(float input){
-  inputBuffer[inputWritePosition] = input;
-  //redundant write for clean array access later
-  inputBuffer[inputWriteRedundantPosition] = input;
-  inputWritePosition++;//increment write position
-  inputWritePosition = inputWritePosition % inputBuffer.size();//wrap at window size
-  //the redundant write is 'windowSize' samples ago, wrapped around the inputBuffer size
-  inputWriteRedundantPosition = (inputWritePosition + windowSize) % inputBuffer.size();
+  inputWritePosition = inputWritePosition % windowSize;//wrap at window size
+  inputBuffer[inputWritePosition] = input;  
   //check if there is enough new data for analysis
   if(inputWritePosition % hopSize == 0){//if an input segment has been filled
-    const int offset = inputWritePosition % windowSize;//safe because of if check
+    const int offset = (inputWritePosition + windowSize) % windowSize;//index for 'windowSize' samples in the past
     calculateWindowedInput(offset);//scale input segment by window, assign to windowedInputSegment
     //realBuffer and imaginaryBuffer are updated in place, ready for use after this call
     fft.fft(windowedInputSegment.data(), realBuffer.data(), imaginaryBuffer.data());
@@ -33,6 +27,7 @@ bool STFT::updateInput(float input){
   }else{
     fftReadyFlag = false;//still need more samples for analysis
   }
+  inputWritePosition++;//increment write position
   return fftReadyFlag;
 }
 bool STFT::isFFTReady(){
@@ -55,6 +50,8 @@ float STFT::updateOutput(){//MUST be called per sample if at all
     int index = (currentOutputIndex - (hopSize * i) + windowSize) % windowSize;//add
     currentSample += windowedOutput[i][index];
   }
+  //scale by normalization factor
+  currentSample *= outputNormalizationScalar;
   currentOutputIndex++;//increment output buffer index
   return currentSample;//return single sample
 }
@@ -92,13 +89,13 @@ void STFT::setWindowSize(int powerOfTwoSize){
   //from stack overflow:https://stackoverflow.com/questions/466204/rounding-up-to-next-power-of-2
   windowSize = std::pow(2, std::ceil(std::log(powerOfTwoSize)/
                                      std::log(2.0f)));
-  inputBuffer.resize(windowSize * 2, 0.0f);//*see notes at bottom
+  hopSize = windowSize/static_cast<float>(overlap);
+  inputBuffer.resize(windowSize, 0.0f);//*see notes at bottom
   windowedInputSegment.resize(windowSize);
   int complexSize = (windowSize/2) + 1;//real and imaginary buffer need half windowsize + 1
   realBuffer.resize(complexSize);
   imaginaryBuffer.resize(complexSize);
   window.resize(windowSize);
-  windowedOutput.resize(overlap);
   windowedOutput.clear();
   std::vector<float> temp(windowSize, 0.0f);
   for(int i = 0; i < overlap; i++){
@@ -165,43 +162,58 @@ float* STFT::getImaginaryBufferPointer(){
 void STFT::calculateWindow(){
   //calculate once since used 'windowSize' times
   float phaseReciprocal = 1.0f/static_cast<float>(windowSize - 1);
+  std::vector<float> windowSamples;
+  windowSamples.resize(overlap);
   switch(windowType){//fill 'window' vector based on window type
     case Window::Mode::HANNING:
       for(int i = 0; i < windowSize; i++){
         float phase = i * phaseReciprocal;
         window[i] = Window::hanningFromPhase(phase);
+        if(i % hopSize == 0) windowSamples[i/hopSize] = window[i];
       }
     break;
     case Window::Mode::HAMMING:
       for(int i = 0; i < windowSize; i++){
         float phase = i * phaseReciprocal;
         window[i] = Window::hammingFromPhase(phase);
+        if(i % hopSize == 0) windowSamples[i/hopSize] = window[i];
       }
     break;
     case Window::Mode::COSINE:
       for(int i = 0; i < windowSize; i++){
         float phase = i * phaseReciprocal;
         window[i] = Window::cosineFromPhase(phase);
+        if(i % hopSize == 0) windowSamples[i/hopSize] = window[i];
       }
     break;
     case Window::Mode::TRIANGULAR:
       for(int i = 0; i < windowSize; i++){
         float phase = i * phaseReciprocal;
         window[i] = Window::triangularFromPhase(phase);
+        if(i % hopSize == 0) windowSamples[i/hopSize] = window[i];
       }
     break;
     case Window::Mode::BLACKMAN_NUTALL:
       for(int i = 0; i < windowSize; i++){
         float phase = i * phaseReciprocal;
         window[i] = Window::blackmanNutallFromPhase(phase);
+        if(i % hopSize == 0) windowSamples[i/hopSize] = window[i];
       }
     break;
     case Window::Mode::GAUSSIAN:
       for(int i = 0; i < windowSize; i++){
         float phase = i * phaseReciprocal;
         window[i] = Window::gaussianFromPhase(phase);
+        if(i % hopSize == 0) windowSamples[i/hopSize] = window[i];
       }
     break;
   }
+  //use the collected samples to calculate the normalization factor
+  float accumulatedSum = 0.0f;
+  for(int i = 0 ;i < windowSamples.size(); i++){
+    accumulatedSum += windowSamples[i];
+  }
+  //sum * x = 1.0           x = 1.0f/sum
+  outputNormalizationScalar = 1.0f / accumulatedSum;
 }
 // calculateWindowedInput() is in header b/c inlined

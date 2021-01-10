@@ -48,10 +48,10 @@ class Window {
   //can be used without creating a Window object
   public:
   static inline float hanningFromPhase(float inputPhase){
-    return 0.5f * (1.0f - std::cos(2.0f * pedal::PI * inputPhase));
+    return 0.5f * (1.0f - std::cos(pedal::TWOPI * inputPhase));
   }
   static inline float hammingFromPhase(float inputPhase){
-    return 0.54 - (0.46 * std::cos(2.0f * pedal::PI * inputPhase));
+    return 0.54 - (0.46 * std::cos(pedal::TWOPI * inputPhase));
   }
   static inline float cosineFromPhase(float inputPhase){
     return std::sin(pedal::PI * inputPhase);
