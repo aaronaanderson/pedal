@@ -5,6 +5,8 @@
 
 #include "example_app.hpp"
 
+//using namespace pedal;
+
 void midiCallback(double deltaTime, std::vector<unsigned char>* message, PedalExampleApp* app){
     //This will be called whenver a midi message is received.
     //The message will be delivered in binary. 
@@ -50,6 +52,7 @@ int main(){
     //Select a MIDI port if needed
     pdlOpenMidiPort(app, 1);
     //This is the perpetual loop; it will keep going until the window is closed
+    pdlStartExampleApp(app);
     while(pdlRunExampleApp(app)){//while the window is still open
         pdlUpdateExampleApp(app);//continue running the app
     }

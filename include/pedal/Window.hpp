@@ -48,26 +48,26 @@ class Window {
   //can be used without creating a Window object
   public:
   static inline float hanningFromPhase(float inputPhase){
-    return 0.5f * (1.0f - std::cos(pedal::TWOPI * inputPhase));
+    return 0.5f * (1.0f - std::cos(inputPhase));
   }
   static inline float hammingFromPhase(float inputPhase){
-    return 0.54 - (0.46 * std::cos(pedal::TWOPI * inputPhase));
+    return 0.54 - (0.46 * std::cos(inputPhase));
   }
   static inline float cosineFromPhase(float inputPhase){
-    return std::sin(pedal::PI * inputPhase);
+    return std::sin(0.5f * inputPhase);
   }
   static inline float triangularFromPhase(float inputPhase){
-    return 1.0f - std::abs(2.0f * inputPhase - 1.0f);
+    return 1.0f - std::abs(pedal::PI_INVERSE * inputPhase - 1.0f);
   }
   static inline float blackmanNutallFromPhase(float inputPhase){
     return 0.3635819f - 
-       (0.4891775f * std::cos(2.0f * pedal::PI * inputPhase)) + 
-       (0.1365995f * std::cos(4.0f * pedal::PI * inputPhase)) + 
-       (0.0106411f * std::cos(6.0f * pedal::PI * inputPhase));
+       (0.4891775f * std::cos(inputPhase)) + 
+       (0.1365995f * std::cos(2.0f * inputPhase)) + 
+       (0.0106411f * std::cos(3.0f * inputPhase));
   }
   static inline float gaussianFromPhase(float inputPhase, const float kurtosis = 0.3f){
     float gausRecip = 1.0/(-2.0 * kurtosis * kurtosis);
-    float phase = inputPhase * 2.0f - 1.0f;
+    float phase = inputPhase * pedal::PI_INVERSE - 1.0f;
     phase *= phase;
     return std::exp(phase * gausRecip);
   }
