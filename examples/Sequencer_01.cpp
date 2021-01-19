@@ -5,6 +5,7 @@
 #include "pedal/WaveTableSaw.hpp"
 #include "pedal/MoogLadderFilter.hpp"
 #include "pedal/utilities.hpp"
+#include "pedal/SmoothValue.hpp"
 #include "pedal/Counter.hpp"
 #include "pedal/Phasor.hpp"
 #include "pedal/EdgeDetector.hpp"

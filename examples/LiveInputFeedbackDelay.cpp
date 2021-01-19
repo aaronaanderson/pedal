@@ -4,6 +4,7 @@
 #include "pedal/Settings.hpp"
 #include "pedal/Delay.hpp"
 #include "pedal/utilities.hpp"
+#include "pedal/SmoothValue.hpp"
 
 using namespace pedal;
 

@@ -21,6 +21,8 @@
 #include "pedal/CurvedEnvelope.hpp"
 #include "pedal/WaveTableSquare.hpp"
 #include "pedal/utilities.hpp"
+#include "pedal/SmoothValue.hpp"
+
 #include "pedal/MoogLadderFilter.hpp"
 
 using namespace pedal;

@@ -4,6 +4,7 @@
 #include "CircularBuffer.hpp"
 #include "BufferedRMS.hpp"
 #include "utilities.hpp"
+#include "DirectionalSmoothValue.hpp"
 /*
 This is a basic compressor. More specifically, this 
 is a dynamic compressor; it comresses the dynamic range

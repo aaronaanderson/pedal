@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include "utilities.hpp"
+#include "SmoothValue.hpp"
 
 namespace pedal{
 class StreamedRMS{

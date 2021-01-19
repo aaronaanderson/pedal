@@ -4,6 +4,7 @@
 #include "pedal/LowFrequencyOscillator.hpp"
 #include "pedal/WaveTableSaw.hpp"
 #include "pedal/MoogLadderFilter.hpp"
+#include "pedal/SmoothValue.hpp"
 
 using namespace pedal;
 

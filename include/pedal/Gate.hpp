@@ -4,6 +4,7 @@
 #include "CircularBuffer.hpp"
 #include "BufferedRMS.hpp"
 #include "utilities.hpp"
+#include "DirectionalSmoothValue.hpp"
 /*
 A gate makes quiet sounds more quiet. How much more
 quiet depends on how high the ratio is, and how quiet

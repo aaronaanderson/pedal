@@ -14,6 +14,7 @@
 #include "pedal/ImpulseGenerator.hpp"
 #include "pedal/Phasor.hpp"
 #include "pedal/utilities.hpp"
+#include "pedal/SmoothValue.hpp"
 
 using namespace pedal;
 

@@ -5,6 +5,8 @@
 #include "pedal/TrivialTriangle.hpp"
 #include "pedal/WaveTableSaw.hpp"
 #include "pedal/LowFrequencyOscillator.hpp"
+#include "pedal/SmoothValue.hpp"
+
 using namespace pedal;
 
 TrivialTriangle triangle(100.0f);

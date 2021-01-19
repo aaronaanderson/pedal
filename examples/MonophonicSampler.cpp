@@ -14,6 +14,8 @@
 
 #include "pedal/MIDIEvent.hpp"
 #include "pedal/utilities.hpp"
+#include "pedal/SmoothValue.hpp"
+
 #include "pedal/Buffer.hpp"
 #include "pedal/BufferPlayer.hpp"
 
