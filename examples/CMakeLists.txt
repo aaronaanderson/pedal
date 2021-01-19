@@ -81,6 +81,7 @@ set(example_list
     Sequencer_01
     Convolution
     Granulator
+    MoogFilterExample
 )
 
 # loop through example targets

@@ -9,6 +9,7 @@
 #include "pedal/Phasor.hpp"
 #include "pedal/EdgeDetector.hpp"
 #include "pedal/CREnvelope.hpp"
+
 using namespace pedal;
 
 SmoothValue<float> frequency;
