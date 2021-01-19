@@ -1,4 +1,4 @@
-#include "pedal/WTSaw.hpp"
+#include "pedal/WTrivialSaw.hpp"
 
 #include <cstring>
 
@@ -97,20 +97,20 @@ SawTable* SawTable::instance = nullptr;
 
 //WaveTableSine==================================================
 //Constructors and Deconstructors=========
-WTSaw::WTSaw(){
+WTrivialSaw::WTrivialSaw(){
   setFrequency(440.0f);
   setPhase(0.0f);
   setAmplitude(1.0f);
 }
-WTSaw::WTSaw(float initialFrequency){
+WTrivialSaw::WTrivialSaw(float initialFrequency){
   setFrequency(initialFrequency);
   setPhase(0.0f);
   setAmplitude(1.0f);
 }
-WTSaw::~WTSaw(){}//when object is deleted
+WTrivialSaw::~WTrivialSaw(){}//when object is deleted
 
 //Basic Functionallity of class==========
-float WTSaw::generateSample(){
+float WTrivialSaw::generateSample(){
   float** table = instance->getTable();
   // store which tables will be used (y axis of 2D array)
   const int lowTableIndex = (int)currentTable;
@@ -133,7 +133,7 @@ float WTSaw::generateSample(){
   return currentSample;//return results
 }
 
-float WTSaw::whichTable(float testFrequency){//essentially the Y value of a 2D array
+float WTrivialSaw::whichTable(float testFrequency){//essentially the Y value of a 2D array
   float* frequencyList = instance->getLowFrequencyList();//get the list of table frequencies
   //boundry check
   if(testFrequency > frequencyList[NUM_TABLES-1]){//if the frequency is > than the highest table
@@ -155,20 +155,20 @@ float WTSaw::whichTable(float testFrequency){//essentially the Y value of a 2D a
   return 0;//windows compilers force this to be here
 }
 //Getters and Setters==================
-void WTSaw::setFrequency(float newFrequency){
+void WTrivialSaw::setFrequency(float newFrequency){
   frequency = newFrequency;
   currentTable = whichTable(frequency);
   phaseIncrement = frequency/float(instance->getFundamentalFrequency());
 }
-void WTSaw::setPhase(float newPhase){//expecting 0-TWO_PI
+void WTrivialSaw::setPhase(float newPhase){//expecting 0-TWO_PI
   phase = std::fmod(std::fabs(newPhase), pedal::TWOPI);//wrap to 0 -TWO_PI
   float scalar = instance->getTableSize()/pedal::TWOPI;
   phase = phase * scalar;//map 0-TWO_PI to 0 - tablSize
 }
-void WTSaw::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
-float WTSaw::getFrequency(){return frequency;}
-float WTSaw::getPhase(){
+void WTrivialSaw::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
+float WTrivialSaw::getFrequency(){return frequency;}
+float WTrivialSaw::getPhase(){
   return (phase * pedal::TWOPI)/float(instance->getTableSize());
 }
-float WTSaw::getAmplitude(){return amplitude;}
-float WTSaw::getSample(){return currentSample;}
+float WTrivialSaw::getAmplitude(){return amplitude;}
+float WTrivialSaw::getSample(){return currentSample;}

@@ -80,16 +80,16 @@ void LowFrequencyOscillator::setWaveShape(WaveShape newWaveShape){
   currentWaveShape = newWaveShape;
   switch(currentWaveShape){
     case WaveShape::Sine:
-      oscillator = new TSine(frequency);
+      oscillator = new TrivialSine(frequency);
     break;
     case WaveShape::Triangle:
-      oscillator = new TTriangle(frequency);
+      oscillator = new TrivialTriangle(frequency);
     break;
     case WaveShape::Square:
-      oscillator = new TSquare(frequency);
+      oscillator = new TrivialSquare(frequency);
     break;
     case WaveShape::Saw:
-      oscillator = new TSaw(frequency);
+      oscillator = new TrivialSaw(frequency);
     break;
   }
 }
@@ -109,19 +109,19 @@ float LowFrequencyOscillator::getOutputRangeUpperBound(){return outputRangeUpper
 void LowFrequencyOscillator::deletePreviousOscillator(WaveShape previousShape){
   switch(previousShape){
     case WaveShape::Sine:
-      if(auto ptr = std::get<TSine*>(oscillator))
+      if(auto ptr = std::get<TrivialSine*>(oscillator))
         delete ptr;
     break;
     case WaveShape::Triangle:
-      if(auto ptr = std::get<TTriangle*>(oscillator))
+      if(auto ptr = std::get<TrivialTriangle*>(oscillator))
         delete ptr;
     break;
     case WaveShape::Square:
-      if(auto ptr = std::get<TSquare*>(oscillator))
+      if(auto ptr = std::get<TrivialSquare*>(oscillator))
         delete ptr;
     break;
     case WaveShape::Saw:
-      if(auto ptr = std::get<TSaw*>(oscillator))
+      if(auto ptr = std::get<TrivialSaw*>(oscillator))
         delete ptr;
     break;
   }

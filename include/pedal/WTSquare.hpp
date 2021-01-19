@@ -1,5 +1,5 @@
-#ifndef WTSquare_hpp
-#define WTSquare_hpp
+#ifndef WTrivialSquare_hpp
+#define WTrivialSquare_hpp
 
 #include <iostream>
 #include "Settings.hpp"
@@ -33,11 +33,11 @@ class SquareTable{
   int getTableSize();//return table size (-1)
 };
 
-class WTSquare{
+class WTrivialSquare{
   public://everything listed after this is public
-  WTSquare();//constructor, defined in the cpp
-  WTSquare(float frequency);//option to set frequency on construction
-  ~WTSquare();//deconstructor (may be needed to free memory)
+  WTrivialSquare();//constructor, defined in the cpp
+  WTrivialSquare(float frequency);//option to set frequency on construction
+  ~WTrivialSquare();//deconstructor (may be needed to free memory)
   float generateSample();//generate and return a single sample
 
   //"setters"

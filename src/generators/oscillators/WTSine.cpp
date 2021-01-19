@@ -1,4 +1,4 @@
-#include "pedal/WTSine.hpp"
+#include "pedal/WTrivialSine.hpp"
 
 using namespace pedal;
 
@@ -39,19 +39,19 @@ SineTable* SineTable::instance = nullptr;
 
 //WaveTableSine==================================================
 
-WTSine::WTSine(){
+WTrivialSine::WTrivialSine(){
   setFrequency(440.0f);
   setPhase(0.0f);
   setAmplitude(1.0f);
 }
-WTSine::WTSine(float initialFrequency){
+WTrivialSine::WTrivialSine(float initialFrequency){
   setFrequency(initialFrequency);
   setPhase(0.0f);
   setAmplitude(1.0f);
 }
-WTSine::~WTSine(){}//when object is deleted
+WTrivialSine::~WTrivialSine(){}//when object is deleted
 
-float WTSine::generateSample(){
+float WTrivialSine::generateSample(){
   //interpolate between the prvious and next stored value
   float* table = sineTable->getTable();
   currentSample = linearInterpolation(phase,
@@ -65,22 +65,22 @@ float WTSine::generateSample(){
   return currentSample;//return results
 }
 
-void WTSine::setFrequency(float newFrequency){
+void WTrivialSine::setFrequency(float newFrequency){
   frequency = newFrequency;
   phaseIncrement = frequency/float(sineTable->getFundamentalFrequency());
 }
-void WTSine::setPhase(float newPhase){//expecting 0-TWO_PI
+void WTrivialSine::setPhase(float newPhase){//expecting 0-TWO_PI
   phase = std::fmod(std::fabs(newPhase), pedal::TWOPI);//wrap to 0 -TWO_PI
   float scalar = sineTable->getTableSize()/pedal::TWOPI;
   phase = phase * scalar;//map 0-TWO_PI to 0 - tablSize
 }
-void WTSine::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
+void WTrivialSine::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 
-float WTSine::getFrequency(){return frequency;}
-float WTSine::getPhase(){
+float WTrivialSine::getFrequency(){return frequency;}
+float WTrivialSine::getPhase(){
   return (phase * pedal::TWOPI)/float(sineTable->getTableSize());
 }
-float WTSine::getAmplitude(){return amplitude;}
-float WTSine::getSample(){return currentSample;}
+float WTrivialSine::getAmplitude(){return amplitude;}
+float WTrivialSine::getSample(){return currentSample;}
 
 

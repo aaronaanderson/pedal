@@ -100,7 +100,7 @@ void Buffer::fillSineSweep(float lowFrequency, float highFrequency){
   float lowExponent = std::log(lowFrequency)/std::log(2.0f);//2^x = 20.0Hz, find x
   float highExponent = std::log(highFrequency)/std::log(2.0f);//2^x = 20,000Hz, find x
   float linearRange = highExponent - lowExponent;
-  TSine sineOscillator;//briefly create a sine oscillator to generate samples
+  TrivialSine sineOscillator;//briefly create a sine oscillator to generate samples
   for(int i = 0; i < durationInSamples; i++){//for every sample in array
     float linearPosition = (i/float(durationInSamples))*linearRange;//find the linear position between ranges
     float frequency = std::pow(2, linearPosition);//determine appropriate frequency for sample

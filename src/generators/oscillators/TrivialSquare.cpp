@@ -1,28 +1,28 @@
-#include "pedal/TSquare.hpp"
+#include "pedal/TrivialSquare.hpp"
 
 using namespace pedal;
 
 //constructors and deconstructors
 //=========================================================
-TSquare::TSquare(){//default constructor
+TrivialSquare::TrivialSquare(){//default constructor
   setFrequency(440);//default frequency is 440
   setPhase(0.0);
   setAmplitude(1.0);
   setDutyCycle(0.5);
 }
 
-TSquare::TSquare(float frequency){//override constructor
+TrivialSquare::TrivialSquare(float frequency){//override constructor
   setFrequency(frequency);
   setPhase(0.0);
   setAmplitude(1.0);
   setDutyCycle(0.5);
 }
 
-TSquare::~TSquare(){}//when object is deleted
+TrivialSquare::~TrivialSquare(){}//when object is deleted
 
 //primary mechanics of class
 //=========================================================
-float TSquare::generateSample(){//return a float even if you don't use it
+float TrivialSquare::generateSample(){//return a float even if you don't use it
   phase += phaseIncrement;
   while(phase > 1.0){
     phase -= 1.0;
@@ -39,7 +39,7 @@ float TSquare::generateSample(){//return a float even if you don't use it
   return currentSample;
 }
 //expects an input phase int he range of 0 to TWOPI
-float TSquare::generateSample(float inputPhase){//return a float even if you don't use it
+float TrivialSquare::generateSample(float inputPhase){//return a float even if you don't use it
   //wrap phase to useful range then scale to 0.0 to 1.0
   setPhase(inputPhase);
   if(phase > dutyCycle){//phase stored locally 0.0 to 1.0
@@ -51,18 +51,18 @@ float TSquare::generateSample(float inputPhase){//return a float even if you don
 }
 //Getters and setters
 //=========================================================
-void TSquare::setFrequency(float newFrequency){
+void TrivialSquare::setFrequency(float newFrequency){
   frequency = newFrequency;
   phaseIncrement = (frequency)/Settings::sampleRate;
 }
-void TSquare::setPhase(float newPhase){//expecting (0-2PI)
+void TrivialSquare::setPhase(float newPhase){//expecting (0-2PI)
     phase = fmod(newPhase, pedal::TWOPI);//ensure 0-2PI
     phase *= pedal::PI_INVERSE;//convert range to 0.0 to 2.0
     phase *= 0.5;//phase stored locally 0.0 to 1.0
 }
-void TSquare::setDutyCycle(float newDutyCycle){dutyCycle = newDutyCycle;}
-void TSquare::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
+void TrivialSquare::setDutyCycle(float newDutyCycle){dutyCycle = newDutyCycle;}
+void TrivialSquare::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 
-float TSquare::getFrequency(){return frequency;}
-float TSquare::getAmplitude(){return amplitude;}
-float TSquare::getSample(){return currentSample;}
+float TrivialSquare::getFrequency(){return frequency;}
+float TrivialSquare::getAmplitude(){return amplitude;}
+float TrivialSquare::getSample(){return currentSample;}

@@ -6,15 +6,15 @@ project(pedal)
 
 add_library(pedal STATIC
     src/pedal.cpp
-    src/generators/oscillators/TSine.cpp
-    src/generators/oscillators/TSaw.cpp
-    src/generators/oscillators/TTriangle.cpp
-    src/generators/oscillators/TSquare.cpp 
+    src/generators/oscillators/TrivialSine.cpp
+    src/generators/oscillators/TrivialSaw.cpp
+    src/generators/oscillators/TrivialTriangle.cpp
+    src/generators/oscillators/TrivialSquare.cpp 
     src/generators/oscillators/Phasor.cpp
-    src/generators/oscillators/WTSine.cpp
-    src/generators/oscillators/WTSaw.cpp
-    src/generators/oscillators/WTTriangle.cpp
-    src/generators/oscillators/WTSquare.cpp
+    src/generators/oscillators/WTrivialSine.cpp
+    src/generators/oscillators/WTrivialSaw.cpp
+    src/generators/oscillators/WTrivialTriangle.cpp
+    src/generators/oscillators/WTrivialSquare.cpp
     src/generators/ImpulseGenerator.cpp
     src/generators/envelopes/LinearEnvelope.cpp
     src/Buffer.cpp
@@ -49,7 +49,7 @@ add_library(pedal STATIC
     src/utilities/Counter.cpp
     src/modifiers/reverb/FDNReverb.cpp
     src/generators/VOSIM.cpp
-    src/generators/oscillators/BLITSaw.cpp
+    src/generators/oscillators/BLITrivialSaw.cpp
     src/modifiers/filters/MoogLadderFilter.cpp
     src/generators/oscillators/LowFrequencyOscillator.cpp
     external/AudioFFT.cpp

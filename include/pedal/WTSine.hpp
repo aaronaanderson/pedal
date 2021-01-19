@@ -1,6 +1,6 @@
 //incomplete
-#ifndef WTSine_hpp
-#define WTSine_hpp
+#ifndef WTrivialSine_hpp
+#define WTrivialSine_hpp
 
 #include "stdio.h"
 
@@ -32,11 +32,11 @@ class SineTable{
 };
 
 //======================Play the table defined above
-class WTSine{
+class WTrivialSine{
   public://everything listed after this is public
-  WTSine();//constructor, defined in the cpp
-  WTSine(float frequency);//option to set frequency on construction
-  ~WTSine();//deconstructor (may be needed to free memory)
+  WTrivialSine();//constructor, defined in the cpp
+  WTrivialSine(float frequency);//option to set frequency on construction
+  ~WTrivialSine();//deconstructor (may be needed to free memory)
   float generateSample();//generate and return a single sample
 
   //"setters"

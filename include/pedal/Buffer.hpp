@@ -3,7 +3,7 @@
 
 #include "utilities.hpp"
 #include "Interpolation.hpp"
-#include "TSine.hpp"
+#include "TrivialSine.hpp"
 #include <iostream>
 #include "../../external/dr_wav.h"//for reading and writing .wav
 

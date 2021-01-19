@@ -1,16 +1,16 @@
-#ifndef TSquare_hpp
-#define TSquare_hpp
+#ifndef TrivialSquare_hpp
+#define TrivialSquare_hpp
 
 #include "pdlConstants.hpp"
 #include <cmath> //so we can use sin()
 #include "Settings.hpp"//so we can access sampleRate and bufferSize
 
 namespace pedal{
-class TSquare{//Pedal Trivial Square Oscillator
+class TrivialSquare{//Pedal Trivial Square Oscillator
   public:
-  TSquare();//constructor, defined in the cpp
-  TSquare(float frequency);//option to set frequency on construction
-  ~TSquare();//deconstructor (may be needed to free memory)
+  TrivialSquare();//constructor, defined in the cpp
+  TrivialSquare(float frequency);//option to set frequency on construction
+  ~TrivialSquare();//deconstructor (may be needed to free memory)
   float generateSample();//calculate and return next sample
   float generateSample(float fromPhase);//phase driven overload
   //"setters"

@@ -2,15 +2,15 @@
 #include <iostream>
 
 #include "pedal/STFT.hpp"
-#include "pedal/TTriangle.hpp"
-#include "pedal/WTSaw.hpp"
+#include "pedal/TrivialTriangle.hpp"
+#include "pedal/WTrivialSaw.hpp"
 #include "pedal/LowFrequencyOscillator.hpp"
 using namespace pedal;
 
-TTriangle triangle(100.0f);
+TrivialTriangle triangle(100.0f);
 STFT stftOne(16384, 128);
 LowFrequencyOscillator lfoOne;
-WTSaw saw(40.0f);
+WTrivialSaw saw(40.0f);
 STFT stftTwo(16384, 128);
 LowFrequencyOscillator lfoTwo;
 SmoothValue<float> outputVolume;

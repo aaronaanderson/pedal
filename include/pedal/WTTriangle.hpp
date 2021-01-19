@@ -1,5 +1,5 @@
-#ifndef WTTriangle_hpp
-#define WTTriangle_hpp
+#ifndef WTrivialTriangle_hpp
+#define WTrivialTriangle_hpp
 
 #include <iostream>
 #include "Settings.hpp"
@@ -33,11 +33,11 @@ class TriangleTable{
   int getTableSize();//return table size (-1)
 };
 
-class WTTriangle{
+class WTrivialTriangle{
   public://everything listed after this is public
-  WTTriangle();//constructor, defined in the cpp
-  WTTriangle(float frequency);//option to set frequency on construction
-  ~WTTriangle();//deconstructor (may be needed to free memory)
+  WTrivialTriangle();//constructor, defined in the cpp
+  WTrivialTriangle(float frequency);//option to set frequency on construction
+  ~WTrivialTriangle();//deconstructor (may be needed to free memory)
   float generateSample();//generate and return a single sample
 
   //"setters"

@@ -3,10 +3,10 @@
 
 #include <variant>
 #include "pedal/utilities.hpp"
-#include "pedal/TSine.hpp"
-#include "pedal/TTriangle.hpp"
-#include "pedal/TSaw.hpp"
-#include "pedal/TSquare.hpp"
+#include "pedal/TrivialSine.hpp"
+#include "pedal/TrivialTriangle.hpp"
+#include "pedal/TrivialSaw.hpp"
+#include "pedal/TrivialSquare.hpp"
 
 namespace pedal{
 class LowFrequencyOscillator{
@@ -37,7 +37,7 @@ class LowFrequencyOscillator{
   float getOutputRangeLowerBound();
   float getOutputRangeUpperBound();  
   private:
-  std::variant<TSine*, TTriangle*, TSaw*, TSquare*> oscillator;
+  std::variant<TrivialSine*, TrivialTriangle*, TrivialSaw*, TrivialSquare*> oscillator;
   WaveShape currentWaveShape;
   float currentSample;
   float frequency;
@@ -53,12 +53,12 @@ class LowFrequencyOscillator{
 #endif
 
     // union Oscillator{
-    //     TSine sine;
-    //     TTriangle triangle;
-    //     TSaw saw;
-    //     TSquare square;
+    //     TrivialSine sine;
+    //     TrivialTriangle triangle;
+    //     TrivialSaw saw;
+    //     TrivialSquare square;
     //     TPhasor phasor;
-    //     Oscillator(){new(&sine)TSine(440.0f);}
+    //     Oscillator(){new(&sine)TrivialSine(440.0f);}
     //     ~Oscillator(){delete(&sine);}
     // };
     // Oscillator unionOscillator;

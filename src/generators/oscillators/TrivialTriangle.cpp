@@ -1,27 +1,27 @@
 
-#include "pedal/TTriangle.hpp"
+#include "pedal/TrivialTriangle.hpp"
 
 using namespace pedal;
 
 //constructors and deconstructors
 //=========================================================
-TTriangle::TTriangle(){//default constructor
+TrivialTriangle::TrivialTriangle(){//default constructor
   setFrequency(440);//default frequency is 440
   setPhase(0.0);
   setAmplitude(1.0);
 }
 
-TTriangle::TTriangle(float frequency){//override constructor
+TrivialTriangle::TrivialTriangle(float frequency){//override constructor
   setFrequency(frequency);
   setPhase(0.0);
   setAmplitude(1.0);
 }
 
-TTriangle::~TTriangle(){}//when object is deleted
+TrivialTriangle::~TrivialTriangle(){}//when object is deleted
 
 //primary mechanics of class
 //=========================================================
-float TTriangle::generateSample(){//return a float even if you don't use it
+float TrivialTriangle::generateSample(){//return a float even if you don't use it
   //We can start by making a trivial sawtooth
   phase += phaseIncrement;
   while(phase > 1.0){
@@ -36,7 +36,7 @@ float TTriangle::generateSample(){//return a float even if you don't use it
   return currentSample;
 }
 //overload expecting phase in the range of 0 to TWOPI
-float TTriangle::generateSample(float inputPhase){//return a float even if you don't use it
+float TrivialTriangle::generateSample(float inputPhase){//return a float even if you don't use it
   //We can start by making a trivial sawtooth
   phase += phaseIncrement;
   while(phase > pedal::TWOPI){
@@ -52,15 +52,15 @@ float TTriangle::generateSample(float inputPhase){//return a float even if you d
 }
 //Getters and setters
 //=========================================================
-void TTriangle::setFrequency(float newFrequency){
+void TrivialTriangle::setFrequency(float newFrequency){
   frequency = newFrequency;
   phaseIncrement = (frequency * pedal::TWOPI )/Settings::sampleRate;
 }
-void TTriangle::setPhase(float newPhase){//expecting (0-2PI)
+void TrivialTriangle::setPhase(float newPhase){//expecting (0-2PI)
   phase = fmod(newPhase, pedal::TWOPI);//ensure 0-2PI
 }
-void TTriangle::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
+void TrivialTriangle::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 
-float TTriangle::getFrequency(){return frequency;}
-float TTriangle::getAmplitude(){return amplitude;}
-float TTriangle::getSample(){return currentSample;}
+float TrivialTriangle::getFrequency(){return frequency;}
+float TrivialTriangle::getAmplitude(){return amplitude;}
+float TrivialTriangle::getSample(){return currentSample;}

@@ -1,5 +1,5 @@
-#ifndef WTSaw_hpp
-#define WTSaw_hpp
+#ifndef WTrivialSaw_hpp
+#define WTrivialSaw_hpp
 
 #include <iostream>
 #include "Settings.hpp"
@@ -36,11 +36,11 @@ class SawTable{
 //using Table = std::array<float, TABLESIZE>;
 //std::array<Table, 10> table;
 
-class WTSaw{
+class WTrivialSaw{
   public://everything listed after this is public
-  WTSaw();//constructor, defined in the cpp
-  WTSaw(float frequency);//option to set frequency on construction
-  ~WTSaw();//deconstructor (may be needed to free memory)
+  WTrivialSaw();//constructor, defined in the cpp
+  WTrivialSaw(float frequency);//option to set frequency on construction
+  ~WTrivialSaw();//deconstructor (may be needed to free memory)
   float generateSample();//generate and return a single sample
 
   //"setters"

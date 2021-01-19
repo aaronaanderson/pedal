@@ -1,49 +1,49 @@
-#include "pedal/TSine.hpp"
+#include "pedal/TrivialSine.hpp"
 
 using namespace pedal;
 
 //constructors and deconstructors
 //=========================================================
-TSine::TSine(){//default constructor
+TrivialSine::TrivialSine(){//default constructor
   setFrequency(440);
   setPhase(0.0);
   setAmplitude(1.0);
 }
 
-TSine::TSine(float frequency){//override constructor
+TrivialSine::TrivialSine(float frequency){//override constructor
   setFrequency(frequency);
   setPhase(0.0);
   setAmplitude(1.0);
 }
 
-TSine::~TSine(){}//when object is deleted
+TrivialSine::~TrivialSine(){}//when object is deleted
 
 //primary mechanics of class
 //=========================================================
-float TSine::generateSample(){//generate and return single sample
+float TrivialSine::generateSample(){//generate and return single sample
   currentSample = std::sin(phase) * amplitude;//calculate single sample
   phase += (float)phaseIncrement;//increment phase for the next sample
   phase = std::fmod(phase, pedal::TWOPI);
   return currentSample;//return a copy
 }
 //expects input phase in the range of 0 to TWOPI
-float TSine::generateSample(float inputPhase){//generate and return single sample
+float TrivialSine::generateSample(float inputPhase){//generate and return single sample
   setPhase(inputPhase);
   currentSample = std::sin(phase) * amplitude;//calculate single sample
   return currentSample;//return a copy
 }
 //Getters and setters
 //=========================================================
-void TSine::setFrequency(float newFrequency){
+void TrivialSine::setFrequency(float newFrequency){
   frequency = newFrequency;
   phaseIncrement = (frequency * pedal::TWOPI)/Settings::sampleRate;//*see notes on bottom
 }
-void TSine::setPhase(float newPhase){phase = newPhase;}
-void TSine::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
+void TrivialSine::setPhase(float newPhase){phase = newPhase;}
+void TrivialSine::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 
-float TSine::getFrequency(){return frequency;}
-float TSine::getAmplitude(){return amplitude;}
-float TSine::getSample(){return currentSample;}
+float TrivialSine::getFrequency(){return frequency;}
+float TrivialSine::getAmplitude(){return amplitude;}
+float TrivialSine::getSample(){return currentSample;}
 
 /*
 *Why is a phase increment needed? 
