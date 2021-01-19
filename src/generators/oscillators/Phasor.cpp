@@ -20,11 +20,11 @@ Phasor::~Phasor(){}//when object is deleted
 //=========================================================
 float Phasor::generateSample(){//DANGER, returns range 0 to TWOPI; do not output directly
   phase += phaseIncrement;
-  while(phase > pedal::PI){
-    phase -= pedal::PI;
+  while(phase > pedal::TWOPI){
+    phase -= pedal::TWOPI;
   }
   while(phase < 0.0){//to ensure that negative frequencies will work
-    phase += pedal::PI;
+    phase += pedal::TWOPI;
   }
   return phase;
 }
@@ -41,4 +41,4 @@ void Phasor::setPhase(float newPhase){//set phase (0 - 2PI)
   phase /= pedal::PI;//now the phase is (-1, 1);
 }
 float Phasor::getFrequency(){return frequency;}
-float Phasor::getSample(){return currentSample;}
+float Phasor::getSample(){return phase;}

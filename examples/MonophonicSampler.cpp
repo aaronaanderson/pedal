@@ -82,7 +82,7 @@ int main(){
     std::string filePath = pdlGetPathToSoundFiles() + std::string("Glass.wav");
     soundBuffer.loadSoundFile(filePath.c_str());
 
-    bufferPlayer.setPlayMode(PlayMode::ONE_SHOT);
+    bufferPlayer.setPlayMode(BufferPlayer::PlayMode::ONE_SHOT);
     //new noteAmplitudeScalar targets will arrive smoothly over 100ms
     noteAmplitudeScalar.setTarget(100.0f);
     noteAmplitudeScalar.setTarget(1.0f);

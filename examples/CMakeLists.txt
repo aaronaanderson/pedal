@@ -80,6 +80,7 @@ set(example_list
     LFO
     Sequencer_01
     Convolution
+    Granulator
 )
 
 # loop through example targets

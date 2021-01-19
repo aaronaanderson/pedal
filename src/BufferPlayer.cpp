@@ -6,13 +6,16 @@ BufferPlayer::BufferPlayer(Buffer* reference){//constructor (default)
   if(reference != nullptr){//if the reference isn't invalid (it is by default)
     bufferReference = reference;//assign the input as the reference
     assignDataFromReference(reference);//extract and assign data from this reference
+  }else{
+    numberChannels = 1;
+    currentFrame = new float[numberChannels];
   }
   //assign defaults
   index = 0.0f;//beginning of sound
   playSpeed = 1.0f;//natural playback speed
-  playMode = LOOP;//One shot, Loop, or PingPong
+  playMode = PlayMode::LOOP;//One shot, Loop, or PingPong
   isPlaying = true;//on by default
-  interpolationMode = LINEAR;//most common interpolation mode
+  interpolationMode = InterpolationMode::LINEAR;//most common interpolation mode
   direction = 1.0f;//forward -1.0f is backward
 }
 
@@ -23,17 +26,17 @@ float BufferPlayer::update(){//function called per-sample
       for(int i = 0; i < numberChannels; i++){//for every audio channel in the buffer
         //calculate the next sample. This depends on the desired interpolation mode
         switch(interpolationMode){
-          case NONE://grab the 'floor' of the index (ignore decimal portion), pull out a sample
+          case InterpolationMode::NONE://grab the 'floor' of the index (ignore decimal portion), pull out a sample
             currentFrame[i] = bufferReference->getSample((int)index, i);
           break;
-          case LINEAR://Look at value before, and value ahead. choose value based on this
+          case InterpolationMode::LINEAR://Look at value before, and value ahead. choose value based on this
           { //*this process is explained in more detail at the bottom of this document
             float previousSample = bufferReference->getSample((int)index, i);
             float nextSample = bufferReference->getSample(wrapIndex((int)index + numberChannels), i);
             currentFrame[i] = linearInterpolation(index, previousSample, nextSample);
           }
           break;
-          case CUBIC://look two samples back and two samples forward to determine the value
+          case InterpolationMode::CUBIC://look two samples back and two samples forward to determine the value
           {//*this process is explained in more detail at the bottom of this document
             float backTwo = bufferReference->getSample(wrapIndex((int)index - numberChannels), i);
             float backOne = bufferReference->getSample((int)index, i);
@@ -47,19 +50,19 @@ float BufferPlayer::update(){//function called per-sample
       //after the sample is acquired, update the playback position(index)
       index += playSpeed * direction;//Increment by speed (if speed is negative, this is a decrement)
       switch (playMode){
-        case ONE_SHOT:
+        case PlayMode::ONE_SHOT:
         if(index > bufferReference->getDurationInSamples() || index < 0.0f){
           stop();
         }
         break;
-        case LOOP://default
+        case PlayMode::LOOP://default
         if(index > bufferReference->getDurationInSamples()){//if index has passed the end
           index -= bufferReference->getDurationInSamples();//subtract the size of the buffer
         }else if(index < 0.0f){//if index has gone past the beginning (possible for negative speeds)
           index += bufferReference->getDurationInSamples();//add the duration to the index (go to end)
         }
         break;
-        case PING_PONG://If reached either end, reverse direction and proceed
+        case PlayMode::PING_PONG://If reached either end, reverse direction and proceed
         if(index > bufferReference->getDurationInSamples()){//if index has over shot
           //mirror position
           //bounce back from the end the same distance it overshot
@@ -74,6 +77,8 @@ float BufferPlayer::update(){//function called per-sample
         }
         break;
       }//end of playmode switch statement
+    }else{
+      currentFrame[0] = 0.0f;
     }//end of 'isPlaying' condition
   }//end of nullptr reference check
   return currentFrame[0];
@@ -111,12 +116,22 @@ float BufferPlayer::getSample(int channel){//returns channel 0 if bad request
     return currentFrame[0];
   }
 }
+void BufferPlayer::setPosition(float newPositionMS){
+  if(bufferReference){
+    index = clamp(msToSamples(newPositionMS), 0.0f, bufferReference->getDurationInSamples());
+    //std::cout << newPositionMS << " " << index << std::endl;
+  }
+}
 void BufferPlayer::setSpeed(float newSpeed){playSpeed = newSpeed;}
 void BufferPlayer::setPlayMode(PlayMode newPlayMode){
   playMode = newPlayMode;
   direction = 1.0f;//start forward, always. (this is only needed because of ping_pong mode)  
 }
-void BufferPlayer::setReference(Buffer* newReference){bufferReference = newReference;}
+void BufferPlayer::setReference(Buffer* newReference){
+  bufferReference = newReference;
+  totalSampleCount = bufferReference->getDurationInSamples() * //sample length of one channel
+                     bufferReference->getNumberChannels();
+}
 void BufferPlayer::setInterpolationMode(InterpolationMode newMode){interpolationMode = newMode;}
 
 //=============further explenation

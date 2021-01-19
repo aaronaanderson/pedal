@@ -1,15 +1,18 @@
-#include "pedal/Window.hpp"
+ #include "pedal/Window.hpp"
 
 using namespace pedal;
 
 //Constructors and Deconstructors=============
 Window::Window(){
   setDuration(1000.0f);
-  trigger = false;
+  setMode(Window::Mode::HANNING);
+  trigger = active = false;
+  
 }
 Window::Window(float initialDuration){
   setDuration(initialDuration);
-  trigger = false;
+  setMode(Window::Mode::HANNING);
+  trigger = active = false;
 }
 
 //Core functionality===========================
@@ -36,16 +39,16 @@ float Window::generateSample(){
       break;
     }
     phase += phaseIncrement;
-    if(phase > 1.0f){
+    if(phase > pedal::TWOPI){
       phase = 0.0f;
-      active = false;
+      active = trigger = false;
     }
   }else{//if window is not active
     currentSample = 0.0f;
   }
   return currentSample;
 }
-
+#include <iostream>
 //Getters and Setters===============================
 void Window::setTrigger(bool newTrigger){
   if(trigger == false && newTrigger == true){//if it was off but now will be on
@@ -56,10 +59,13 @@ void Window::setTrigger(bool newTrigger){
 }
 void Window::setDuration(float newDuration){
   duration = newDuration;
-  phaseIncrement = 1.0f/(pdlSettings::sampleRate*(duration*0.001));
+  phaseIncrement = pedal::TWOPI/(pdlSettings::sampleRate*(duration*0.001));
+}
+void Window::setMode(Window::Mode newMode){
+  currentMode = newMode;
 }
 void Window::setPhase(float newPhase){
-  phase = clamp(newPhase, 0.0f, 1.0f);
+  phase = clamp(newPhase, 0.0f, pedal::TWOPI);
 }
 float Window::getCurrentSample(){return currentSample;}
 float Window::getDuration(){return duration;}
