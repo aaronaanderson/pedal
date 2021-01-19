@@ -24,10 +24,10 @@ CREnvelope envelope;
 
 SmoothValue<float> outputVolume;
 
-void audioCallback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, PedalExampleApp* app){
-  timer.setFrequency(bpmToHz(pdlGetSlider(app, 0)));
-  int sequenceOffset = pdlGetSlider(app, 1);
-  outputVolume.setTarget(dBToAmplitude(pdlGetSlider(app, 2)));
+void audioCallback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, app::PedalExampleApp* app){
+  timer.setFrequency(bpmToHz(app::getSlider(app, 0)));
+  int sequenceOffset = app::getSlider(app, 1);
+  outputVolume.setTarget(dBToAmplitude(app::getSlider(app, 2)));
 
   for(int sampleIndex = 0; sampleIndex < bufferSize; sampleIndex++){
     //Timer will generate N edged per second, which will be deteced by the edgeDetector
@@ -47,20 +47,20 @@ void audioCallback(float* output, float* input, int bufferSize, int inputChannel
 
 int main(){
   //Create the application (an audio callback is required here)
-  PedalExampleApp* app = pdlInitializeExampleApp(audioCallback, pdlSettings::sampleRate, pdlSettings::bufferSize);
+  app::PedalExampleApp* app = app::pdlInitializeExampleApp(audioCallback, pdlSettings::sampleRate, pdlSettings::bufferSize);
   saw.setFrequency(30.0f);
   envelope.setMode(CREnvelope::Mode::AR);
   envelope.setAttackTime(35.0f);
   envelope.setDecayTime(150.0f);
   
-  pdlAddSlider(app, 0, "BPM", 30.0f, 600.0f, 145.0f);
-  pdlAddSlider(app, 1, "Sequence offset", - 12, 12, 0);
-  pdlAddSlider(app, 2, "Output Gain(dB)", -60, 0.0f, -3.0f);
-  pdlStartExampleApp(app);
+  app::addSlider(app, 0, "BPM", 30.0f, 600.0f, 145.0f);
+  app::addSlider(app, 1, "Sequence offset", - 12, 12, 0);
+  app::addSlider(app, 2, "Output Gain(dB)", -60, 0.0f, -3.0f);
+  app::startApp(app);
   //This is the perpetual loop; it will keep going until the window is closed
-  while(pdlRunExampleApp(app)){//while the window is still open
-    pdlUpdateExampleApp(app);//continue running the app
+  while(app::shouldContinue(app)){//while the window is still open
+    app::update(app);//continue running the app
   }
   //If this point is reached, the application is closing
-  pdlDeleteExampleApp(app);
+  app::freeMemory(app);
 }

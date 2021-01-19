@@ -37,10 +37,10 @@ ImpulseGenerator impulseGenerator;
 //Smooth value to scale the output
 SmoothValue<float> outputGain;
 
-void audioCallback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, PedalExampleApp* app){
+void audioCallback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, app::PedalExampleApp* app){
    
-    impulseGenerator.setFrequency(pdlGetSlider(app, 0));
-    outputGain.setTarget(dBToAmplitude(pdlGetSlider(app, 4)));
+    impulseGenerator.setFrequency(app::getSlider(app, 0));
+    outputGain.setTarget(dBToAmplitude(app::getSlider(app, 4)));
     for(int sampleIndex = 0; sampleIndex < bufferSize; sampleIndex++){
         //progress the grain index location (in case a new grain is to be made)
         //phasor.generateSample();
@@ -50,11 +50,11 @@ void audioCallback(float* output, float* input, int bufferSize, int inputChannel
             for(int i = 0; i < maximumNumberOfGrains; i++){
                 if(grainArray[i].window.getActive() == false){
                     //if the grain is inactive, so index 'i' is safe to use
-                    grainArray[i].window.setDuration(pdlGetSlider(app, 1));
+                    grainArray[i].window.setDuration(app::getSlider(app, 1));
                     grainArray[i].window.setTrigger(true);
                     //grainArray[i].bufferPlayer.setPosition(0.0f);
-                    grainArray[i].bufferPlayer.setSpeed(pdlGetSlider(app, 3));
-                    grainArray[i].bufferPlayer.setPosition(pdlGetSlider(app, 2) * //normalized index
+                    grainArray[i].bufferPlayer.setSpeed(app::getSlider(app, 3));
+                    grainArray[i].bufferPlayer.setPosition(app::getSlider(app, 2) * //normalized index
                                                            buffer.getDuration());//scale by duraction of buffer
                     grainArray[i].bufferPlayer.play();
                     break;
@@ -77,7 +77,7 @@ void audioCallback(float* output, float* input, int bufferSize, int inputChannel
 
 int main(){
     
-    std::string filePath = pdlGetPathToSoundFiles() + std::string("Glass.wav");
+    std::string filePath = app::getPathToSoundFiles() + std::string("Glass.wav");
     buffer.loadSoundFile(filePath.c_str());
     //now we can set the frequency of the phasor based on the duration of the file
     for(int i = 0; i < maximumNumberOfGrains; i++){
@@ -88,18 +88,18 @@ int main(){
         grainArray[i].window.setMode(Window::Mode::HANNING);
     }
     //Create the application (an audio callback is required here)
-    PedalExampleApp* app = pdlInitializeExampleApp(audioCallback);
+    app::PedalExampleApp* app = app::pdlInitializeExampleApp(audioCallback);
     //we need to set the references for all of the bufferPlayers
-    pdlAddSlider(app, 0, "Emission Rate", 0.5f, 40.0f, 20.0f);
-    pdlAddSlider(app, 1, "Grain Duration", 5.0f, 80.0f, 60.0f);
-    pdlAddSlider(app, 2, "Sample Index", 0.0f, 1.0f, 0.2f);
-    pdlAddSlider(app, 3, "Speed", 0.5f, 2.0f, 1.0f);
-    pdlAddSlider(app, 4, "Output Gain", -60.0f, 0.0f, -6.0f);
+    app::addSlider(app, 0, "Emission Rate", 0.5f, 40.0f, 20.0f);
+    app::addSlider(app, 1, "Grain Duration", 1.0f, 80.0f, 60.0f);
+    app::addSlider(app, 2, "Sample Index", 0.0f, 1.0f, 0.2f);
+    app::addSlider(app, 3, "Speed", 0.5f, 2.0f, 1.0f);
+    app::addSlider(app, 4, "Output Gain", -60.0f, 0.0f, -6.0f);
 
-    pdlStartExampleApp(app);
-    while(pdlRunExampleApp(app)){//while the window is still open
-        pdlUpdateExampleApp(app);//continue running the app
+    app::startApp(app);
+    while(app::shouldContinue(app)){//while the window is still open
+        app::update(app);//continue running the app
     }
     //If this point is reached, the application is closing
-    pdlDeleteExampleApp(app);
+    app::freeMemory(app);
 }

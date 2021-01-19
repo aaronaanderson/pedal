@@ -11,10 +11,10 @@ Delay delay;//feedback delay
 SmoothValue<float> delayTime;//smooth changes in delay time
 
 //========================Audio Callback
-void callback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, PedalExampleApp* app) {
+void callback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, app::PedalExampleApp* app) {
   
-  delay.setFeedback(pdlGetSlider(app, 0));//set feedback amplitude from 0th slider
-  delayTime.setTarget(pdlGetSlider(app, 1));//tell smooth value to target 1st slider value
+  delay.setFeedback(app::getSlider(app, 0));//set feedback amplitude from 0th slider
+  delayTime.setTarget(app::getSlider(app, 1));//tell smooth value to target 1st slider value
 
   for (unsigned i = 0; i < bufferSize; i += 1) {//for entire buffer of frames
     float liveInputSample = input[i * inputChannels];//get the input sample (on the 0th channel)
@@ -31,24 +31,23 @@ void callback(float* output, float* input, int bufferSize, int inputChannels, in
 }
 //======================main loop
 int main() {
-    //make an app (a pointer to an app, actually)
-    PedalExampleApp* app = pdlInitializeExampleApp(callback);
-    if (!app) {//if app doesn't succesfully allocate
-      return 1;//cancel program, return 1
-    }
-    pdlSettings::sampleRate = pdlGetSampleRate(app);
-    pdlSettings::bufferSize = pdlGetBufferSize(app);
-    delayTime.setTime(500.0f);
-    // Add your GUI elements here
-    pdlAddSlider(app, 0, "feedback", 0.0f, 0.99f, 0.4f);
-    pdlAddSlider(app, 1, "delay time(ms)", 0.0f, 2000.0f, 500.0f);
-
-    //begin the app--------
-    pdlStartExampleApp(app);
-    //pdlSettings::sampleRate = app->sampling_rate;
-    while (pdlRunExampleApp(app)) {//run forever
-        pdlUpdateExampleApp(app);//run the application
-    }
-    //the application has stopped running, 
-    pdlDeleteExampleApp(app);//free the app from memory
+  //make an app (a pointer to an app, actually)
+  app::PedalExampleApp* app = app::pdlInitializeExampleApp(callback);
+  if (!app) {//if app doesn't succesfully allocate
+    return 1;//cancel program, return 1
+  }
+  pdlSettings::sampleRate = getSampleRate(app);
+  pdlSettings::bufferSize = getBufferSize(app);
+  delayTime.setTime(500.0f);
+  // Add your GUI elements here
+  app::addSlider(app, 0, "feedback", 0.0f, 0.99f, 0.4f);
+  app::addSlider(app, 1, "delay time(ms)", 0.0f, 2000.0f, 500.0f);
+  //begin the app--------
+  app::startApp(app);
+  //pdlSettings::sampleRate = app->sampling_rate;
+  while (app::shouldContinue(app)) {//run forever
+    app::update(app);//run the application
+  }
+  //the application has stopped running, 
+  app::freeMemory(app);//free the app from memory
 }

@@ -7,7 +7,7 @@
 
 //using namespace pedal;
 
-void midiCallback(double deltaTime, std::vector<unsigned char>* message, PedalExampleApp* app){
+void midiCallback(double deltaTime, std::vector<unsigned char>* message, app::PedalExampleApp* app){
     //This will be called whenver a midi message is received.
     //The message will be delivered in binary. 
     //Use pedal's MidiEvent class to convert this binary data to something usable
@@ -21,7 +21,7 @@ void keyboardCallback(int key, bool keyDown){
     //tell the application what to do with keyboard input here
 }
 
-void audioCallback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, PedalExampleApp* app){
+void audioCallback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, app::PedalExampleApp* app){
     //This is the audio loop. This function will be called as needed automatically.
 
     //Audio arrives in the input array. 
@@ -44,18 +44,18 @@ void audioCallback(float* output, float* input, int bufferSize, int inputChannel
 
 int main(){
     //Create the application (an audio callback is required here)
-    PedalExampleApp* app = pdlInitializeExampleApp(audioCallback);
+    app::PedalExampleApp* app = app::pdlInitializeExampleApp(audioCallback);
     //If using a qwerty keyboard callback, add it
-    pdlSetKeyboardCallback(keyboardCallback);
+    app::setKeyboardCallback(keyboardCallback);
     //If using a MIDI input callback, add it
-    pdlSetMidiCallback(app, midiCallback);
+    app::setMidiCallback(app, midiCallback);
     //Select a MIDI port if needed
-    pdlOpenMidiPort(app, 1);
+    app::openMidiPort(app, 1);
     //This is the perpetual loop; it will keep going until the window is closed
-    pdlStartExampleApp(app);
-    while(pdlRunExampleApp(app)){//while the window is still open
-        pdlUpdateExampleApp(app);//continue running the app
+    app::startApp(app);
+    while(app::shouldContinue(app)){//while the window is still open
+        app::update(app);//continue running the app
     }
     //If this point is reached, the application is closing
-    pdlDeleteExampleApp(app);
+    app::freeMemory(app);
 }

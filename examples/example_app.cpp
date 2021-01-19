@@ -20,106 +20,106 @@
 #define NUM_TRIGGERS_MAX 16
 #define NUM_DROPDOWNS_MAX 16
 
-struct slider {
-    std::string name;
-    std::atomic<float> atomic_val;
-    float low, high;
-    float val;
-};
 
-struct toggle {
-    std::string name;
-    std::atomic<bool> atomic_val;
-    bool val;
-};
-
-struct trigger {
-    std::string name;
-    std::atomic<bool> atomic_val;
-    bool val;
-};
-
-struct dropDown{
-    std::string name;
-    std::atomic<int> atomic_val;
-    char** content;
-    int length;
-    int val;
-};
-
-struct PedalExampleApp {
-    GLFWwindow* window;
-    RtAudio audio;
-    std::string device_name;
-    unsigned device_id;
-    unsigned input_channels;
-    unsigned output_channels;
-    unsigned sample_rate;
-    unsigned buffer_size;
-    pdlExampleAudioCallback callback;
-    RtMidiIn* rtMidiIn = nullptr;
-    std::string midiDeviceName;
-    unsigned int numPorts;    
-    int userDefinedPort = -1;//initiate with invalid port
-    slider sliders[NUM_SLIDERS_MAX];
-    toggle toggles[NUM_TOGGLES_MAX];
-    trigger triggers[NUM_TRIGGERS_MAX];
-    dropDown dropDowns[NUM_DROPDOWNS_MAX];
-    std::atomic<float> cursorx;
-    std::atomic<float> cursory;
-};
-
-//callback function for ascii keyboard
-void (*customKeyboardCallback)(int keyPressed, bool keyDown) = nullptr;
-
-static int audioCallback(void *outputBuffer, void *inputBuffer,
-                         unsigned int nFrames, double streamTime,
-                         RtAudioStreamStatus status, void *userData) {
-    float* out = (float*)outputBuffer;
-    float* in = (float*)inputBuffer;
-    auto* app = (PedalExampleApp*)userData;
-    if (app && app->callback) {
-        app->callback(out, in, nFrames, app->output_channels,
-                      app->input_channels, app);
-    }
-    return 0;
-}
-
-static float clampf01(float x) {
-    if (x < 0.0f) return 0.0f;
-    else if (x > 1.0f) return 1.0f;
-    else return x;
-}
-
-PedalExampleApp* appPtr;
-PedalExampleApp* getAppPtr(){return appPtr;}
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+namespace app{
+  struct slider {
+      std::string name;
+      std::atomic<float> atomic_val;
+      float low, high;
+      float val;
+  };
+  
+  struct toggle {
+      std::string name;
+      std::atomic<bool> atomic_val;
+      bool val;
+  };
+  
+  struct trigger {
+      std::string name;
+      std::atomic<bool> atomic_val;
+      bool val;
+  };
+  
+  struct dropDown{
+      std::string name;
+      std::atomic<int> atomic_val;
+      char** content;
+      int length;
+      int val;
+  };
+  
+  struct PedalExampleApp {
+      GLFWwindow* window;
+      RtAudio audio;
+      std::string device_name;
+      unsigned device_id;
+      unsigned input_channels;
+      unsigned output_channels;
+      unsigned sample_rate;
+      unsigned buffer_size;
+      pdlExampleAudioCallback callback;
+      RtMidiIn* rtMidiIn = nullptr;
+      std::string midiDeviceName;
+      unsigned int numPorts;    
+      int userDefinedPort = -1;//initiate with invalid port
+      slider sliders[NUM_SLIDERS_MAX];
+      toggle toggles[NUM_TOGGLES_MAX];
+      trigger triggers[NUM_TRIGGERS_MAX];
+      dropDown dropDowns[NUM_DROPDOWNS_MAX];
+      std::atomic<float> cursorx;
+      std::atomic<float> cursory;
+  };
+  
+  //callback function for ascii keyboard
+  void (*customKeyboardCallback)(int keyPressed, bool keyDown) = nullptr;
+  
+  static int audioCallback(void *outputBuffer, void *inputBuffer,
+                           unsigned int nFrames, double streamTime,
+                           RtAudioStreamStatus status, void *userData) {
+      float* out = (float*)outputBuffer;
+      float* in = (float*)inputBuffer;
+      auto* app = (PedalExampleApp*)userData;
+      if (app && app->callback) {
+          app->callback(out, in, nFrames, app->output_channels,
+                        app->input_channels, app);
+      }
+      return 0;
+  }
+  
+  static float clampf01(float x) {
+      if (x < 0.0f) return 0.0f;
+      else if (x > 1.0f) return 1.0f;
+      else return x;
+  }
+  
+  void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if ((action == GLFW_PRESS) && (mods & GLFW_MOD_CONTROL) && (key == GLFW_KEY_Q)) {
-        glfwSetWindowShouldClose(window, 1);
+      glfwSetWindowShouldClose(window, 1);
     }else if(action == GLFW_PRESS && (mods &GLFW_MOD_CONTROL) && (key >= 48) && (key <=57)){// if ctl + number
-        // // ascii number on keyboard is n + 48
-        // int deviceIndex = key - 48;
-        // //check to make sure that it isn't already running
-        // if(getAppPtr()->audio.isStreamOpen())
-        //     getAppPtr()->audio.closeStream();
-        // }
-        // if(deviceIndex < getAppPtr()->audio.getDeviceCount()){
-        //     getAppPtr()->audio.
-        // }
-        
+      // // ascii number on keyboard is n + 48
+      // int deviceIndex = key - 48;
+      // //check to make sure that it isn't already running
+      // if(getAppPtr()->audio.isStreamOpen())
+      //     getAppPtr()->audio.closeStream();
+      // }
+      // if(deviceIndex < getAppPtr()->audio.getDeviceCount()){
+      //     getAppPtr()->audio.
+      // }
     }
     bool keyDown;
     if(action == GLFW_PRESS || action == GLFW_RELEASE){
-        keyDown = (action == GLFW_PRESS) ? true : false;
-        if(*customKeyboardCallback != nullptr){
-            customKeyboardCallback(key, keyDown);
-        }
+      keyDown = (action == GLFW_PRESS) ? true : false;
+      if(*customKeyboardCallback != nullptr){
+        customKeyboardCallback(key, keyDown);
+      }
     }
+  }
 }
 
-PedalExampleApp* pdlInitializeExampleApp(pdlExampleAudioCallback callback, int sampleRate, int bufferSize) {
+using namespace app;
+PedalExampleApp* app::pdlInitializeExampleApp(pdlExampleAudioCallback callback, int sampleRate, int bufferSize) {
     auto* app = new PedalExampleApp;
-    appPtr = app;
     if (!app) {
         std::cerr << "Fail: app creation\n";
         return nullptr;
@@ -233,7 +233,7 @@ PedalExampleApp* pdlInitializeExampleApp(pdlExampleAudioCallback callback, int s
     return app;
 }
 
-void pdlStartExampleApp(PedalExampleApp* app) {
+void app::startApp(PedalExampleApp* app) {
     try{
         app->audio.startStream();
     }catch(RtAudioError& e) {
@@ -241,13 +241,13 @@ void pdlStartExampleApp(PedalExampleApp* app) {
     }
 }
 
-bool pdlRunExampleApp(PedalExampleApp* app) {
+bool app::shouldContinue(PedalExampleApp* app) {
     glfwSwapBuffers(app->window);
     glfwPollEvents();
     return glfwWindowShouldClose(app->window)? false : true;
 }
 
-void pdlUpdateExampleApp(PedalExampleApp* app) {
+void app::update(PedalExampleApp* app) {
     int display_w, display_h;
     glfwGetFramebufferSize(app->window, &display_w, &display_h);
     int window_w, window_h;
@@ -339,7 +339,7 @@ void pdlUpdateExampleApp(PedalExampleApp* app) {
     }
 }
 
-void pdlDeleteExampleApp(PedalExampleApp* app) {
+void app::freeMemory(PedalExampleApp* app) {
     try {
         app->audio.stopStream();
     }
@@ -356,7 +356,7 @@ void pdlDeleteExampleApp(PedalExampleApp* app) {
     glfwTerminate();
     delete app;
 }
-void pdlSetMidiCallback(PedalExampleApp* app, pdlExampleMidiInputCallback newMidiCallback){
+void app::setMidiCallback(PedalExampleApp* app, pdlExampleMidiInputCallback newMidiCallback){
     if(!app->rtMidiIn){
         app->rtMidiIn = new RtMidiIn();
     }
@@ -385,10 +385,10 @@ void pdlSetMidiCallback(PedalExampleApp* app, pdlExampleMidiInputCallback newMid
         app->rtMidiIn->ignoreTypes( true, false, false );
     }    
 }
-void pdlSetKeyboardCallback(void (*keyboardCallback)(int key, bool keyDown)){
+void app::setKeyboardCallback(void (*keyboardCallback)(int key, bool keyDown)){
     customKeyboardCallback = *keyboardCallback;
 }
-void pdlOpenMidiPort(PedalExampleApp* app, int port){
+void app::openMidiPort(PedalExampleApp* app, int port){
     app->userDefinedPort = port;
     if(app->userDefinedPort < app->rtMidiIn->getPortCount()){
         app->rtMidiIn->closePort();
@@ -398,20 +398,20 @@ void pdlOpenMidiPort(PedalExampleApp* app, int port){
         std::cout << "Port: " << port << " is not available" << std::endl;
     }
 }
-unsigned pdlGetSampleRate(PedalExampleApp* app) {
+unsigned app::getSampleRate(PedalExampleApp* app) {
     return app->sample_rate;
 }
 
-unsigned pdlGetBufferSize(PedalExampleApp* app){
+unsigned app::getBufferSize(PedalExampleApp* app){
     return app->buffer_size;
 }
 
-void pdlGetCursorPos(PedalExampleApp* app, float* mx, float* my) {
+void app::pdlGetCursorPos(PedalExampleApp* app, float* mx, float* my) {
     *mx = app->cursorx.load();
     *my = app->cursory.load();
 }
 
-void pdlAddSlider(PedalExampleApp* app, int sliderIndex, const char* name,
+void app::addSlider(PedalExampleApp* app, int sliderIndex, const char* name,
                   float low, float high, float initialValue) {
     slider* s = app->sliders + sliderIndex;
     s->name = name;
@@ -421,11 +421,11 @@ void pdlAddSlider(PedalExampleApp* app, int sliderIndex, const char* name,
     s->atomic_val.store(initialValue);
 }
 
-float pdlGetSlider(PedalExampleApp* app, int idx) {
+float app::getSlider(PedalExampleApp* app, int idx) {
     return app->sliders[idx].atomic_val.load();
 }
 
-void pdlAddToggle(PedalExampleApp* app, int toggleIndex, const char* name,
+void app::addToggle(PedalExampleApp* app, int toggleIndex, const char* name,
                   bool initialValue) {
     toggle* t = app->toggles + toggleIndex;
     t->name = name;
@@ -433,21 +433,21 @@ void pdlAddToggle(PedalExampleApp* app, int toggleIndex, const char* name,
     t->atomic_val.store(initialValue);
 }
 
-bool pdlGetToggle(PedalExampleApp* app, int idx) {
+bool app::getToggle(PedalExampleApp* app, int idx) {
     return app->toggles[idx].atomic_val.load();
 }
 
-void pdlAddTrigger(PedalExampleApp* app, int triggerIndex, const char* name) {
+void app::addTrigger(PedalExampleApp* app, int triggerIndex, const char* name) {
     trigger* t = app->triggers + triggerIndex;
     t->name = name;
     t->val = false;
     t->atomic_val.store(false);
 }
 
-bool pdlGetTrigger(PedalExampleApp* app, int idx) {
+bool app::getTrigger(PedalExampleApp* app, int idx) {
     return app->triggers[idx].atomic_val.exchange(false);
 }
-void pdlAddDropDown(PedalExampleApp* app, int idx, const char* name,char* content[],int length){
+void app::addDropDown(PedalExampleApp* app, int idx, const char* name,char* content[],int length){
     dropDown* t = app->dropDowns + idx;
     t->name = name;
     t->content = content;
@@ -455,11 +455,11 @@ void pdlAddDropDown(PedalExampleApp* app, int idx, const char* name,char* conten
     t->length = length;
     t->atomic_val.store(0);
 }
-int pdlGetDropDown(PedalExampleApp* app, int idx){
+int app::getDropDown(PedalExampleApp* app, int idx){
     return app->dropDowns[idx].atomic_val.load();
 }
 
-int pdlAsciiToMidi(int asciiCode){
+int app::asciiToMidi(int asciiCode){
     //start with invalid midi note
     int midiNoteNumber = -1;
     if(asciiCode > 64 && asciiCode < 90){
@@ -511,4 +511,4 @@ int pdlAsciiToMidi(int asciiCode){
     return midiNoteNumber;
 }
 //PATH_TO_SOUNDFILES set by CMAKE
-std::string pdlGetPathToSoundFiles(){return std::string(PATH_TO_SOUNDFILES) + std::string("/");}
+std::string app::getPathToSoundFiles(){return std::string(PATH_TO_SOUNDFILES) + std::string("/");}

@@ -33,7 +33,7 @@ SmoothValue<float> amplitude;
 MoogLadderFilter ladderFilter;
 int mostRecentNoteOn = -1;
 
-void midiCallback(double deltaTime, std::vector<unsigned char>* message, PedalExampleApp* app){
+void midiCallback(double deltaTime, std::vector<unsigned char>* message, app::PedalExampleApp* app){
   MIDIEvent event(message);
   switch(event.getEventType()){
     case MIDIEvent::EventTypes::NOTE_ON:
@@ -54,7 +54,7 @@ void midiCallback(double deltaTime, std::vector<unsigned char>* message, PedalEx
 }
 
 void keyboardCallback(int key, bool keyDown){
-  int midiNoteNumber = pdlAsciiToMidi(key);//returns -1 if key invalid
+  int midiNoteNumber = app::asciiToMidi(key);//returns -1 if key invalid
   if(midiNoteNumber > -1){//if key mapped to midi note
     if(keyDown){
       mostRecentNoteOn = midiNoteNumber;
@@ -70,12 +70,12 @@ void keyboardCallback(int key, bool keyDown){
   }
 }
 
-void audioCallback(float* output, float* input, int bufferSize, int outputChannels, int inputChannels, PedalExampleApp* app){
+void audioCallback(float* output, float* input, int bufferSize, int outputChannels, int inputChannels, app::PedalExampleApp* app){
   //collect these values once per buffer (very lazy form of control rate)
-  float portamento = pdlGetSlider(app, 0);
+  float portamento = app::getSlider(app, 0);
   frequency.setTime(portamento);//set the time it takes to arrive at target value
-  float filterRange = pdlGetSlider(app, 1);//scalar for filter frequency envelope outpout
-  float outputGainScalar = dBToAmplitude(pdlGetSlider(app, 2));// collect the 'volume' scalar (amplitude scalar)
+  float filterRange = app::getSlider(app, 1);//scalar for filter frequency envelope outpout
+  float outputGainScalar = dBToAmplitude(app::getSlider(app, 2));// collect the 'volume' scalar (amplitude scalar)
   
   for(int sampleIndex = 0; sampleIndex < bufferSize; sampleIndex++){//for every sample
     //update the squareOscillator frequency per sample
@@ -100,13 +100,13 @@ void audioCallback(float* output, float* input, int bufferSize, int outputChanne
 int main(){
   //Create the application. pdlInitializeExampleApp requries an audioCallback,
   // but the samplerate and buffersize will default if not provided
-  PedalExampleApp* app = pdlInitializeExampleApp(audioCallback, pdlSettings::sampleRate, pdlSettings::bufferSize);
+  app::PedalExampleApp* app = app::pdlInitializeExampleApp(audioCallback, pdlSettings::sampleRate, pdlSettings::bufferSize);
   //optionally, add a qewrty (ascii) keyboard callback
-  pdlSetKeyboardCallback(keyboardCallback);
+  app::setKeyboardCallback(keyboardCallback);
   //optionally, add a MIDI input callback
-  pdlSetMidiCallback(app, midiCallback);
+  app::setMidiCallback(app, midiCallback);
   //specify a MIDI port (the devices will print to the terminal, you may have to select a different index)
-  pdlOpenMidiPort(app, 2);//<<<<=======================MIDI Port selected Here=============================
+  app::openMidiPort(app, 2);//<<<<=======================MIDI Port selected Here=============================
   
   //new amplitude targets will arrive smoothly over 100ms
   amplitude.setTarget(100.0f);
@@ -129,14 +129,14 @@ int main(){
   filterEnvelope.setSustainLevel(0.5f);
   filterEnvelope.setReleaseTime(1000.0f);  
   //add a few sliders for control
-  pdlAddSlider(app, 0, "Portamento (ms)", 0.0f, 2000.0f, 250.0f);
-  pdlAddSlider(app, 1, "Filter Range", 0.0f, 8.0f, 4.0f);
-  pdlAddSlider(app, 2, "Output Gain (dB)", -60.0f, 0.0f, -10.0f);
+  app::addSlider(app, 0, "Portamento (ms)", 0.0f, 2000.0f, 250.0f);
+  app::addSlider(app, 1, "Filter Range", 0.0f, 8.0f, 4.0f);
+  app::addSlider(app, 2, "Output Gain (dB)", -60.0f, 0.0f, -10.0f);
   
-  pdlStartExampleApp(app);//start the app
-  while(pdlRunExampleApp(app)){//while the app shouldn't quit
-    pdlUpdateExampleApp(app);//update the app
+  app::startApp(app);//start the app
+  while(app::shouldContinue(app)){//while the app shouldn't quit
+    app::update(app);//update the app
   }
   //if the previous while loop has ended, it is time to close the app
-  pdlDeleteExampleApp(app);
+  app::freeMemory(app);
 }

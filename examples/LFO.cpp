@@ -29,8 +29,8 @@ void keyboardCallback(int key, bool keyDown){
   }
 }
 
-void audioCallback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, PedalExampleApp* app){
-  frequency.setTarget(pdlGetSlider(app, 0));
+void audioCallback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, app::PedalExampleApp* app){
+  frequency.setTarget(app::getSlider(app, 0));
 
   for(int sampleIndex = 0; sampleIndex < bufferSize; sampleIndex++){
     float currentSample = saw.generateSample();
@@ -45,18 +45,18 @@ void audioCallback(float* output, float* input, int bufferSize, int inputChannel
 
 int main(){
   //Create the application (an audio callback is required here)
-  PedalExampleApp* app = pdlInitializeExampleApp(audioCallback, pdlSettings::sampleRate, pdlSettings::bufferSize);
-  pdlSetKeyboardCallback(keyboardCallback);
+  app::PedalExampleApp* app = app::pdlInitializeExampleApp(audioCallback, pdlSettings::sampleRate, pdlSettings::bufferSize);
+  app::setKeyboardCallback(keyboardCallback);
   saw.setFrequency(30.0f);
   lfo.setOutputRange(60.0f, 2000.0f);
   lfo.setFrequency(0.125f);
   filter.setResonance(0.94f);
-  pdlAddSlider(app, 0, "LFO frequency", 0.0f, 18.0f, 2.0f);
-  pdlStartExampleApp(app);
+  app::addSlider(app, 0, "LFO frequency", 0.0f, 18.0f, 2.0f);
+  app::startApp(app);
   //This is the perpetual loop; it will keep going until the window is closed
-  while(pdlRunExampleApp(app)){//while the window is still open
-    pdlUpdateExampleApp(app);//continue running the app
+  while(app::shouldContinue(app)){//while the window is still open
+    app::update(app);//continue running the app
   }
   //If this point is reached, the application is closing
-  pdlDeleteExampleApp(app);
+  app::freeMemory(app);
 }

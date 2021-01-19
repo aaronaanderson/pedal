@@ -24,7 +24,7 @@ BufferPlayer bufferPlayer(&soundBuffer);//simple buffer player
 SmoothValue<float> noteAmplitudeScalar;
 SmoothValue<float> outputGain;
 
-void midiCallback(double deltaTime, std::vector<unsigned char>* message, PedalExampleApp* app){
+void midiCallback(double deltaTime, std::vector<unsigned char>* message, app::PedalExampleApp* app){
     MIDIEvent event(message);
     switch(event.getEventType()){
         case MIDIEvent::EventTypes::NOTE_ON:
@@ -42,7 +42,7 @@ void midiCallback(double deltaTime, std::vector<unsigned char>* message, PedalEx
 }
 
 void keyboardCallback(int key, bool keyDown){
-    int midiNoteNumber = pdlAsciiToMidi(key);//returns -1 if key invalid
+    int midiNoteNumber = app::asciiToMidi(key);//returns -1 if key invalid
     if(midiNoteNumber > -1){//if key mapped to midi note
         if(keyDown){
             bufferPlayer.setSpeed(midiNoteToPlaySpeed(midiNoteNumber));//set speed based on note value
@@ -54,9 +54,9 @@ void keyboardCallback(int key, bool keyDown){
     }
 }
 
-void audioCallback(float* output, float* input, int bufferSize, int outputChannels, int inputChannels, PedalExampleApp* app){
+void audioCallback(float* output, float* input, int bufferSize, int outputChannels, int inputChannels, app::PedalExampleApp* app){
     //collect these values once per buffer (very lazy form of control rate)
-    float outputGainScalar = dBToAmplitude(pdlGetSlider(app, 0));// collect the 'volume' scalar (noteAmplitudeScalar scalar)
+    float outputGainScalar = dBToAmplitude(app::getSlider(app, 0));// collect the 'volume' scalar (noteAmplitudeScalar scalar)
     outputGain.setTarget(outputGainScalar);
     for(int sampleIndex = 0; sampleIndex < bufferSize; sampleIndex++){//for every sample
         float currentSample = bufferPlayer.update();//collect the next sample from the buffer
@@ -71,15 +71,15 @@ void audioCallback(float* output, float* input, int bufferSize, int outputChanne
 int main(){
     //Create the application. pdlInitializeExampleApp requries an audioCallback,
     // but the samplerate and buffersize will default if not provided
-    PedalExampleApp* app = pdlInitializeExampleApp(audioCallback, pdlSettings::sampleRate, pdlSettings::bufferSize);
+    app::PedalExampleApp* app = app::pdlInitializeExampleApp(audioCallback, pdlSettings::sampleRate, pdlSettings::bufferSize);
     //optionally, add a qewrty (ascii) keyboard callback
-    pdlSetKeyboardCallback(keyboardCallback);
+    app::setKeyboardCallback(keyboardCallback);
     //optionally, add a MIDI input callback
-    pdlSetMidiCallback(app, midiCallback);
+    app::setMidiCallback(app, midiCallback);
     //specify a MIDI port (the devices will print to the terminal, you may have to select a different index)
-    pdlOpenMidiPort(app, 2);//<<<<=======================MIDI Port selected Here=============================
+    app::openMidiPort(app, 2);//<<<<=======================MIDI Port selected Here=============================
     
-    std::string filePath = pdlGetPathToSoundFiles() + std::string("Glass.wav");
+    std::string filePath = app::getPathToSoundFiles() + std::string("Glass.wav");
     soundBuffer.loadSoundFile(filePath.c_str());
 
     bufferPlayer.setPlayMode(BufferPlayer::PlayMode::ONE_SHOT);
@@ -88,12 +88,12 @@ int main(){
     noteAmplitudeScalar.setTarget(1.0f);
 
     //add a few sliders for control
-    pdlAddSlider(app, 0, "Output Gain (dB)", -60.0f, 0.0f, -10.0f);
+    app::addSlider(app, 0, "Output Gain (dB)", -60.0f, 0.0f, -10.0f);
     
-    pdlStartExampleApp(app);//start the app
-    while(pdlRunExampleApp(app)){//while the app shouldn't quit
-        pdlUpdateExampleApp(app);//update the app
+    app::startApp(app);//start the app
+    while(app::shouldContinue(app)){//while the app shouldn't quit
+      app::update(app);//update the app
     }
     //if the previous while loop has ended, it is time to close the app
-    pdlDeleteExampleApp(app);
+    app::freeMemory(app);
 }

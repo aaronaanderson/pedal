@@ -32,10 +32,10 @@ void keyboardCallback(int key, bool keyDown){
   }
 }
 
-void audioCallback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, PedalExampleApp* app){
-  filter.setFrequency(pdlGetSlider(app, 0));
-  filter.setResonance(1.0f - (1.0f /pdlGetSlider(app, 1)));
-  float lazyAmplitude = dBToAmplitude(pdlGetSlider(app, 2));
+void audioCallback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, app::PedalExampleApp* app){
+  filter.setFrequency(app::getSlider(app, 0));
+  filter.setResonance(1.0f - (1.0f /app::getSlider(app, 1)));
+  float lazyAmplitude = dBToAmplitude(app::getSlider(app, 2));
   for(int sampleIndex = 0; sampleIndex < bufferSize; sampleIndex++){
     float currentSample = noise.generateSample();
     currentSample = filter.processSample(currentSample);
@@ -47,18 +47,18 @@ void audioCallback(float* output, float* input, int bufferSize, int inputChannel
 
 int main(){
     //Create the application (an audio callback is required here)
-    PedalExampleApp* app = pdlInitializeExampleApp(audioCallback, 48000, 512);
+    app::PedalExampleApp* app = app::pdlInitializeExampleApp(audioCallback, 48000, 512);
     //If using a qwerty keyboard callback, add it
-    pdlSetKeyboardCallback(keyboardCallback);
+    app::setKeyboardCallback(keyboardCallback);
   
-    pdlAddSlider(app, 0, "Frequency", 20.0f, 400.0f, 100.0f);
-    pdlAddSlider(app, 1, "Q", 1.0f, 20.0f, 4.0f);
-    pdlAddSlider(app, 2, "Output Gain", -60.0f, 0.0f, -9.0f);
-    pdlStartExampleApp(app);
+    app::addSlider(app, 0, "Frequency", 20.0f, 400.0f, 100.0f);
+    app::addSlider(app, 1, "Q", 1.0f, 20.0f, 4.0f);
+    app::addSlider(app, 2, "Output Gain", -60.0f, 0.0f, -9.0f);
+    app::startApp(app);
     //This is the perpetual loop; it will keep going until the window is closed
-    while(pdlRunExampleApp(app)){//while the window is still open
-        pdlUpdateExampleApp(app);//continue running the app
+    while(app::shouldContinue(app)){//while the window is still open
+      app::update(app);//continue running the app
     }
     //If this point is reached, the application is closing
-    pdlDeleteExampleApp(app);
+    app::freeMemory(app);
 }

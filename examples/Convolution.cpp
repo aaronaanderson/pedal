@@ -15,7 +15,7 @@ STFT stftTwo(16384, 128);
 LowFrequencyOscillator lfoTwo;
 SmoothValue<float> outputVolume;
 
-void audioCallback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, PedalExampleApp* app){
+void audioCallback(float* output, float* input, int bufferSize, int inputChannels, int outputChannels, app::PedalExampleApp* app){
   for(int sampleIndex = 0; sampleIndex < bufferSize; sampleIndex++){
     triangle.setFrequency(lfoOne.generateSample());
     stftOne.updateInput(triangle.generateSample() );
@@ -35,8 +35,8 @@ void audioCallback(float* output, float* input, int bufferSize, int inputChannel
 
 int main(){
   //Create the application (an audio callback is required here)
-  PedalExampleApp* app = pdlInitializeExampleApp(audioCallback, pdlSettings::sampleRate, pdlSettings::bufferSize);
-  pdlStartExampleApp(app);
+  app::PedalExampleApp* app = app::pdlInitializeExampleApp(audioCallback, pdlSettings::sampleRate, pdlSettings::bufferSize);
+  app::startApp(app);
   lfoOne.setWaveShape(LowFrequencyOscillator::WaveShape::Sine);
   lfoOne.setOutputRange(40.0f, 60.0f);
   lfoOne.setFrequency(0.33333f);
@@ -44,9 +44,9 @@ int main(){
   lfoTwo.setOutputRange(80.0f, 200.0f);
   lfoTwo.setFrequency(0.1f);
   //This is the perpetual loop; it will keep going until the window is closed
-  while(pdlRunExampleApp(app)){//while the window is still open
-    pdlUpdateExampleApp(app);//continue running the app
+  while(app::shouldContinue(app)){//while the window is still open
+    app::update(app);//continue running the app
   }
   //If this point is reached, the application is closing
-  pdlDeleteExampleApp(app);
+  app::freeMemory(app);
 }
