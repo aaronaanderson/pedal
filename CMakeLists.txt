@@ -49,7 +49,7 @@ add_library(pedal STATIC
     src/utilities/Counter.cpp
     src/modifiers/reverb/FDNReverb.cpp
     src/generators/VOSIM.cpp
-    src/generators/oscillators/BLITrivialSaw.cpp
+    src/generators/oscillators/BLITSaw.cpp
     src/modifiers/filters/MoogLadderFilter.cpp
     src/generators/oscillators/LowFrequencyOscillator.cpp
     external/AudioFFT.cpp

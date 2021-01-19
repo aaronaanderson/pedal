@@ -1,9 +1,9 @@
-#ifndef BLITrivialSaw_hpp
-#define BLITrivialSaw_hpp
-//using https://github.com/thestk/stk/blob/master/include/BliTrivialSaw.h
+#ifndef BLITSaw_hpp
+#define BLITSaw_hpp
+//using https://github.com/thestk/stk/blob/master/include/BLITSaw.h
 //as reference
 namespace pedal{
-class BliTrivialSaw{
+class BLITSaw{
     public:
 
     private:
