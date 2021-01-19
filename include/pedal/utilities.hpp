@@ -4,7 +4,7 @@
 #include "stdlib.h"
 #include "pdlConstants.hpp"
 #include <cmath>
-#include "pdlSettings.hpp"
+#include "Settings.hpp"
 #include "algorithm"
 
 namespace pedal{
@@ -79,7 +79,7 @@ class SmoothValue{
 
   private:
   void calculateCoefficients(){//called only when 'setTime' is called (and in constructor)
-    a = std::exp(-(pedal::TWOPI) / (arrivalTime * 0.001f * pdlSettings::sampleRate));//rearranged lpf coeff calculations
+    a = std::exp(-(pedal::TWOPI) / (arrivalTime * 0.001f * Settings::sampleRate));//rearranged lpf coeff calculations
     b = 1.0f - a;
   }
   T targetValue;//what is the destination (of type T, determind by implementation)
@@ -136,7 +136,7 @@ public:
   private:
   void calculateUpCoefficients(){//called only when 'setTimeUp' is called (and in constructor)
     if(arrivalTimeUp > 0.0f){//avoid / 0
-      aUp = std::exp(-(pedal::TWOPI) / (arrivalTimeUp * 0.001f * pdlSettings::sampleRate));//rearranged lpf coeff calculations
+      aUp = std::exp(-(pedal::TWOPI) / (arrivalTimeUp * 0.001f * Settings::sampleRate));//rearranged lpf coeff calculations
       bUp = 1.0f - aUp;
     }else{
       aUp = 0.0f;
@@ -145,7 +145,7 @@ public:
   }
   void calculateDownCoefficients(){//called only when 'setTimeUp' is called (and in constructor)
     if(arrivalTimeDown > 0.0f){//avoid / 0
-      aDown = std::exp(-(pedal::TWOPI) / (arrivalTimeDown * 0.001f * pdlSettings::sampleRate));
+      aDown = std::exp(-(pedal::TWOPI) / (arrivalTimeDown * 0.001f * Settings::sampleRate));
       bDown = 1.0f - aDown;
     }else{
       aDown = 0.0f;

@@ -59,7 +59,7 @@ void Window::setTrigger(bool newTrigger){
 }
 void Window::setDuration(float newDuration){
   duration = newDuration;
-  phaseIncrement = pedal::TWOPI/(pdlSettings::sampleRate*(duration*0.001));
+  phaseIncrement = pedal::TWOPI/(Settings::sampleRate*(duration*0.001));
 }
 void Window::setMode(Window::Mode newMode){
   currentMode = newMode;

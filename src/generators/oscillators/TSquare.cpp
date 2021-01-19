@@ -53,7 +53,7 @@ float TSquare::generateSample(float inputPhase){//return a float even if you don
 //=========================================================
 void TSquare::setFrequency(float newFrequency){
   frequency = newFrequency;
-  phaseIncrement = (frequency)/pdlSettings::sampleRate;
+  phaseIncrement = (frequency)/Settings::sampleRate;
 }
 void TSquare::setPhase(float newPhase){//expecting (0-2PI)
     phase = fmod(newPhase, pedal::TWOPI);//ensure 0-2PI

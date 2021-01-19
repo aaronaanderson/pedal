@@ -7,7 +7,7 @@ void DebugTool::update(int currentFrame){
     if(currentFrame == 0){
       firstFrameFlag = true;
       lastFrameFlag = false;
-    }else if(currentFrame == pdlSettings::bufferSize - 1){
+    }else if(currentFrame == Settings::bufferSize - 1){
       firstFrameFlag = false;
       lastFrameFlag = true;
     }else{

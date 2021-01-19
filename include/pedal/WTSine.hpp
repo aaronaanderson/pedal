@@ -4,7 +4,7 @@
 
 #include "stdio.h"
 
-#include "pdlSettings.hpp"
+#include "Settings.hpp"
 #include "utilities.hpp"
 #include "pedal/Interpolation.hpp"
 #include <cmath>

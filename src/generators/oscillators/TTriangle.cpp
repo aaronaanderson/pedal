@@ -54,7 +54,7 @@ float TTriangle::generateSample(float inputPhase){//return a float even if you d
 //=========================================================
 void TTriangle::setFrequency(float newFrequency){
   frequency = newFrequency;
-  phaseIncrement = (frequency * pedal::TWOPI )/pdlSettings::sampleRate;
+  phaseIncrement = (frequency * pedal::TWOPI )/Settings::sampleRate;
 }
 void TTriangle::setPhase(float newPhase){//expecting (0-2PI)
   phase = fmod(newPhase, pedal::TWOPI);//ensure 0-2PI

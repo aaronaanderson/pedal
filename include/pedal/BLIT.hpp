@@ -5,7 +5,7 @@
 #include <cmath>
 #include <limits>
 
-#include "pedal/pdlSettings.hpp"
+#include "pedal/Settings.hpp"
 #include "pedal/DebugTool.hpp"
 //Band Limited Impulse Train
 namespace pedal{

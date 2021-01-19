@@ -3,7 +3,7 @@
 
 #include "pdlConstants.hpp"
 #include <cmath>
-#include "pdlSettings.hpp"
+#include "Settings.hpp"
 
 /*
 This biquad object was based heavily on Nigel Redmon's
@@ -23,7 +23,7 @@ class Biquad{
   HIGH_SHELF
   };
   Biquad(Mode initialMode = Mode::LOW_SHELF, 
-         float initialFrequency = 2000.0f/pdlSettings::sampleRate,
+         float initialFrequency = 2000.0f/Settings::sampleRate,
          float initialQ = 0.7f);
   ~Biquad();
 

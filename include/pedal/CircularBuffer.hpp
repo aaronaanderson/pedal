@@ -1,7 +1,7 @@
 #ifndef CircularBuffer_hpp
 #define CircularBuffer_hpp
 
-#include "pdlSettings.hpp"
+#include "Settings.hpp"
 #include "utilities.hpp"
 #include "Interpolation.hpp"
 #include "Buffer.hpp"

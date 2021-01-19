@@ -40,7 +40,7 @@ float ImpulseGenerator::generateSample(){
 //Getters and Setters======================
 void ImpulseGenerator::setFrequency(float newFrequency){
   frequency = fabs(newFrequency);//no need for negative frequencies for this
-  period = pdlSettings::sampleRate/frequency;//period in samples
+  period = Settings::sampleRate/frequency;//period in samples
 }
 void ImpulseGenerator::setPhase(float newPhase){
     phase = newPhase*period;//conver from 0 - 1 to 0 - period

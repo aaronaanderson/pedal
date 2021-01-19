@@ -22,10 +22,10 @@ Biquad::~Biquad(){
 //========================================================
 float* Biquad::processBlock(float* input){
   if(currentBlock != nullptr){//if we don't have a local currentBlock yet, 
-    currentBlock = new float[pdlSettings::bufferSize];//create a new array of floats
+    currentBlock = new float[Settings::bufferSize];//create a new array of floats
   }
 
-  for(int i = 0; i < pdlSettings::bufferSize; ++i){//for every sample in the buffer
+  for(int i = 0; i < Settings::bufferSize; ++i){//for every sample in the buffer
     //TODO check input block before iterating
     currentBlock[i] = processSample(input[i]);
   }
@@ -141,14 +141,14 @@ void Biquad::clearHistory(){
 void Biquad::setBiquad(Mode newMode, float newFrequency, 
                        float newQ, float newGain){
   mode = newMode;
-  frequency = newFrequency/pdlSettings::sampleRate;
+  frequency = newFrequency/Settings::sampleRate;
   q = newQ;
   gain = newGain;
   calculateCoefficients();
 }
 void Biquad::setFrequency(float newFrequency){
   if(newFrequency != frequency){
-    frequency = newFrequency/pdlSettings::sampleRate;
+    frequency = newFrequency/Settings::sampleRate;
     calculateCoefficients();
   }
 }
@@ -172,7 +172,7 @@ void Biquad::setMode(Mode newMode){
   }
 }
 //frequency is stored in normalized form, so must adjust to retrieve
-float Biquad::getFrequency(){return frequency * pdlSettings::sampleRate;}
+float Biquad::getFrequency(){return frequency * Settings::sampleRate;}
 float Biquad::getGain(){return gain;}
 float Biquad::getQ(){return q;}
 Biquad::Mode Biquad::getMode(){return mode;}

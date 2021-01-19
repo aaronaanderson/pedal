@@ -8,7 +8,7 @@
 
 #include "pdlConstants.hpp"
 #include <cmath>
-#include "pedal/pdlSettings.hpp"
+#include "pedal/Settings.hpp"
 #include <iostream>
 
 namespace pedal{

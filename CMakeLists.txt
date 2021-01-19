@@ -23,7 +23,7 @@ add_library(pedal STATIC
     src/modifiers/delay/BufferTap.cpp
     src/utilities/Interpolation.cpp
     src/utilities/utilities.cpp
-    src/pdlSettings.cpp
+    src/Settings.cpp
     src/utilities/DebugTool.cpp
     src/generators/noise/WhiteNoise.cpp 
     src/generators/noise/PinkNoise.cpp

@@ -4,7 +4,7 @@
 #include "pdlConstants.hpp"
 #include <cmath>
 #include "utilities.hpp"
-#include "pdlSettings.hpp"
+#include "Settings.hpp"
 /*
 Windows are generally used to gradually scale the amplitude of
 an array of samples to zero at both ends. The shape of a window

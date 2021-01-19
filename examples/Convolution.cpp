@@ -35,7 +35,7 @@ void audioCallback(float* output, float* input, int bufferSize, int inputChannel
 
 int main(){
   //Create the application (an audio callback is required here)
-  app::PedalExampleApp* app = app::pdlInitializeExampleApp(audioCallback, pdlSettings::sampleRate, pdlSettings::bufferSize);
+  app::PedalExampleApp* app = app::pdlInitializeExampleApp(audioCallback, Settings::sampleRate, Settings::bufferSize);
   app::startApp(app);
   lfoOne.setWaveShape(LowFrequencyOscillator::WaveShape::Sine);
   lfoOne.setOutputRange(40.0f, 60.0f);

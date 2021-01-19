@@ -28,7 +28,7 @@ float CircularBuffer::getDelayed(float timeBack){
 }
 void CircularBuffer::inputBlock(float* inputBlock){
   //is there a way to confirm the incoming block is valid?
-  for(int i = 0; i < pdlSettings::bufferSize; i++){
+  for(int i = 0; i < Settings::bufferSize; i++){
     inputSample(inputBlock[i]);
   }
 }

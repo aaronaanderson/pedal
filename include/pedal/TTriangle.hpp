@@ -4,7 +4,7 @@
 
 #include "pdlConstants.hpp"
 #include <cmath> //so we can use sin()
-#include "pdlSettings.hpp"//so we can access sampleRate and bufferSize
+#include "Settings.hpp"//so we can access sampleRate and bufferSize
 
 namespace pedal{
 class TTriangle{//Pedal Trivial Sine Oscillator

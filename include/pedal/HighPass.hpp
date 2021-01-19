@@ -3,7 +3,7 @@
 
 #include "pdlConstants.hpp"
 #include <cmath>
-#include "pdlSettings.hpp"
+#include "Settings.hpp"
 #include "iostream"
 
 namespace pedal{

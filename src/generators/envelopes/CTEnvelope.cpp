@@ -110,17 +110,17 @@ void CTEnvelope::calculateIncrement(State whichIncrement){
   //going next.
   switch(whichIncrement){
     case ATTACK:
-      attackIncrement = 1.0f/(pdlSettings::sampleRate * (attack * 0.001f));
+      attackIncrement = 1.0f/(Settings::sampleRate * (attack * 0.001f));
     break;
     case DECAY:
-      decayIncrement = (1.0f - sustain)/(pdlSettings::sampleRate * (decay * 0.001f));
+      decayIncrement = (1.0f - sustain)/(Settings::sampleRate * (decay * 0.001f));
     break;
     //SUSTAIN has no increment; it is a measure of level, not time
     case RELEASE:
       if(currentMode == Mode::AR){
-        releaseIncrement = 1.0f/(pdlSettings::sampleRate * (release * 0.001f));
+        releaseIncrement = 1.0f/(Settings::sampleRate * (release * 0.001f));
       }else{
-        releaseIncrement = sustain/(pdlSettings::sampleRate * (release * 0.001f));
+        releaseIncrement = sustain/(Settings::sampleRate * (release * 0.001f));
       }
     break;
   }

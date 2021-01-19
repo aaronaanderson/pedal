@@ -93,12 +93,12 @@ class MoorerReverb{
   //25k and 50k to interpolate/extrapolate gain values for our
   //sample rate. This is taken from the data in Table 2
   const float gainArray[NUM_COMBS] = {//This is how the cutoff frequency of internal lpf in combs is set, by g1
-    linearInterpolation(pdlSettings::sampleRate, 25000.0f, 0.24f, 50000.0f, 0.46f), 
-    linearInterpolation(pdlSettings::sampleRate, 25000.0f, 0.26f, 50000.0f, 0.48f),
-    linearInterpolation(pdlSettings::sampleRate, 25000.0f, 0.28f, 50000.0f, 0.50f),
-    linearInterpolation(pdlSettings::sampleRate, 25000.0f, 0.29f, 50000.0f, 0.52f),
-    linearInterpolation(pdlSettings::sampleRate, 25000.0f, 0.30f, 50000.0f, 0.53f),
-    linearInterpolation(pdlSettings::sampleRate, 25000.0f, 0.32f, 50000.0f, 0.55f)};
+    linearInterpolation(Settings::sampleRate, 25000.0f, 0.24f, 50000.0f, 0.46f), 
+    linearInterpolation(Settings::sampleRate, 25000.0f, 0.26f, 50000.0f, 0.48f),
+    linearInterpolation(Settings::sampleRate, 25000.0f, 0.28f, 50000.0f, 0.50f),
+    linearInterpolation(Settings::sampleRate, 25000.0f, 0.29f, 50000.0f, 0.52f),
+    linearInterpolation(Settings::sampleRate, 25000.0f, 0.30f, 50000.0f, 0.53f),
+    linearInterpolation(Settings::sampleRate, 25000.0f, 0.32f, 50000.0f, 0.55f)};
   //delay times, taken from Table 2
   const float combDelayTimess[NUM_COMBS] = {50.0f, 56.0f, 61.0f,
                                             68.0f, 72.0f, 78.0f};

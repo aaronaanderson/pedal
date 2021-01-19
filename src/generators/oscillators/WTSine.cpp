@@ -4,7 +4,7 @@ using namespace pedal;
 
 //Sine Table=====================================================
 SineTable::SineTable(){//when it is time to build a table (constructor)
-  fundamentalFrequency = (float)pdlSettings::sampleRate / float(getTableSize());
+  fundamentalFrequency = (float)Settings::sampleRate / float(getTableSize());
   table = new float[TABLESIZE];//allocate memory for the table
   for(int i = 0; i < TABLESIZE; i++){//for every memory location
     //convert i from 0 - (TABLESIZE-1) to 0 - TWO_PI

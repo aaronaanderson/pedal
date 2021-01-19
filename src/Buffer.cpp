@@ -10,7 +10,7 @@ Buffer::Buffer(float initialDuration){
   outputFormat.container = drwav_container_riff;// <-- drwav_container_riff = normal WAV files, drwav_container_w64 = Sony Wave64.
   outputFormat.format = DR_WAVE_FORMAT_PCM; // <-- Any of the DR_WAVE_FORMAT_* codes.
   outputFormat.channels = 1;
-  outputFormat.sampleRate = pdlSettings::sampleRate;
+  outputFormat.sampleRate = Settings::sampleRate;
   outputFormat.bitsPerSample = 16;
   setDuration(initialDuration);
 }
@@ -93,7 +93,7 @@ void Buffer::writeSoundFile(const char* pathToFile){
   drwav_uint64 framesWritten = drwav_write_pcm_frames(&wavTemp, 
                                                      durationInSamples,//how many frames 
                                                      content );
-  std::cout << framesWritten/pdlSettings::sampleRate << std::endl;
+  std::cout << framesWritten/Settings::sampleRate << std::endl;
 }
 
 void Buffer::fillSineSweep(float lowFrequency, float highFrequency){

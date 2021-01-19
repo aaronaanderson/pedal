@@ -26,13 +26,13 @@ float pedal::rangedRandom(float minimum, float maximum){
   return (signedHalfNormal*range) + center;
 }
 float pedal::msToSamples(float timeInMS){
-  return timeInMS * 0.001f * pdlSettings::sampleRate;
+  return timeInMS * 0.001f * Settings::sampleRate;
 }
 float pedal::secondsToSamples(float timeInSeconds){
-  return timeInSeconds * pdlSettings::sampleRate;
+  return timeInSeconds * Settings::sampleRate;
 }
 float pedal::samplesToMS(float samples){
-  return (samples*1000.0f)/pdlSettings::sampleRate;
+  return (samples*1000.0f)/Settings::sampleRate;
 }
 //amplitudeToDB is in header since templated
 //dBToAmplitude is in header since templated

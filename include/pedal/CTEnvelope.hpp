@@ -2,7 +2,7 @@
 #define CTEnvelope_hpp
 
 #include <cmath>//for fmin and fmax
-#include "pdlSettings.hpp"//so we can access sampleRate and bufferSize
+#include "Settings.hpp"//so we can access sampleRate and bufferSize
 #include "utilities.hpp"// for clamp 
 
 namespace pedal{

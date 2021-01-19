@@ -42,7 +42,7 @@ float TSaw::generateSample(float inputPhase){//if phase provided, use instead
 //=========================================================
 void TSaw::setFrequency(float newFrequency){
   frequency = newFrequency;
-  phaseIncrement = (frequency * 2.0)/pdlSettings::sampleRate;
+  phaseIncrement = (frequency * 2.0)/Settings::sampleRate;
 }
 void TSaw::setPhase(float newPhase){//set phase (0 - 2PI)
   //convert the standard 0-2PI range to -1 to 1 to make calculations cheap

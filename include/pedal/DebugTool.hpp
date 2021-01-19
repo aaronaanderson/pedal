@@ -6,7 +6,7 @@ thread debugging
 #define DebugTool_hpp
 
 #include <iostream>
-#include "pdlSettings.hpp"
+#include "Settings.hpp"
 
 namespace pedal{
 class DebugTool{
@@ -22,7 +22,7 @@ class DebugTool{
   }
   template <class T>
   void printOncePerBuffer(T whatToPrint){
-    frameCount = frameCount % pdlSettings::bufferSize;
+    frameCount = frameCount % Settings::bufferSize;
     if(frameCount == 0){
       std::cout << whatToPrint << std::endl;
     }

@@ -57,7 +57,7 @@ void FDNReverb::setReverbTime(float timeDC,float timeNyquist){
   dCReverbTimeInSamples = std::max(msToSamples(timeDC), 0.0f);
   nyquistReverbTimeInSamples = std::max(msToSamples(timeNyquist), 0.0f);
   
-  float shortestDelay = roomSize / (343.0f * (1.0f/pdlSettings::sampleRate));
+  float shortestDelay = roomSize / (343.0f * (1.0f/Settings::sampleRate));
   //set the delay of each node to the nearest co-prime spread linearly from the minimal
   //size to 1.5 x the minimal size
   for(int i = 0; i < N; i++){

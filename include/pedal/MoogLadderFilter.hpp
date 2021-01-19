@@ -34,7 +34,7 @@
 #include "pdlConstants.hpp"
 #include <cmath>
 
-#include "pedal/pdlSettings.hpp"
+#include "pedal/Settings.hpp"
 #include "pedal/utilities.hpp"
 
 #define NUM_SUB_FILTERS 4

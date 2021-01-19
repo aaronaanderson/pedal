@@ -4,8 +4,8 @@ using namespace pedal;
 
 //Sine Table=====================================================
 SquareTable::SquareTable(){//when it is time to build a table (constructor)
-  nyquist = (float)pdlSettings::sampleRate * 0.5f;
-  fundamentalFrequency = (float)pdlSettings::sampleRate/float(TABLESIZE - 1);
+  nyquist = (float)Settings::sampleRate * 0.5f;
+  fundamentalFrequency = (float)Settings::sampleRate/float(TABLESIZE - 1);
   lowFrequencyList = new float[NUM_TABLES];//allocate space for this list
   currentLowestFrequency = 20.0f;//20 will be considered the lowest frequency;
   for(int i = 0; i < NUM_TABLES; i++){//for each table 

@@ -1,7 +1,7 @@
 #ifndef ImpulseGenerator_hpp
 #define ImpulseGenerator_hpp
 
-#include "pdlSettings.hpp"
+#include "Settings.hpp"
 #include "utilities.hpp"
 #include <cmath>
 

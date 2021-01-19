@@ -3,7 +3,7 @@
 
 #include "CircularBuffer.hpp"//Circular Buffers are ideal for delay
 #include "BufferTap.hpp"//an automated buffer lookup for CircularBuffer
-#include "pdlSettings.hpp"//access to pdlSettings::bufferSize
+#include "Settings.hpp"//access to Settings::bufferSize
 
 namespace pedal{
 class Delay{

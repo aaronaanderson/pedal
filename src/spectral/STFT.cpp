@@ -148,7 +148,7 @@ float STFT::getBinPhase(int whichBin){
   return std::arg(bin);
 }
 float STFT::getBinFrequency(int whichBin){
-  float binBandwidth = pdlSettings::sampleRate / static_cast<float>(windowSize);
+  float binBandwidth = Settings::sampleRate / static_cast<float>(windowSize);
   float halfBandwidth = binBandwidth * 0.5f;
   return binBandwidth * whichBin + halfBandwidth;
 }

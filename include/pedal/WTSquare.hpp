@@ -2,7 +2,7 @@
 #define WTSquare_hpp
 
 #include <iostream>
-#include "pdlSettings.hpp"
+#include "Settings.hpp"
 #include "pdlConstants.hpp"
 #include <cmath>
 #include "Interpolation.hpp"
@@ -16,7 +16,7 @@ class SquareTable{
   static SquareTable* instance;//store a pointer to an instance of the table
   //The next value is simply 'what frequency would be played if 1 sample of 
   //of the table was played per 1 sample of the audio out.
-  float fundamentalFrequency = (float)pdlSettings::sampleRate/float(TABLESIZE);
+  float fundamentalFrequency = (float)Settings::sampleRate/float(TABLESIZE);
   SquareTable();//constructor is private, which is unusual 
   ~SquareTable();
   void normalizeTables();//bring tables a range to -1 to 1

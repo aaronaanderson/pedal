@@ -49,8 +49,8 @@ float VOSIM::generateSample(){
       changed = true;
     }
     if(changed){
-      maxOscillationsPerPeriod = (pdlSettings::sampleRate/frequency) / 
-                                 (pdlSettings::sampleRate/(formantFrequency * pedal::PI));
+      maxOscillationsPerPeriod = (Settings::sampleRate/frequency) / 
+                                 (Settings::sampleRate/(formantFrequency * pedal::PI));
     }
   }
   return currentSample;
@@ -61,9 +61,9 @@ void VOSIM::setFrequency(float newFrequency){
 void VOSIM::updateFrequency(){
   //how many samples long is the full waveform?
   frequency = nextFrequency;
-  periodPhaseIncrement = (frequency / pdlSettings::sampleRate);
-  maxOscillationsPerPeriod = (pdlSettings::sampleRate/frequency) / 
-                             (pdlSettings::sampleRate/(formantFrequency * pedal::PI));
+  periodPhaseIncrement = (frequency / Settings::sampleRate);
+  maxOscillationsPerPeriod = (Settings::sampleRate/frequency) / 
+                             (Settings::sampleRate/(formantFrequency * pedal::PI));
 }
 void VOSIM::setFormantFrequency(float newFormantFrequency){
   nextFormantFrequency = std::max(newFormantFrequency, 0.0f);
@@ -71,7 +71,7 @@ void VOSIM::setFormantFrequency(float newFormantFrequency){
 void VOSIM::updateFormantFrequency(){
   formantFrequency = nextFormantFrequency;
   oscillationPhaseIncrement = ((formantFrequency * pedal::PI) / 
-                              pdlSettings::sampleRate);
+                              Settings::sampleRate);
 
 }
 void VOSIM::setDecayFactor(float newDecayFactor){

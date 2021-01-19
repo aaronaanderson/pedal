@@ -3,7 +3,7 @@
 
 #include "pdlConstants.hpp"
 #include <cmath> 
-#include "pdlSettings.hpp"//so we can access sampleRate and bufferSize
+#include "Settings.hpp"//so we can access sampleRate and bufferSize
 
 namespace pedal{
 class Phasor{//Pedal Trivial Sine Oscillator

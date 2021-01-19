@@ -32,7 +32,7 @@ float Phasor::generateSample(){//DANGER, returns range 0 to TWOPI; do not output
 //=========================================================
 void Phasor::setFrequency(float newFrequency){
   frequency = newFrequency;
-  phaseIncrement = (frequency * pedal::TWOPI)/pdlSettings::sampleRate;
+  phaseIncrement = (frequency * pedal::TWOPI)/Settings::sampleRate;
 }
 void Phasor::setPhase(float newPhase){//set phase (0 - 2PI)
   //convert the standard 0-2PI range to -1 to 1 to make calculations cheap

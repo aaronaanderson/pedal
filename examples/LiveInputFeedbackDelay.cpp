@@ -1,7 +1,7 @@
 #include "example_app.hpp"//include functionality of a basic app
 
 //include class if using
-#include "pedal/pdlSettings.hpp"
+#include "pedal/Settings.hpp"
 #include "pedal/Delay.hpp"
 #include "pedal/utilities.hpp"
 
@@ -36,15 +36,15 @@ int main() {
   if (!app) {//if app doesn't succesfully allocate
     return 1;//cancel program, return 1
   }
-  pdlSettings::sampleRate = getSampleRate(app);
-  pdlSettings::bufferSize = getBufferSize(app);
+  Settings::sampleRate = getSampleRate(app);
+  Settings::bufferSize = getBufferSize(app);
   delayTime.setTime(500.0f);
   // Add your GUI elements here
   app::addSlider(app, 0, "feedback", 0.0f, 0.99f, 0.4f);
   app::addSlider(app, 1, "delay time(ms)", 0.0f, 2000.0f, 500.0f);
   //begin the app--------
   app::startApp(app);
-  //pdlSettings::sampleRate = app->sampling_rate;
+  //Settings::sampleRate = app->sampling_rate;
   while (app::shouldContinue(app)) {//run forever
     app::update(app);//run the application
   }

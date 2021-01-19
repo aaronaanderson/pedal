@@ -36,7 +36,7 @@ float TSine::generateSample(float inputPhase){//generate and return single sampl
 //=========================================================
 void TSine::setFrequency(float newFrequency){
   frequency = newFrequency;
-  phaseIncrement = (frequency * pedal::TWOPI)/pdlSettings::sampleRate;//*see notes on bottom
+  phaseIncrement = (frequency * pedal::TWOPI)/Settings::sampleRate;//*see notes on bottom
 }
 void TSine::setPhase(float newPhase){phase = newPhase;}
 void TSine::setAmplitude(float newAmplitude){amplitude = newAmplitude;}

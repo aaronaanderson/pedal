@@ -32,9 +32,9 @@ void BLIT::setNumberOfHarmonics(float newNumberOfHarmonics){
 }
 void BLIT::setFrequency(float newFrequency){
   frequency = newFrequency;
-  phaseIncrement = (0.5f * pedal::PI * frequency) / pdlSettings::sampleRate;
+  phaseIncrement = (0.5f * pedal::PI * frequency) / Settings::sampleRate;
   if(syncHarmonicsWithFrequency){
-    setNumberOfHarmonics(std::floor((pdlSettings::sampleRate*0.5f)/frequency));
+    setNumberOfHarmonics(std::floor((Settings::sampleRate*0.5f)/frequency));
     std::cout << numberOfHarmonics << std::endl;
   }
 
