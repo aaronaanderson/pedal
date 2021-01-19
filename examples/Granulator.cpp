@@ -5,10 +5,8 @@
 
 #include "example_app.hpp"
 
-
 #include <iostream>
 #include <vector>
-
 
 #include "pedal/Window.hpp"
 #include "pedal/Buffer.hpp"
