@@ -1,4 +1,4 @@
-#include "example_app.hpp"//include functionality of a basic app
+#include "exampleAppSource/example_app.hpp"//include functionality of a basic app
 
 //include class if using
 #include "pedal/Settings.hpp"

@@ -1,4 +1,4 @@
-#include "example_app.hpp"
+#include "exampleAppSource/example_app.hpp"
 #include <iostream>
 
 #include "pedal/STFT.hpp"

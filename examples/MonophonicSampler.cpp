@@ -9,7 +9,7 @@
 // Aaron Anderson, Oct 2020
 */
 
-#include "example_app.hpp"
+#include "exampleAppSource/example_app.hpp"
 #include <iostream>
 
 #include "pedal/MIDIEvent.hpp"

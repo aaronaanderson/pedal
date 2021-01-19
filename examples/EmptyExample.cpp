@@ -3,7 +3,7 @@
 // limited example app framework
 */
 
-#include "example_app.hpp"
+#include "exampleAppSource/example_app.hpp"
 
 //using namespace pedal;
 
