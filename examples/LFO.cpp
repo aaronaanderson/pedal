@@ -2,12 +2,12 @@
 #include <iostream>
 
 #include "pedal/LowFrequencyOscillator.hpp"
-#include "pedal/WTrivialSaw.hpp"
+#include "pedal/WaveTableSaw.hpp"
 #include "pedal/MoogLadderFilter.hpp"
 
 using namespace pedal;
 
-WTrivialSaw saw;
+WaveTableSaw saw;
 MoogLadderFilter filter;
 LowFrequencyOscillator lfo;
 SmoothValue<float> frequency;

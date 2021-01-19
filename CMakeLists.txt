@@ -11,10 +11,10 @@ add_library(pedal STATIC
     src/generators/oscillators/TrivialTriangle.cpp
     src/generators/oscillators/TrivialSquare.cpp 
     src/generators/oscillators/Phasor.cpp
-    src/generators/oscillators/WTrivialSine.cpp
-    src/generators/oscillators/WTrivialSaw.cpp
-    src/generators/oscillators/WTrivialTriangle.cpp
-    src/generators/oscillators/WTrivialSquare.cpp
+    src/generators/oscillators/WaveTableSine.cpp
+    src/generators/oscillators/WaveTableSaw.cpp
+    src/generators/oscillators/WaveTableTriangle.cpp
+    src/generators/oscillators/WaveTableSquare.cpp
     src/generators/ImpulseGenerator.cpp
     src/generators/envelopes/LinearEnvelope.cpp
     src/Buffer.cpp

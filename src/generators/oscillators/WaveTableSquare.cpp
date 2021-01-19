@@ -1,4 +1,4 @@
-#include "pedal/WTrivialSquare.hpp"
+#include "pedal/WaveTableSquare.hpp"
 
 using namespace pedal;
 
@@ -95,20 +95,20 @@ SquareTable* SquareTable::instance = nullptr;
 
 //WaveTableSine==================================================
 //Constructors and Deconstructors=========
-WTrivialSquare::WTrivialSquare(){
+WaveTableSquare::WaveTableSquare(){
   setFrequency(440.0f);
   setPhase(0.0f);
   setAmplitude(1.0f);
 }
-WTrivialSquare::WTrivialSquare(float initialFrequency){
+WaveTableSquare::WaveTableSquare(float initialFrequency){
   setFrequency(initialFrequency);
   setPhase(0.0f);
   setAmplitude(1.0f);
 }
-WTrivialSquare::~WTrivialSquare(){}//when object is deleted
+WaveTableSquare::~WaveTableSquare(){}//when object is deleted
 
 //Basic Functionallity of class==========
-float WTrivialSquare::generateSample(){
+float WaveTableSquare::generateSample(){
   float** table = instance->getTable();
   // store which tables will be used (y axis of 2D array)
   const int lowTableIndex = (int)currentTable;
@@ -131,7 +131,7 @@ float WTrivialSquare::generateSample(){
   return currentSample;//return results
 }
 
-float WTrivialSquare::whichTable(float testFrequency){//essentially the Y value of a 2D array
+float WaveTableSquare::whichTable(float testFrequency){//essentially the Y value of a 2D array
   float* frequencyList = instance->getLowFrequencyList();//get the list of table frequencies
   //boundry check
   if(testFrequency > frequencyList[NUM_TABLES-1]){//if the frequency is > than the highest table
@@ -153,20 +153,20 @@ float WTrivialSquare::whichTable(float testFrequency){//essentially the Y value 
   return 0;//windows compilers force this to be here
 }
 //Getters and Setters==================
-void WTrivialSquare::setFrequency(float newFrequency){
+void WaveTableSquare::setFrequency(float newFrequency){
   frequency = newFrequency;
   currentTable = whichTable(frequency);
   phaseIncrement = frequency/float(instance->getFundamentalFrequency());
 }
-void WTrivialSquare::setPhase(float newPhase){//expecting 0-TWO_PI
+void WaveTableSquare::setPhase(float newPhase){//expecting 0-TWO_PI
   phase = std::fmod(std::fabs(newPhase), pedal::TWOPI);//wrap to 0 -TWO_PI
   float scalar = instance->getTableSize()/pedal::TWOPI;
   phase = phase * scalar;//map 0-TWO_PI to 0 - tablSize
 }
-void WTrivialSquare::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
-float WTrivialSquare::getFrequency(){return frequency;}
-float WTrivialSquare::getPhase(){
+void WaveTableSquare::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
+float WaveTableSquare::getFrequency(){return frequency;}
+float WaveTableSquare::getPhase(){
   return (phase * pedal::TWOPI)/float(instance->getTableSize());
 }
-float WTrivialSquare::getAmplitude(){return amplitude;}
-float WTrivialSquare::getSample(){return currentSample;}
+float WaveTableSquare::getAmplitude(){return amplitude;}
+float WaveTableSquare::getSample(){return currentSample;}

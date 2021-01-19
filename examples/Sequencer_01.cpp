@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include <vector>
-#include "pedal/WTrivialSaw.hpp"
+#include "pedal/WaveTableSaw.hpp"
 #include "pedal/MoogLadderFilter.hpp"
 #include "pedal/utilities.hpp"
 #include "pedal/Counter.hpp"
@@ -19,7 +19,7 @@ EdgeDetector edgeDetector;
 
 std::vector<int> sequence = {40, 42, 44, 45, 47, 49, 51, 52};
 Counter counter(sequence.size());
-WTrivialSaw saw;
+WaveTableSaw saw;
 CurvedEnvelope envelope;
 
 SmoothValue<float> outputVolume;

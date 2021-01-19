@@ -1,4 +1,4 @@
-#include "pedal/WTrivialTriangle.hpp"
+#include "pedal/WaveTableTriangle.hpp"
 
 using namespace pedal;
 
@@ -95,20 +95,20 @@ TriangleTable* TriangleTable::instance = nullptr;
 
 //WaveTableSine==================================================
 //Constructors and Deconstructors=========
-WTrivialTriangle::WTrivialTriangle(){
+WaveTableTriangle::WaveTableTriangle(){
   setFrequency(440.0f);
   setPhase(0.0f);
   setAmplitude(1.0f);
 }
-WTrivialTriangle::WTrivialTriangle(float initialFrequency){
+WaveTableTriangle::WaveTableTriangle(float initialFrequency){
   setFrequency(initialFrequency);
   setPhase(0.0f);
   setAmplitude(1.0f);
 }
-WTrivialTriangle::~WTrivialTriangle(){}//when object is deleted
+WaveTableTriangle::~WaveTableTriangle(){}//when object is deleted
 
 //Basic Functionallity of class==========
-float WTrivialTriangle::generateSample(){
+float WaveTableTriangle::generateSample(){
   float** table = instance->getTable();
   // store which tables will be used (y axis of 2D array)
   const int lowTableIndex = (int)currentTable;
@@ -131,7 +131,7 @@ float WTrivialTriangle::generateSample(){
   return currentSample;//return results
 }
 
-float WTrivialTriangle::whichTable(float testFrequency){//essentially the Y value of a 2D array
+float WaveTableTriangle::whichTable(float testFrequency){//essentially the Y value of a 2D array
   float* frequencyList = instance->getLowFrequencyList();//get the list of table frequencies
   //boundry check
   if(testFrequency > frequencyList[NUM_TABLES-1]){//if the frequency is > than the highest table
@@ -153,20 +153,20 @@ float WTrivialTriangle::whichTable(float testFrequency){//essentially the Y valu
   return 0;//windows compilers force this to be here
 }
 //Getters and Setters==================
-void WTrivialTriangle::setFrequency(float newFrequency){
+void WaveTableTriangle::setFrequency(float newFrequency){
   frequency = newFrequency;
   currentTable = whichTable(frequency);
   phaseIncrement = frequency/float(instance->getFundamentalFrequency());
 }
-void WTrivialTriangle::setPhase(float newPhase){//expecting 0-TWO_PI
+void WaveTableTriangle::setPhase(float newPhase){//expecting 0-TWO_PI
   phase = std::fmod(std::fabs(newPhase), pedal::TWOPI);//wrap to 0 -TWO_PI
   float scalar = instance->getTableSize()/pedal::TWOPI;
   phase = phase * scalar;//map 0-TWO_PI to 0 - tablSize
 }
-void WTrivialTriangle::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
-float WTrivialTriangle::getFrequency(){return frequency;}
-float WTrivialTriangle::getPhase(){
+void WaveTableTriangle::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
+float WaveTableTriangle::getFrequency(){return frequency;}
+float WaveTableTriangle::getPhase(){
   return (phase * pedal::TWOPI)/float(instance->getTableSize());
 }
-float WTrivialTriangle::getAmplitude(){return amplitude;}
-float WTrivialTriangle::getSample(){return currentSample;}
+float WaveTableTriangle::getAmplitude(){return amplitude;}
+float WaveTableTriangle::getSample(){return currentSample;}

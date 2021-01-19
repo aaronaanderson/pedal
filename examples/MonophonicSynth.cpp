@@ -19,13 +19,13 @@
 
 #include "pedal/MIDIEvent.hpp"
 #include "pedal/CurvedEnvelope.hpp"
-#include "pedal/WTrivialSquare.hpp"
+#include "pedal/WaveTableSquare.hpp"
 #include "pedal/utilities.hpp"
 #include "pedal/MoogLadderFilter.hpp"
 
 using namespace pedal;
 
-WTrivialSquare squareOscillator;
+WaveTableSquare squareOscillator;
 CurvedEnvelope amplitudeEnvelope;
 CurvedEnvelope filterEnvelope;
 SmoothValue<float> frequency;

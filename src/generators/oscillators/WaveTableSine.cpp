@@ -1,4 +1,4 @@
-#include "pedal/WTrivialSine.hpp"
+#include "pedal/WaveTableSine.hpp"
 
 using namespace pedal;
 
@@ -39,19 +39,19 @@ SineTable* SineTable::instance = nullptr;
 
 //WaveTableSine==================================================
 
-WTrivialSine::WTrivialSine(){
+WaveTableSine::WaveTableSine(){
   setFrequency(440.0f);
   setPhase(0.0f);
   setAmplitude(1.0f);
 }
-WTrivialSine::WTrivialSine(float initialFrequency){
+WaveTableSine::WaveTableSine(float initialFrequency){
   setFrequency(initialFrequency);
   setPhase(0.0f);
   setAmplitude(1.0f);
 }
-WTrivialSine::~WTrivialSine(){}//when object is deleted
+WaveTableSine::~WaveTableSine(){}//when object is deleted
 
-float WTrivialSine::generateSample(){
+float WaveTableSine::generateSample(){
   //interpolate between the prvious and next stored value
   float* table = sineTable->getTable();
   currentSample = linearInterpolation(phase,
@@ -65,22 +65,22 @@ float WTrivialSine::generateSample(){
   return currentSample;//return results
 }
 
-void WTrivialSine::setFrequency(float newFrequency){
+void WaveTableSine::setFrequency(float newFrequency){
   frequency = newFrequency;
   phaseIncrement = frequency/float(sineTable->getFundamentalFrequency());
 }
-void WTrivialSine::setPhase(float newPhase){//expecting 0-TWO_PI
+void WaveTableSine::setPhase(float newPhase){//expecting 0-TWO_PI
   phase = std::fmod(std::fabs(newPhase), pedal::TWOPI);//wrap to 0 -TWO_PI
   float scalar = sineTable->getTableSize()/pedal::TWOPI;
   phase = phase * scalar;//map 0-TWO_PI to 0 - tablSize
 }
-void WTrivialSine::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
+void WaveTableSine::setAmplitude(float newAmplitude){amplitude = newAmplitude;}
 
-float WTrivialSine::getFrequency(){return frequency;}
-float WTrivialSine::getPhase(){
+float WaveTableSine::getFrequency(){return frequency;}
+float WaveTableSine::getPhase(){
   return (phase * pedal::TWOPI)/float(sineTable->getTableSize());
 }
-float WTrivialSine::getAmplitude(){return amplitude;}
-float WTrivialSine::getSample(){return currentSample;}
+float WaveTableSine::getAmplitude(){return amplitude;}
+float WaveTableSine::getSample(){return currentSample;}
 
 
