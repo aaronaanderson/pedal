@@ -1,5 +1,5 @@
-#ifndef CREnvelope_hpp
-#define CREnvelope_hpp
+#ifndef CurvedEnvelope_hpp
+#define CurvedEnvelope_hpp
 
 #include <cmath>
 #include <algorithm>
@@ -19,9 +19,9 @@ struct CurvedSegment{
   float offset;
 };
 
-class CREnvelope{
+class CurvedEnvelope{
   public:
-  CREnvelope();
+  CurvedEnvelope();
   float generateSample();
   void setTrigger(bool newTrigger);
   enum class Mode{
@@ -65,21 +65,21 @@ class CREnvelope{
   DebugTool debugTool;
 };
 
-inline void CREnvelope::calculateAttackCurve(float newAttackTime){
+inline void CurvedEnvelope::calculateAttackCurve(float newAttackTime){
   attack.timeInSamples = Settings::sampleRate * newAttackTime * 0.001f;
   attack.curveCoefficient = std::exp(attack.curveOffset/
                                     attack.timeInSamples);
   attack.offset = (1.0f + attack.curveOvershoot) * 
                  (1.0f - attack.curveCoefficient);
 }
-inline void CREnvelope::calculateDecayCurve(float newDecayTime){
+inline void CurvedEnvelope::calculateDecayCurve(float newDecayTime){
   decay.timeInSamples = Settings::sampleRate * newDecayTime * 0.001f;
   decay.curveCoefficient = std::exp(decay.curveOffset/ 
                                    decay.timeInSamples);
   decay.offset = (sustainLevel - decay.curveOvershoot) *
                 (1.0f - decay.curveCoefficient);
 }
-inline void CREnvelope::calculateReleaseCurve(float newReleaseTime){
+inline void CurvedEnvelope::calculateReleaseCurve(float newReleaseTime){
   release.timeInSamples = Settings::sampleRate * newReleaseTime * 0.001f;
   release.curveCoefficient = std::exp(release.curveOffset/
                                      release.timeInSamples);

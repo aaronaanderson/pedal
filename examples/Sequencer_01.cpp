@@ -8,7 +8,7 @@
 #include "pedal/Counter.hpp"
 #include "pedal/Phasor.hpp"
 #include "pedal/EdgeDetector.hpp"
-#include "pedal/CREnvelope.hpp"
+#include "pedal/CurvedEnvelope.hpp"
 
 using namespace pedal;
 
@@ -20,7 +20,7 @@ EdgeDetector edgeDetector;
 std::vector<int> sequence = {40, 42, 44, 45, 47, 49, 51, 52};
 Counter counter(sequence.size());
 WTSaw saw;
-CREnvelope envelope;
+CurvedEnvelope envelope;
 
 SmoothValue<float> outputVolume;
 
@@ -49,7 +49,7 @@ int main(){
   //Create the application (an audio callback is required here)
   app::PedalExampleApp* app = app::pdlInitializeExampleApp(audioCallback, Settings::sampleRate, Settings::bufferSize);
   saw.setFrequency(30.0f);
-  envelope.setMode(CREnvelope::Mode::AR);
+  envelope.setMode(CurvedEnvelope::Mode::AR);
   envelope.setAttackTime(35.0f);
   envelope.setDecayTime(150.0f);
   

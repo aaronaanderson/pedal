@@ -18,7 +18,7 @@
 #include <iostream>
 
 #include "pedal/MIDIEvent.hpp"
-#include "pedal/CREnvelope.hpp"
+#include "pedal/CurvedEnvelope.hpp"
 #include "pedal/WTSquare.hpp"
 #include "pedal/utilities.hpp"
 #include "pedal/MoogLadderFilter.hpp"
@@ -26,8 +26,8 @@
 using namespace pedal;
 
 WTSquare squareOscillator;
-CREnvelope amplitudeEnvelope;
-CREnvelope filterEnvelope;
+CurvedEnvelope amplitudeEnvelope;
+CurvedEnvelope filterEnvelope;
 SmoothValue<float> frequency;
 SmoothValue<float> amplitude;
 MoogLadderFilter ladderFilter;
@@ -117,13 +117,13 @@ int main(){
   
   //I'm going to set these and forget them (but please, explore changing these settings!)
   //This is just the final output amplitude envelope
-  amplitudeEnvelope.setMode(CREnvelope::Mode::ADSR);
+  amplitudeEnvelope.setMode(CurvedEnvelope::Mode::ADSR);
   amplitudeEnvelope.setAttackTime(100.0f);
   amplitudeEnvelope.setDecayTime(40.0f);
   amplitudeEnvelope.setSustainLevel(0.7f);
   amplitudeEnvelope.setReleaseTime(2000.0f);
   //A second envelope will control the filter frequency. This gives each note a bit more variety.
-  filterEnvelope.setMode(CREnvelope::Mode::ADSR);
+  filterEnvelope.setMode(CurvedEnvelope::Mode::ADSR);
   filterEnvelope.setAttackTime(250.0f);
   filterEnvelope.setDecayTime(500.0f);
   filterEnvelope.setSustainLevel(0.5f);

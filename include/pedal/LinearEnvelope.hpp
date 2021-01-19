@@ -1,17 +1,17 @@
-#ifndef CTEnvelope_hpp
-#define CTEnvelope_hpp
+#ifndef LinearEnvelope_hpp
+#define LinearEnvelope_hpp
 
 #include <cmath>//for fmin and fmax
 #include "Settings.hpp"//so we can access sampleRate and bufferSize
 #include "utilities.hpp"// for clamp 
 
 namespace pedal{
-class CTEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
+class LinearEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   public:
-  CTEnvelope();//default constructor
+  LinearEnvelope();//default constructor
   //best to have a standard ADSR as an overload constructor
-  CTEnvelope(float initialAttack, float initialDecay, float initialSustain, float initialRelease);
-  ~CTEnvelope();//deconstructor, used to clear memory if allocated
+  LinearEnvelope(float initialAttack, float initialDecay, float initialSustain, float initialRelease);
+  ~LinearEnvelope();//deconstructor, used to clear memory if allocated
   
   enum class Mode {
     ADSR=0, 

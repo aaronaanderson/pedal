@@ -16,7 +16,7 @@ add_library(pedal STATIC
     src/generators/oscillators/WTTriangle.cpp
     src/generators/oscillators/WTSquare.cpp
     src/generators/ImpulseGenerator.cpp
-    src/generators/envelopes/CTEnvelope.cpp
+    src/generators/envelopes/LinearEnvelope.cpp
     src/Buffer.cpp
     src/CircularBuffer.cpp
     src/modifiers/delay/Delay.cpp
@@ -40,7 +40,7 @@ add_library(pedal STATIC
     src/modifiers/dynamic/Compressor.cpp
     src/modifiers/dynamic/Gate.cpp
     src/spectral/STFT.cpp
-    src/generators/envelopes/CREnvelope.cpp
+    src/generators/envelopes/CurvedEnvelope.cpp
     src/generators/oscillators/BLIT.cpp
     src/generators/Window.cpp
     src/utilities/MicroBenchmark.cpp

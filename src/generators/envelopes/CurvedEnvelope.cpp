@@ -1,8 +1,8 @@
-#include "pedal/CREnvelope.hpp"
+#include "pedal/CurvedEnvelope.hpp"
 
 using namespace pedal;
 
-CREnvelope::CREnvelope(){
+CurvedEnvelope::CurvedEnvelope(){
   //offset to get the more linear part of the curve
   attack.curveOvershoot = std::exp(-1.5);
   //attackCurveOvershoot = 0.9999f;//try this
@@ -24,7 +24,7 @@ CREnvelope::CREnvelope(){
   trigger = false;
   holdSampleCount = 0;
 }
-float CREnvelope::generateSample(){
+float CurvedEnvelope::generateSample(){
   switch(currentMode){
     case Mode::ADSR://Attack, Decay, Sustain, Release
       switch(currentState){
@@ -147,7 +147,7 @@ float CREnvelope::generateSample(){
   }
   return currentSample;
 }
-void CREnvelope::setTrigger(bool newTrigger){
+void CurvedEnvelope::setTrigger(bool newTrigger){
   //re-trigger if last trigger was false, but new trigger is true
   if(newTrigger == true && trigger == false){
     currentState = ATTACK;
@@ -163,36 +163,36 @@ void CREnvelope::setTrigger(bool newTrigger){
     trigger = newTrigger;
   }
 }
-void CREnvelope::setMode(Mode newMode){currentMode = newMode;}
-void CREnvelope::setAttackTime(float newAttackTime){
+void CurvedEnvelope::setMode(Mode newMode){currentMode = newMode;}
+void CurvedEnvelope::setAttackTime(float newAttackTime){
   attack.timeInMS = std::max(newAttackTime, 0.0f);
   calculateAttackCurve(attack.timeInMS);
 }
-void CREnvelope::setDecayTime(float newDecayTime){
+void CurvedEnvelope::setDecayTime(float newDecayTime){
   decay.timeInMS = std::max(newDecayTime, 0.0f);
   calculateDecayCurve(decay.timeInMS);
 }
-void CREnvelope::setSustainLevel(float newSustainLevel){
+void CurvedEnvelope::setSustainLevel(float newSustainLevel){
   sustainLevel = clamp(newSustainLevel, 0.0f, 1.0f);
   calculateDecayCurve(decay.timeInMS);
 }
-void CREnvelope::setReleaseTime(float newReleaseTime){
+void CurvedEnvelope::setReleaseTime(float newReleaseTime){
   release.timeInMS = std::max(newReleaseTime, 0.0f);
   calculateReleaseCurve(release.timeInMS);
 }
-void CREnvelope::setHoldTime(float newHoldTime){
+void CurvedEnvelope::setHoldTime(float newHoldTime){
   holdTimeInMS = std::max(newHoldTime, 0.0f);
   holdTimeInSamples = msToSamples(holdTimeInMS);
 }
 
-float CREnvelope::getSample(){return currentState;}
-CREnvelope::Mode CREnvelope::getCurrentMode(){return currentMode;}
-float CREnvelope::getAttackTime(){return attack.timeInMS;}
-float CREnvelope::getDecayTime(){return decay.timeInMS;}
-float CREnvelope::getSustainLevel(){return sustainLevel;}
-float CREnvelope::getReleaseTime(){return release.timeInMS;}
-bool CREnvelope::getTrigger(){return trigger;}
-bool CREnvelope::isBusy(){
+float CurvedEnvelope::getSample(){return currentState;}
+CurvedEnvelope::Mode CurvedEnvelope::getCurrentMode(){return currentMode;}
+float CurvedEnvelope::getAttackTime(){return attack.timeInMS;}
+float CurvedEnvelope::getDecayTime(){return decay.timeInMS;}
+float CurvedEnvelope::getSustainLevel(){return sustainLevel;}
+float CurvedEnvelope::getReleaseTime(){return release.timeInMS;}
+bool CurvedEnvelope::getTrigger(){return trigger;}
+bool CurvedEnvelope::isBusy(){
   if(currentState = OFF){
     return false;
   }
