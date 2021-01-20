@@ -88,12 +88,12 @@ set(example_list
 foreach(example ${example_list})
     add_executable(${example} "${example}.cpp")
     set_target_properties(${example} PROPERTIES
-        DEBUG_POSTFIX d
+        DEBUG_POSTFIX _DEBUG
         CXX_STANDARD 17
         CXX_STANDARD_REQUIRED ON
-        RUNTIME_OUTPUT_DIRECTORY bin
-        RUNTIME_OUTPUT_DIRECTORY_DEBUG bin
-        RUNTIME_OUTPUT_DIRECTORY_RELEASE bin
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ExampleBuilds
+        RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/ExampleBuilds
+        RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/ExampleBuilds
     )
     target_link_libraries(${example} PRIVATE pedal example_app)
 endforeach()

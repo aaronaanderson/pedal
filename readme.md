@@ -12,27 +12,60 @@ Performance: Clear code need not be slow, it usually just takes longer to write.
 
 Programming audio in C++ can open a tremendous amount of opportunities; I hope Pedal will bring these opportunities to more people.
 
-## BUILDING
+## **BUILDING**
 
- cmake -G ${GENERATOR} -A ${PLATFORM} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -S ${PEDAL_DIR} -B ${BUILD_DIR}
 
-For options, check https://cmake.org/cmake/help/latest/manual/cmake.1.html#options
+Pedal uses a CMake build system. If you do not have CMake, follow instructions here: https://cmake.org/install/ 
 
-For generators, check https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html
+### **Linux and MacOS**
 
-Examples
-   Assumes running command from Pedal root directory with build folder named 'build' inside the root directory
-Linux/MacOS + Make:
+Use the terminal to clone pedal
 
-```cmake
-cmake -DCMAKE_BUILD_TYPE=Debug -S . -B build
+```terminal
+git clone https://github.com/aaronaanderson/pedal.git
 ```
 
-Default generator is Make for both Linux and MacOS so can be skipped
-Windows + Visual Studio 2017 64 bit:
+By default cmake will generate Makefiles for Linux and MacOS. 
 
-```cmake
-cmake -G Visual Studio 15 2017 -A x64 -S . -B build
+```terminal 
+cd pedal
+mkdir build 
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make
+```
+In these calls, we have changed directory to pedal, made a build folder, called cmake from that build folder, and then called make to execute the make files. 
+
+### **Windows**
+
+
+After installing cmake, Install Git Bash if you do not have it: https://gitforwindows.org/
+
+Use Git Bash to clone pedal
+
+```terminal
+git clone https://github.com/aaronaanderson/pedal.git
 ```
 
-Build type will be selected in Visual Studio so the option is not needed
+Add a build folder for CMake's generated content
+
+```terminal
+cd pedal
+mkdir build
+cd build
+```
+
+If you do not have Visual Studio, get it here: https://visualstudio.microsoft.com/vs/
+
+Assuming you are using Visual Studio 2019, run this cmake command in pedal's newly created build folder
+
+```terminal 
+cmake -G "Visual Studio 16 2019" -A x64 ..
+```
+
+This will generate Visual Studio project files. You can open these files, and build from there.
+
+
+## **Examples**
+
+Examples are built by default when pedal is compiled. These builds will be located in the pedal/examples/ExampleBuilds directory
