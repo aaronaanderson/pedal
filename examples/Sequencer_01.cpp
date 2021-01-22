@@ -48,7 +48,7 @@ void audioCallback(float* output, float* input, int bufferSize, int inputChannel
 
 int main(){
   //Create the application (an audio callback is required here)
-  app::PedalExampleApp* app = app::pdlInitializeExampleApp(audioCallback, Settings::sampleRate, Settings::bufferSize);
+  app::PedalExampleApp* app = app::initializeExampleApp(audioCallback, Settings::sampleRate, Settings::bufferSize);
   saw.setFrequency(30.0f);
   envelope.setMode(CurvedEnvelope::Mode::AR);
   envelope.setAttackTime(35.0f);

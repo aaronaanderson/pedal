@@ -4,8 +4,9 @@
 */
 
 #include "exampleAppSource/example_app.hpp"
+#include "pedal/Settings.hpp"
 
-//using namespace pedal;
+using namespace pedal;
 
 void midiCallback(double deltaTime, std::vector<unsigned char>* message, app::PedalExampleApp* app){
     //This will be called whenver a midi message is received.
@@ -44,7 +45,7 @@ void audioCallback(float* output, float* input, int bufferSize, int inputChannel
 
 int main(){
     //Create the application (an audio callback is required here)
-    app::PedalExampleApp* app = app::pdlInitializeExampleApp(audioCallback);
+    app::PedalExampleApp* app = app::initializeExampleApp(audioCallback, Settings::sampleRate, Settings::bufferSize);
     //If using a qwerty keyboard callback, add it
     app::setKeyboardCallback(keyboardCallback);
     //If using a MIDI input callback, add it

@@ -17,7 +17,7 @@ using pdlExampleMidiInputCallback = void (*)(double deltatime,
                                              std::vector< unsigned char >* message,
                                              PedalExampleApp* app);
 
-PedalExampleApp* pdlInitializeExampleApp(pdlExampleAudioCallback, int sampleRate = 48000, int bufferSize = 512);
+PedalExampleApp* initializeExampleApp(pdlExampleAudioCallback, int sampleRate = 48000, int bufferSize = 512);
 
 void openMidiPort(PedalExampleApp* app, int port);
 void startApp(PedalExampleApp* app);
@@ -31,7 +31,7 @@ void setKeyboardCallback(void (*)(int keyPressed, bool keyDown));
 unsigned getSampleRate(PedalExampleApp* app);
 unsigned getBufferSize(PedalExampleApp* app);
 
-void pdlGetCursorPos(PedalExampleApp* app, float* mx, float* my);
+void getCursorPos(PedalExampleApp* app, float* mx, float* my);
 
 void addSlider(PedalExampleApp* app, int sliderIndex, const char* name,
                   float low, float high, float initialValue);

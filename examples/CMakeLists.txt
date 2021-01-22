@@ -82,6 +82,7 @@ set(example_list
     Convolution
     Granulator
     MoogFilterExample
+    TestRun
 )
 
 # loop through example targets

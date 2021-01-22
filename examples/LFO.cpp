@@ -46,7 +46,7 @@ void audioCallback(float* output, float* input, int bufferSize, int inputChannel
 
 int main(){
   //Create the application (an audio callback is required here)
-  app::PedalExampleApp* app = app::pdlInitializeExampleApp(audioCallback, Settings::sampleRate, Settings::bufferSize);
+  app::PedalExampleApp* app = app::initializeExampleApp(audioCallback, Settings::sampleRate, Settings::bufferSize);
   app::setKeyboardCallback(keyboardCallback);
   saw.setFrequency(30.0f);
   lfo.setOutputRange(60.0f, 2000.0f);

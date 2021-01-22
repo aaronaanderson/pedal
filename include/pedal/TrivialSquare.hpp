@@ -1,7 +1,7 @@
 #ifndef TrivialSquare_hpp
 #define TrivialSquare_hpp
 
-#include "pdlConstants.hpp"
+#include "Constants.hpp"
 #include <cmath> //so we can use sin()
 #include "Settings.hpp"//so we can access sampleRate and bufferSize
 

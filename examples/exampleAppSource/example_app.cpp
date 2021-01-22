@@ -97,15 +97,7 @@ namespace app{
     if ((action == GLFW_PRESS) && (mods & GLFW_MOD_CONTROL) && (key == GLFW_KEY_Q)) {
       glfwSetWindowShouldClose(window, 1);
     }else if(action == GLFW_PRESS && (mods &GLFW_MOD_CONTROL) && (key >= 48) && (key <=57)){// if ctl + number
-      // // ascii number on keyboard is n + 48
-      // int deviceIndex = key - 48;
-      // //check to make sure that it isn't already running
-      // if(getAppPtr()->audio.isStreamOpen())
-      //     getAppPtr()->audio.closeStream();
-      // }
-      // if(deviceIndex < getAppPtr()->audio.getDeviceCount()){
-      //     getAppPtr()->audio.
-      // }
+
     }
     bool keyDown;
     if(action == GLFW_PRESS || action == GLFW_RELEASE){
@@ -118,7 +110,7 @@ namespace app{
 }
 
 using namespace app;
-PedalExampleApp* app::pdlInitializeExampleApp(pdlExampleAudioCallback callback, int sampleRate, int bufferSize) {
+PedalExampleApp* app::initializeExampleApp(pdlExampleAudioCallback callback, int sampleRate, int bufferSize) {
     auto* app = new PedalExampleApp;
     if (!app) {
         std::cerr << "Fail: app creation\n";
@@ -406,7 +398,7 @@ unsigned app::getBufferSize(PedalExampleApp* app){
     return app->buffer_size;
 }
 
-void app::pdlGetCursorPos(PedalExampleApp* app, float* mx, float* my) {
+void app::getCursorPos(PedalExampleApp* app, float* mx, float* my) {
     *mx = app->cursorx.load();
     *my = app->cursory.load();
 }

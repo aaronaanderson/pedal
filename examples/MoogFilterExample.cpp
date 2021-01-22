@@ -47,7 +47,7 @@ void audioCallback(float* output, float* input, int bufferSize, int inputChannel
 
 int main(){
     //Create the application (an audio callback is required here)
-    app::PedalExampleApp* app = app::pdlInitializeExampleApp(audioCallback, 48000, 512);
+    app::PedalExampleApp* app = app::initializeExampleApp(audioCallback, 48000, 512);
     //If using a qwerty keyboard callback, add it
     app::setKeyboardCallback(keyboardCallback);
   

@@ -1,7 +1,7 @@
 #ifndef CombFilter_hpp
 #define CombFilter_hpp
 
-#include "pdlConstants.hpp"
+#include "Constants.hpp"
 #include "CircularBuffer.hpp"//used for delay line
 
 /* Filter Diagram

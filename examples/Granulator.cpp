@@ -64,7 +64,6 @@ void audioCallback(float* output, float* input, int bufferSize, int inputChannel
         for(int i = 0; i < maximumNumberOfGrains; i++){
             if(grainArray[i].window.getActive()){
                 currentSample += grainArray[i].bufferPlayer.update() * grainArray[i].window.generateSample();
-            
             }
         }
         currentSample *= outputGain.process();
@@ -87,7 +86,7 @@ int main(){
         grainArray[i].window.setMode(Window::Mode::HANNING);
     }
     //Create the application (an audio callback is required here)
-    app::PedalExampleApp* app = app::pdlInitializeExampleApp(audioCallback);
+    app::PedalExampleApp* app = app::initializeExampleApp(audioCallback);
     //we need to set the references for all of the bufferPlayers
     app::addSlider(app, 0, "Emission Rate", 0.5f, 40.0f, 20.0f);
     app::addSlider(app, 1, "Grain Duration", 1.0f, 80.0f, 60.0f);

@@ -6,7 +6,7 @@
 //and 'Signals, Systems, and Sound Syntesis' by Neukom pg 324-5
 //as source material
 
-#include "pdlConstants.hpp"
+#include "Constants.hpp"
 #include <cmath>
 #include "pedal/Settings.hpp"
 #include <iostream>

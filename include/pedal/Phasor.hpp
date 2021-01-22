@@ -1,7 +1,7 @@
 #ifndef Phasor_hpp
 #define Phasor_hpp
 
-#include "pdlConstants.hpp"
+#include "Constants.hpp"
 #include <cmath> 
 #include "Settings.hpp"//so we can access sampleRate and bufferSize
 

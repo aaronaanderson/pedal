@@ -33,7 +33,7 @@ void callback(float* output, float* input, int bufferSize, int inputChannels, in
 //======================main loop
 int main() {
   //make an app (a pointer to an app, actually)
-  app::PedalExampleApp* app = app::pdlInitializeExampleApp(callback);
+  app::PedalExampleApp* app = app::initializeExampleApp(callback);
   if (!app) {//if app doesn't succesfully allocate
     return 1;//cancel program, return 1
   }

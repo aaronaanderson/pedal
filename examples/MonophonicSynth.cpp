@@ -100,9 +100,9 @@ void audioCallback(float* output, float* input, int bufferSize, int outputChanne
 }
 
 int main(){
-  //Create the application. pdlInitializeExampleApp requries an audioCallback,
+  //Create the application. initializeExampleApp requries an audioCallback,
   // but the samplerate and buffersize will default if not provided
-  app::PedalExampleApp* app = app::pdlInitializeExampleApp(audioCallback, Settings::sampleRate, Settings::bufferSize);
+  app::PedalExampleApp* app = app::initializeExampleApp(audioCallback, Settings::sampleRate, Settings::bufferSize);
   //optionally, add a qewrty (ascii) keyboard callback
   app::setKeyboardCallback(keyboardCallback);
   //optionally, add a MIDI input callback
