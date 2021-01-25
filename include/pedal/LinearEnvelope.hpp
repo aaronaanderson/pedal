@@ -20,7 +20,6 @@ class LinearEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
   };//3 envelope types
   void setup(float newAttack, float newDecay, float newSustain, float newRelease);
   float generateSample();//calculate and return next sample
-  float* generateBlock();//calculate and return next block of samples
   
   float getAttackTime();
   float getDecayTime();

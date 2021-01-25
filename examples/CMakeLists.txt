@@ -83,6 +83,7 @@ set(example_list
     Granulator
     MoogFilterExample
     TestRun
+    PadSynth
 )
 
 # loop through example targets

@@ -52,6 +52,7 @@ add_library(pedal STATIC
     src/generators/oscillators/BLITSaw.cpp
     src/modifiers/filters/MoogLadderFilter.cpp
     src/generators/oscillators/LowFrequencyOscillator.cpp
+    src/generators/envelopes/NSegmentLinearEnvelope.cpp
     external/AudioFFT.cpp
 )
 
