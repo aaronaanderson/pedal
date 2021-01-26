@@ -51,14 +51,13 @@ add_library(pedal STATIC
     src/generators/VOSIM.cpp
     src/generators/oscillators/BLITSaw.cpp
     src/modifiers/filters/MoogLadderFilter.cpp
-    src/generators/oscillators/LowFrequencyOscillator.cpp
     src/generators/envelopes/NSegmentLinearEnvelope.cpp
     external/AudioFFT.cpp
 )
 
 set_target_properties(pedal PROPERTIES
     DEBUG_POSTFIX d # When debug build, put `d` in the end of the output library file
-    CXX_STANDARD 17 # The compiler should support at least C++14
+    CXX_STANDARD 14 # The compiler should support at least C++14
     CXX_STANDARD_REQUIRED ON # Specified C++ version support is a must
     ARCHIVE_OUTPUT_DIRECTORY lib # Where to put output library file (in general)
     ARCHIVE_OUTPUT_DIRECTORY_DEBUG lib # For debug build

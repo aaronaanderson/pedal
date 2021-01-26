@@ -26,17 +26,25 @@ class NSegmentLinearEnvelope{
   void clearSegments();
   void setTrigger(bool newTrigger);
   void setInitialValue(float initialValue);
+  void setSustainSegment(int whichSegment);
+  void removeSustain();
   bool getTrigger();
+  int getSustainSegment();
+  int getNumberOfSegments();
   float getSample();
+
 
   private:
   void incrementSegment();
+  double calculateIncrement(float distance, float durationMS);
   float currentSample;
   bool trigger;
   bool active;
   std::vector<Segment> segments;
   int currentSegment;
   float initialValue;
+  int sustainSegment;
+  bool isSustaining;
 };
 }//end pedal namespace
 
