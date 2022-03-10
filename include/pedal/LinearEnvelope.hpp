@@ -44,7 +44,7 @@ class LinearEnvelope{//Constant-Time Envelope (linear piece-wise ADSR)
 
   int currentState;//which phase, off-a-d-s-r, is the envelope in
   Mode currentMode;//which type of envelope is it, adsr,asr, or ar
-  bool trigger;//on or off
+  bool trigger = false;//on or off
   float attack, decay, sustain, release;//internal values for these variables
   float attackIncrement, decayIncrement, releaseIncrement;//necessary to calculate next sample
   float currentSample;//current working sample
